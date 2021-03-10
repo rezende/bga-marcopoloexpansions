@@ -1037,6 +1037,33 @@ class MarcoPoloExpansions extends Table
         }
     }
 
+    function scoreAltanOrdPlacement( $board_id, $player_id ) {
+        $num_trading_posts = $this->getNumberOfTradingPostsPlaced( $player_id );
+        if ( $num_trading_posts == 1 ) {
+            $resources = array("vp" => 1);
+        }
+        if ( $num_trading_posts == 2 ) {
+            $resources = array("vp" => 1, "coin" => 1);
+        }
+        if ( $num_trading_posts == 3 ) {
+            $resources = array("vp" => 1, "coin" => 1, "camel" => 1);
+        }
+        if ( $num_trading_posts == 4 ) {
+            $resources = array("vp" => 1, "coin" => 1, "camel" => 1, "pepper" => 1);
+        }
+        if ( $num_trading_posts == 5 ) {
+            $resources = array("vp" => 1, "coin" => 1, "camel" => 1, "pepper" => 1, "silk" => 1);
+        }
+        if ( $num_trading_posts == 6 ) {
+            $resources = array("vp" => 1, "coin" => 1, "camel" => 1, "pepper" => 1, "silk" => 1, "gold" => 1);
+        }
+        $this->changePlayerResources( $resources, false, "map_node_" . $board_id, $player_id );
+        self::notifyAllPlayers( "message", clienttranslate( '${player_name} scores for placing trading post number ${num_trading_post} as Altan Ord' ), array(
+            'player_id' => $player_id, 'player_name' => $this->getPlayerName( $player_id ), 'num_trading_post' => $num_trading_posts
+        ) );
+
+    }
+
     function scoreTradePostPlacement( $board_id, $player_id )      //bonus points for placing 8th, 9th, 11th trade post
     {
         $num_trading_posts = $this->getNumberOfTradingPostsPlaced( $player_id );
@@ -1090,6 +1117,8 @@ class MarcoPoloExpansions extends Table
         {
             self::incStat( 1, "trading_posts", $player_id );
             $this->scoreTradePostPlacement( $board_id, $player_id );
+            if ( $this->getPlayerIdByCharacterType( 10 ) == $player_id ) // Altan Ord bonuses
+                $this->scoreAltanOrdPlacement( $board_id, $player_id );
         }
 
         return $success;
