@@ -1,0 +1,130 @@
+action argument details
+
+placeDie
+  place = { city, coin3, coin5, travel, bazaar, khan, contracts }
+  index = depends on place
+    city => index = card id, coin3 => 0, coin5 => 0, travel => 0, bazaar => { 0..3 } (camels = 0, bottom to top), khan => position, contracts => 0
+  award_index = award selected if there is a choice, otherwise 0
+    city => 0 (tbd),
+    coin3 => 0, coin5 => 0, 
+    travel => 0..5 (left to right, # of travel spots)
+    bazaar => 0..5 (left to right, in case want lower award)
+    khan => 0,
+    contracts => 0
+  die_id = dice being placed their, maybe more than one (format: id_id_id)
+
+cards - two different decks managed 1) goals 2) contracts
+
+die table 
+  die_location_height - records at what height the die is placed at (i.e. the z axis).  0 = bottom
+
+piece table
+  populate piece_player_id if the piece is in a player specific colour
+  
+  | type                    | locations
+  | trading_post            | player_mat:position, board:graph_node_id
+  | figure                  | board:graph_node_id
+  | outpost_bonus:type      | board:graph_node_id
+  | city_bonus:type         | board:graph_node_id
+  | city_card:type          | board:graph_node_id
+
+** type_arg is a misleading as it really represents the "type_id" which is called "type" in material **
+
+pending_action table
+  - scratch pad table used to keep track of awards or payments still left.  for example compensation_taken, city_c_bonus_taken, city_d_bonus_taken, bonus_contract_taken
+  - maybe need to tie multiple actions together in case order of operation is open to the player.   to consider....
+  - possible pending actions { travel, move_trading_post, discard_contract, choice_of_good, 2_diff_goods, camel_coin, pick_contract }
+  
+types:
+  - travel
+	    type_arg1 => trading_post_ids placed this turn
+
+  - city_card (activate a city card)
+	    type_arg => card_type_id
+
+  - pick_contract
+  - discard_contract
+	    type_arg => contract_ids player started with (i.e. cannot discard contract picked up using contract action)	
+
+  - choice_of_good 
+  - 2_diff_goods
+  - camel_coin
+	    type_arg => string "pay" or gain (leave blank for gain)
+
+  - move_trading_post
+      type_arg => represents board_id where moved trading post should be placed  	     
+  
+  - trigger_other_city_bonus
+  - trigger_city_bonus_having_trading_post
+
+  - bonus
+      type_arg => <city_card> | <character>
+      type_arg1 => <award_type>
+      location => <city_card_type> | <character_type>
+
+  - what is type kubilai_khan?
+
+city_card material
+  kind represents how bonus works for the city card
+    die => based on the die value placed
+    multiple => depends on the number of exchanges the player wants to perform
+    exchange => player has to choose which "side" represents the cost vs. reward
+    choice => player can choose between different cost/reward ratios  (i.e. one camel => 3 coins vs. 1 coin => 1 camel )
+
+  auto boolean represents if the game should automatically apply the exchange or ask player # of times
+
+
+contract, outpost, city_bonus material parameters
+  cost => array of goods required to payments     (note:   city_bonus & output bonuses have no cost)
+  reward => array of what player gets when fulfilling contract
+
+  array is key => value where key is the type of "item" and value is the quantity of the item
+
+possible items
+  camels, pepper, silk, gold, coin, vp - base resources in the game
+  black_die - a black die from the pool if available
+  contract - a new contract from the draw pile
+  travel - a travel movement
+  choice_of_good - player must select pepper/silk/gold as cost/reward
+  camel_coin - choose between camel or coin
+  2_diff_goods - player must select two different resources as cost/reward (pepper+silk, pepper+gold, or silk+gold)
+  trigger_other_city_bonus - player can select a different city bonus award to trigger
+  trigger_city_bonus_having_trading_post - player can trigger city bonus where they have a trading post (note: if awarded multiple times must be different if possible)
+  fulfilled_contracts - # of contracts the player has already fulfilled
+  placed_trading_post - # of trading post the player has placed
+  pick_contract - custom award for contracts
+  pick_gift - get 3 gifts, keep one (can keep two if using 1x bonus piece)
+
+chooseBonusResource - action when player needs to choose a bonus and/or bonus payment.  
+  choice_of_good, 2_diff_goods, trigger_other_city_bonus, trigger_city_bonus_having_trading_post
+
+UI rendering is done via uiItems.  uiItems represents the all the game items that can be moved around (i.e. dice, figures, trading_posts, etc...).  
+
+Each uiItem has 
+  uid - unique id for the entire ui.  Note: the uid is *NOT* used by the server
+  htmlNode - node which is clickable/moveable
+  clickHandler - pointer to handler.  only useful if you need to disconnect the uiItem (which should be never unless the item is being destroyed)
+  uiType - represents the kind of item it is.  note: a css class of uiType is automatically assigned to the htmlNode
+  isSelected - represents the uiItem has been selected by the player
+  isSelectable - represents a uiItem that can be selected by the player
+  data - any useful data required to be kept with the uiItem to run game rules (i.e. the value of the die itself, who the item belongs to, where it is located).  Data is mostly populated from the server.
+
+
+
+
+
+
+  delete methods
+
+  
+    function givePayment( $location, $payments, $player_id )
+    {
+        foreach( $payments as $payment_type => $amount )
+        {
+            if ( in_array( $payment_type, [ "choice_of_good", "2_diff_goods" ] ) )
+            {
+                $this->addToPendingTable( $payment_type, '', '', $amount, $location, 'payment', $player_id );
+            }
+        }
+        $this->changePlayerResources( $payments, true, $location, $player_id );
+    }

@@ -1,0 +1,692 @@
+/**
+ *------
+ * BGA framework: © Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
+ * MarcoPoloExpansions implementation : © Hershey Sakhrani <hersh16@yahoo.com>
+ *
+ * This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
+ * See http://en.boardgamearena.com/#!doc/Studio for more information.
+ * -----
+ *
+ * marcopoloexpansions.css
+ *
+ * MarcoPoloExpansions stylesheet
+ *
+ */
+
+/*
+    This is the CSS stylesheet of your game User Interface.
+    
+    Styles defined on this file will be applied to the HTML elements you define in your
+    HTML template (marcopoloexpansions_marcopoloexpansions.tpl), and to HTML elements you create dynamically
+    (in marcopoloexpansions.js).
+    
+    Usually, you are using CSS to:
+    
+    1°) define the overall layout of your game
+        (ex: place the board on the top left, place player's hand beside, place the deck on the right, ...).
+
+    2°) create your CSS-sprites:
+        All images of your games should be gathered into a small number of image files. Then, using
+        background-image and background-position CSS properties, you create HTML blocks that can 
+        display these images correctly (see example below).
+    
+    3°) ... anything else:
+        It is really easy to add and remove CSS classes dynamically from your Javascript with
+        dojo.addClass and dojo.removeClass. It is also easy to check if an element has a class
+        (dojo.hasClass) or to get all elements with a specific class (dojo.query). This is why,
+        very often, using CSS classes for the logic of your user interface allow you to do complex
+        thing easily.
+        
+        
+     Note: on the production platform, this file will be compressed and comments will be removed.
+           Consequently, don't hesitate to put as many comments as necessary.
+*/
+
+@import url(../../../css/csslayer.css); /* Note: you must not use any @import directive other than this one */
+
+/********* You can start writing your CSS below this line: **********/
+@keyframes border_pulsate {
+    0%   { border-color: rgba(0, 255, 255, 1); animation-timing-function: ease-in; }
+    50%  { border-color: rgba(0, 0, 255, 1); animation-timing-function: linear; }
+    100% { border-color: rgba(0, 255, 255, 1); animation-timing-function: ease-out; }
+}
+
+@keyframes grow_shrink
+{
+    0% { transform: scale(1) rotate(0deg); }
+    50% { transform: scale(2) rotate(180deg); }
+    100% { transform: scale(1) rotate(360deg); }
+}
+
+#boardContainer
+{
+    display:flex;
+    justify-content: center;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+#mainBoardContainer
+{
+    padding: 5px;
+    padding-top: 10px;
+}
+
+#board
+{
+    position: relative;
+    width: 804px;
+    height: 780px;
+    background-image: url('img/board.jpg');
+    background-size: 804px 780px;
+}
+
+#roundContainer
+{
+    height: 70px;
+    margin-top: 10px;
+    position: relative;
+}
+
+#characterSelection
+{
+    position: relative;
+    text-align: center;
+    display: none;
+}
+
+#goalSelection
+{
+    position: relative;
+    text-align: center;
+    display: none;
+}
+
+.playerMat
+{
+    position: relative;
+}
+
+.yellow
+{
+    background-position-y: 0px;
+}
+
+.green
+{
+    background-position-y: -160px;
+}
+
+.blue
+{
+    background-position-y: -320px;
+}
+
+.red
+{
+    background-position-y: -480px;
+}
+
+.purple
+{
+    background-position-y: -640px;
+}
+
+.white
+{
+    background-position-y: -800px;
+}
+
+.black
+{
+    background-position-y: -960px;
+}
+
+.die 
+{
+    width: 98px;
+    height: 114px;
+    position: absolute;
+    transform: scale(0.3);
+}
+
+.die_pip
+{
+    background-position: -900px 0px;
+    width: 100%;
+    height: 100%;
+    display: block;
+    pointer-events: none;
+}
+
+.die.selected
+{
+    filter: brightness(1.5);
+}
+
+.die.white.selected
+{
+    filter: brightness(1.15);
+}
+
+.character
+{
+    background-image: url('img/characters.jpg');
+    background-repeat: no-repeat;
+    position: absolute;    
+    width: 199px;
+    height: 301px;
+    transform: scale(0.6);
+    transform-origin: 199px 301px;
+    bottom: 10px;
+    right: 10px;
+    box-shadow: black 2px 2px 5px;
+    border-radius: 10px;
+}
+
+#characterSelection > .character
+{
+    position: relative;
+    display: inline-block;
+    transform-origin: 0px 0px;
+    transform: scale(1);
+    margin: 10px;
+}
+
+.character_spot
+{
+    width: 100px;
+    height: 36px;
+    position: absolute;
+}
+
+.piece
+{
+    background-image: url('img/pieces.png');
+    background-repeat: no-repeat;
+    transform-origin: 0px 0px;
+    position: absolute;
+    z-index: 100;
+}
+
+.parchment
+{
+    background-image: url(img/parchment.png);
+    position: absolute;
+    left: 243px;
+    top: -15px;
+    width: 410px;
+    height: 236px;
+    transform-origin: 0 0;
+    transform: scale(0.42);
+}
+
+.coin
+{
+    background-position: -408px -5px;
+}
+
+.camel
+{
+    background-position: -510px -5px;
+}
+
+.pepper
+{
+    background-position: -604px -5px;
+}
+
+.silk
+{
+    background-position: -517px -110px;
+}
+
+.gold
+{
+    background-position: -405px -106px;
+    width: 40px;
+    height: 40px;
+}
+
+.vp
+{
+    background-position: -608px -106px;    
+}
+
+.small_piece
+{
+    background-image: url('img/pieces.png');
+    background-repeat: no-repeat;
+    height: 20px;
+    width: 20px;
+    display: inline-block;
+    margin: 0px;
+    vertical-align: middle;
+}
+
+.small_piece.small_coin
+{    
+    background-position: -110px -960px;
+}
+
+.small_piece.small_camel
+{
+    background-position: -137px -960px;
+}
+
+.small_piece.small_pepper
+{
+    width: 18px;
+    background-position: -161px -960px;
+}
+
+.small_piece.small_silk
+{
+    background-position: -187px -960px;
+}
+
+.small_piece.small_gold
+{
+    width: 24px;
+    background-position: -213px -960px;
+}
+
+.small_piece.small_vp
+{
+    width: 28px;
+    background-position: -238px -960px;
+}
+
+.trading_post
+{
+    position: absolute;
+    display: inline-block;
+    background-position-x: -226px;
+    width: 100px;
+    height: 100px;
+    transform: scale(0.4);
+}
+
+.city_card
+{
+    background-image: url('img/city_cards.jpg');        
+    background-repeat: no-repeat;    
+    background-clip: content-box;
+    width: 197px;
+    height: 126px;
+    position: absolute;
+    transform: scale(0.5025);
+    transform-origin: 0px 0px;
+    border: 6px solid transparent;    
+    border-radius: 16px;
+}
+
+.outpost
+{
+    background-image: url('img/bonus_outposts.png');
+    background-repeat: no-repeat;
+    width: 162px;
+    height: 100px;    
+    position: absolute;
+    transform: scale(0.5025);
+    transform-origin: 0px 0px;
+}
+
+.city_bonus
+{
+    background-image: url('img/city_bonus.jpg');    
+    background-position: 0px 0px;
+    width: 136px;
+    height: 68px;
+    position: absolute;
+    border-radius: 10px;
+    transform: scale(0.5025);
+    transform-origin: 0px 0px;    
+}
+
+.goal_card
+{
+    background-image: url('img/goalcards.jpg');
+    background-position: -9px -110px;
+    width: 162px;
+    height: 112px;
+    position: absolute;
+    border-radius: 10px;
+    transform: scale(0.7025);
+    transform-origin: 0px 0px;
+}
+
+#goalSelection > .goal_card
+{
+    position: relative;
+    display: inline-block;
+    transform: scale(1);
+    margin: 10px;
+    width: 172px;
+    height: 278px;
+}
+
+.playerMat .goal_card
+{
+    cursor: pointer;
+    box-shadow: inset 0.5em 0.5em 0.5em 0 rgba(255,255,255,0.5), inset -0.5em -0.5em 0.5em 0 rgba(0,0,0,0.5);
+}
+
+.playerMat .goal_card.goal_card_back
+{
+    cursor: initial;
+    box-shadow: black 2px 3px 3px 0px;
+}
+
+.mp_tooltip > .goal_card
+{
+    position: static;
+    width: 172px;
+    height: 278px;
+}
+
+.contract
+{
+    background-image: url('img/contracts.jpg');
+    width: 146px;
+    height: 140px;
+    position: absolute;
+    transform: scale(0.5025);
+    transform-origin: 0px 0px;
+    box-shadow: black 3px 3px 5px;
+    border-radius: 10px;
+}
+
+.piece.contract_back
+{
+    background-position: 0px -1300px;
+    width: 146px;
+    height: 146px;
+    transform: scale(0.5025);
+    box-shadow: black 4px 4px 2px;
+    border-radius: 10px;
+}
+
+.map_node
+{
+    position: absolute;
+}
+
+.map_node.oasis
+{
+    width: 30px;
+    height: 30px;
+}
+
+.map_node.small_city
+{
+    width: 74px;
+    height: 96px;
+}
+
+.map_node.large_city
+{
+    width: 106px;
+    height: 60px;
+}
+
+.map_node.venezia
+{
+    width: 68px;
+    height: 74px;
+}
+
+.map_node.bejing
+{
+    width: 100px;
+    height: 110px;
+}
+
+.board_spot
+{
+    position: absolute;
+    width: 30px;
+    height: 35px;
+}
+
+.award_spot
+{
+    position: absolute;
+}
+
+.award_spot.travel
+{
+    width: 30px;
+    height: 74px;
+}
+
+.selectable 
+{
+    border: 3px solid cyan;
+    animation: border_pulsate 2s infinite;
+    cursor: pointer;
+}
+
+.selected
+{
+    border: 3px solid red;
+    animation: none;
+}
+
+.character.selectable, .goal_card.selectable
+{
+    border: 6px solid cyan;
+}
+
+.character.selected, .goal_card.selected
+{
+    border: 6px solid red;
+}
+
+.piece.selectable
+{
+    border: 8px solid cyan;
+}
+
+.piece.selected
+{
+    border: 8px solid red;
+}
+
+.contract.selectable
+{
+    border: 6px solid cyan;
+}
+
+.contract.selected
+{
+    border: 6px solid red;
+}
+
+.city_card.selectable
+{
+    border: 6px solid cyan;
+}
+
+.city_card.selected
+{
+    border: 6px solid red;
+}
+
+.panel_player
+{
+    position: relative;
+    width: calc(100% - 40px);
+    margin-top: 5px;
+    min-height: 60px;
+}
+
+.panel_resource
+{    
+    display:inline-block;    
+    margin-left: 38px;
+    line-height: 34px;
+}
+
+.panel_resource_wrapper
+{
+    white-space: nowrap;
+    margin-right: 6px;
+    min-width: 48px;
+    display: inline-block;
+}
+
+.piece.panel_hourglass
+{    
+    right: 0px;
+    bottom: 0px;
+    width: 36px;
+    height: 60px;
+    background-position: -100px -800px;
+}
+
+.piece.panel
+{
+    width: 84px;
+    height: 90px;
+    display: inline-block;
+    transform: scale(.5025);
+    transform-origin: 0px 0px;
+}
+
+.piece.keep_gift_1x
+{
+    background-position: -0px -1100px;
+    transform: scale(.5025);
+    transform-origin: 0px 0px;
+    width: 140px;
+    height: 140px;
+    border-radius: 10px;
+    box-shadow: black 2px 2px 5px;
+}
+
+.completed_contracts
+{
+    background-position: -400px -208px;
+}
+
+.goal_post_anchor
+{    
+    width : 40px;
+    height: 40px;
+    background-position: -220px -794px;
+    filter: brightness(1.75);
+    transform-origin: unset;
+}
+
+.goal_anchor_animate
+{
+    animation-name: grow_shrink;
+    animation-timing-function: linear;
+    animation-duration: 600ms;
+    animation-iteration-count: 2; 
+}
+
+.figure
+{
+    background-position-x: -110px;
+    width: 60px;
+    height: 106px;
+    transform: scale(0.4025);
+}
+
+.gift
+{
+    background-image: url('img/gifts.png');
+    position: absolute;
+    background-repeat: no-repeat;    
+    width: 107px;
+    height: 96px;
+    transform: scale(0.5);
+    transform-origin: 0px 0px;
+}
+
+.gift.log
+{
+    position: static;
+    display: inline-block;
+    margin-bottom: -74px;
+    margin-left: 5px;
+    transform:scale(0.35);
+    transform-origin: 0px -10px;    
+}
+
+.gift.gift_back
+{
+    background-position: -1607px 0px;
+}
+
+.gift.selectable
+{
+    border: 5px solid cyan;
+}
+
+.gift.selected
+{
+    border: 5px solid red;
+}
+
+/* start of player aid */
+.mp_playeraid {
+    background-image: url("img/playeraid.jpg");
+    background-size: 600px 848px;
+    width: 600px;
+    height: 848px;
+    position: relative;
+}
+
+.mp_playeraid_title {
+    position: absolute;
+    left: 40px;
+    top: 37px;   
+}
+.mp_playeraid_subtitle {
+    position: absolute;
+    font-weight: bold;
+    left: 45px;
+}
+.mp_playeraid_content {
+    position: absolute;
+    width: 504px;
+    left: 52px;
+    font-size: 14px;
+    font-style: italic;
+}
+
+.mp_playeraid_t1 {
+    top: 63px;
+}
+.mp_playeraid_t2 {
+    top: 216px;
+}
+.mp_playeraid_t3 {
+    top: 353px;
+}
+.mp_playeraid_t4 {
+    top: 483px;
+}
+.mp_playeraid_t5 {
+    top: 631px;
+}
+
+.mp_playeraid_p1 {
+    top: 168px;
+}
+.mp_playeraid_p2 {
+    top: 308px;
+}
+.mp_playeraid_p3 {
+    top: 453px;
+}
+.mp_playeraid_p4 {
+    top: 585px;
+}
+.mp_playeraid_p5 {
+    top: 738px;
+}
+/* end of player aid */

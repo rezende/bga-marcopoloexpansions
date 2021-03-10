@@ -1,0 +1,71 @@
+self::notifyAllPlayers( "characterUpdate", "", array( "figure_id" => $piece_id, "location_arg" => 8 ) );
+self::notifyAllPlayers( "characterUpdate", "", array( "trading_posts" => $pieces ) );
+self::notifyAllPlayers( "characterUpdate", "", array( "new_figure" => $piece ) );
+
+
+self::notifyAllPlayers( "resourceChange", $message, array( "player_id" => $player_id, "player_name" => $this->getPlayerName( $player_id ), 
+	"location" => $location, "resources" => $resource_break_down ) );
+
+
+self::notifyAllPlayers( "contract", clienttranslate( '${player_name} draws a contract' ), array( "player_id" => $player_id, 
+	"player_name" => $this->getPlayerName( $player_id ), "is_new" => true, "contract_id" => $contract["id"], "contract_type" => $contract["type"] )
+);
+
+self::notifyAllPlayers( "contract", clienttranslate( '${player_name} picks a contract' ), array( "player_id" => $player_id, 
+	"player_name" => $this->getPlayerName( $player_id ), "is_new" => false, "contract_id" => $contract_id )
+);
+
+self::notifyAllPlayers( "fulfillsContract", clienttranslate( '${player_name} fulfills a contract' ), array( "player_id" => $player_id, 
+	"player_name" => self::getActivePlayerName(), "contract_id" => $contract_id ) );
+
+self::notifyAllPlayers( "moveHourGlass", '', array( "player_id" => $player_id ) );
+
+self::notifyAllPlayers( "discardContract", clienttranslate( '${player_name} discards a contract' ), array( "player_id" => $player_id, 
+	"player_name" => $this->getPlayerName( $player_id ), "contract_id" => $contract_id ) );
+
+self::notifyAllPlayers( "slideContracts", "", array( "contracts" => $contracts ) );
+
+
+
+self::notifyAllPlayers( "placeTradingPost", clienttranslate( '${player_name} places a trading post in ${city_name}' ), array( "player_id" => $player_id, 
+	"player_name" => $this->getPlayerName( $player_id ), "trading_post_id" => $piece_id, "location" => "board", "location_arg" => $board_id, 
+	"location_position" => $position, "city_name" => $this->board_map[$board_id]["name"] ) 
+);
+
+
+
+self::notifyAllPlayers( "boxPiece", '', array( "piece_id" => $piece_id, "location" => "box" ) );
+
+
+self::notifyAllPlayers( "updateDie", clienttranslate( '${player_name} gets a black die and rolls a ${die_value}' ), array( "player_id" => $player_id,
+            "player_name" => $this->getPlayerName( $player_id ), "die_id" => $die_id, "die_value" => $die_value, "die_location" => "player_mat" ) );
+
+self::notifyAllPlayers( "updateDie", clienttranslate( '${player_name} re-rolls a die for a camel and rolls a ${die_value}' ), array( "player_id" => $player_id, 
+	"player_name" => self::getActivePlayerName(), "die_id" => $die_id, "die_value" => $die_value ) );
+
+self::notifyAllPlayers( "updateDie", clienttranslate( '${player_name} bumps a die to ${die_value} for 2 camel' ), array( "player_id" => $player_id, 
+	"player_name" => self::getActivePlayerName(), "die_id" => $die_id, "die_value" => $die_value ) );
+
+self::notifyAllPlayers( "updateDice", clienttranslate( '${player_name} changes some of their dice to ${die_value} using Raschid ad-Din Sinan' ), array (
+	"player_id" => $player_id, "player_name" => self::getActivePlayerName(), "dice" => $dice, "die_value" => $new_value
+) );
+
+self::notifyAllPlayers( "updateDice", clienttranslate( '${player_name} places their dice & activates ${place_name}' ), array( "player_id" => $player_id, 
+	"player_name" => self::getActivePlayerName(), "place_name" => $place, "num_coins" => $num_coins, "dice" => $dice_info )
+);
+
+
+self::notifyAllPlayers( "updateDice", clienttranslate( 'All players re-roll their dice' ), array( 'dice' => $dice ) );
+
+self::notifyPlayer( $player_id, "goalCard", '', array( "cards" => $cards ) );
+
+self::notifyAllPlayers("travel", clienttranslate( '${player_name} travels to ${map_name}'), array( "player_id" => $player_id, 
+	"player_name" => self::getActivePlayerName(), "figure_id" => $figure_id, "map_name" => $this->board_map[$dst_id]["name"], "dst_id" => $dst_id ) );
+
+
+
+
+
+
+
+
