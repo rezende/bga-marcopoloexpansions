@@ -33,7 +33,7 @@ $game_options = array(
             1 => array( 'name' => totranslate('Yes'), 'tmdisplay' => totranslate('Expert') ),
         )
     ),
-    100 => array(
+    101 => array(
         'name' => totranslate('The New Characters Expansion'),
         'values' => array(
             0 => array( 'name' => totranslate('No'), 'tmdisplay' => totranslate('Disable') ),
