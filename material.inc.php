@@ -3,7 +3,7 @@
  *------
  * BGA framework: © Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
  * MarcoPoloExpansions implementation : © Hershey Sakhrani <hersh16@yahoo.com>
- * 
+ *
  * This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
  * See http://en.boardgamearena.com/#!doc/Studio for more information.
  * -----
@@ -13,7 +13,7 @@
  * MarcoPoloExpansions game material description
  *
  * Here, you can describe the material of your game with PHP variables.
- *   
+ *
  * This file is loaded in your game logic class constructor, ie these variables
  * are available everywhere in your game logic code.
  *
@@ -48,8 +48,8 @@ $this->outpost_bonus_types = array(
   5 => array( "type" => 5, "award" => [ "black_die" => 1 ] ),
   6 => array( "type" => 6, "award" => [ "silk" => 2 ] ),
   7 => array( "type" => 7, "award" => [ "camel" => 3 ] ),
-  8 => array( "type" => 8, "award" => [ "camel" => 2 ] ), 
-  9 => array( "type" => 9, "award" => [ "coin" => 5 ] ),  
+  8 => array( "type" => 8, "award" => [ "camel" => 2 ] ),
+  9 => array( "type" => 9, "award" => [ "coin" => 5 ] ),
 );
 
 $this->city_bonus_types = array(
@@ -144,7 +144,7 @@ $this->contract_types = array(
   26 => array( "type" => 26, "starter" => false, "cost" => [ "camel" => 1, "gold" => 3 ], "award" => [ "choice_of_good" => 1, "vp" => 6 ] ),
   27 => array( "type" => 27, "starter" => false, "cost" => [ "camel" => 2, "silk" => 1, "pepper" => 2 ], "award" => [ "coin" => 4, "vp" => 3 ] ),
   28 => array( "type" => 28, "starter" => false, "cost" => [ "camel" => 2, "silk" => 1, "pepper" => 2 ], "award" => [ "2_diff_goods" => 1, "vp" => 3 ] ),
-  29 => array( "type" => 29, "starter" => true, "cost" => [ "camel" => 2, "silk" => 1, "gold" => 1 ], "award" => [ "2_diff_goods" => 1, "vp" => 4 ] ),  
+  29 => array( "type" => 29, "starter" => true, "cost" => [ "camel" => 2, "silk" => 1, "gold" => 1 ], "award" => [ "2_diff_goods" => 1, "vp" => 4 ] ),
   30 => array( "type" => 30, "starter" => false, "cost" => [ "camel" => 2, "pepper" => 2, "gold" => 1 ], "award" => [ "contract" => 1, "vp" => 4 ] ),
   31 => array( "type" => 31, "starter" => false, "cost" => [ "camel" => 2, "pepper" => 2, "gold" => 3 ], "award" => [ "2_diff_goods" => 1, "vp" => 9 ] ),
   32 => array( "type" => 32, "starter" => false, "cost" => [ "camel" => 2, "silk" => 2, "pepper" => 2 ], "award" => [ "black_die" => 1, "vp" => 5 ] ),
@@ -190,7 +190,7 @@ $this->board_map = array(
   21 => array( "id" => 21, "name" => "Sumatra", "type" => "large_city", "num_cards" => 3 ),
   22 => array( "id" => 22, "name" => "Oasis", "type" => "oasis" ),
   23 => array( "id" => 23, "name" => "Adana", "type" => "small_city" ),
-  24 => array( "id" => 24, "name" => "Kochi", "type" => "small_city" ),  
+  24 => array( "id" => 24, "name" => "Kochi", "type" => "small_city" ),
 );
 
 #only map data in one direction, code can create edge matrix or brute force look-up (not many edges)
@@ -217,7 +217,7 @@ $this->board_edges = array(
   array( "src" => 14, "dst" => 20, "cost" => [] ),
   array( "src" => 15, "dst" => 21, "cost" => [ "camel" => 4 ] ),
   array( "src" => 16, "dst" => 17, "cost" => [ "coin" => 7 ] ),
-  array( "src" => 16, "dst" => 22, "cost" => [] ),  
+  array( "src" => 16, "dst" => 22, "cost" => [] ),
   array( "src" => 17, "dst" => 18, "cost" => [ "camel" => 3 ] ),
   array( "src" => 18, "dst" => 19, "cost" => [ "camel" => 3 ] ),
   array( "src" => 19, "dst" => 20, "cost" => [] ),
@@ -258,7 +258,7 @@ $this->board_spots = array(
   array( "place" => "bazaar", "index" => 3, "name" => clienttranslate( "The grand bazaar" ),"description" => "4 silk", "num_dice" => 2, "min_die" => 4, "allow_multiple" => true, "is_award_spot" => true, "tied_to_index" => 2, "award" => [ "silk" => 3 ], "ui_location" => "award_spot_bazaar_2_3" ),
   array( "place" => "bazaar", "index" => 4, "name" => clienttranslate( "The grand bazaar" ),"description" => "5 silk", "num_dice" => 2, "min_die" => 5, "allow_multiple" => true, "is_award_spot" => true, "tied_to_index" => 2, "award" => [ "silk" => 3, "camel" => 1, "coin" => 1 ], "ui_location" => "award_spot_bazaar_2_4" ),
   array( "place" => "bazaar", "index" => 5, "name" => clienttranslate( "The grand bazaar" ),"description" => "6 silk", "num_dice" => 2, "min_die" => 6, "allow_multiple" => true, "is_award_spot" => true, "tied_to_index" => 2, "award" => [ "silk" => 4 ], "ui_location" => "award_spot_bazaar_2_5" ),
-  array( "place" => "bazaar", "index" => 3, "name" => clienttranslate( "The grand bazaar" ),"description" => clienttranslate( "The Grand Bazaar - gold" ), "num_dice" => 3, "allow_multiple" => true, "is_award_spot" => false ),  
+  array( "place" => "bazaar", "index" => 3, "name" => clienttranslate( "The grand bazaar" ),"description" => clienttranslate( "The Grand Bazaar - gold" ), "num_dice" => 3, "allow_multiple" => true, "is_award_spot" => false ),
   array( "place" => "bazaar", "index" => 0, "name" => clienttranslate( "The grand bazaar" ),"description" => "1 gold", "num_dice" => 3, "min_die" => 1, "allow_multiple" => true, "is_award_spot" => true, "tied_to_index" => 3, "award" => [ "gold" => 1 ], "ui_location" => "award_spot_bazaar_3_0" ),
   array( "place" => "bazaar", "index" => 1, "name" => clienttranslate( "The grand bazaar" ),"description" => "2 gold", "num_dice" => 3, "min_die" => 2, "allow_multiple" => true, "is_award_spot" => true, "tied_to_index" => 3, "award" => [ "gold" => 2 ], "ui_location" => "award_spot_bazaar_3_1" ),
   array( "place" => "bazaar", "index" => 2, "name" => clienttranslate( "The grand bazaar" ),"description" => "3 gold", "num_dice" => 3, "min_die" => 3, "allow_multiple" => true, "is_award_spot" => true, "tied_to_index" => 3, "award" => [ "gold" => 2, "camel" => 2 ], "ui_location" => "award_spot_bazaar_3_2" ),
@@ -273,17 +273,10 @@ $this->board_spots = array(
 );
 
 $this->character_types = array(
-  0 => array( "type" => 0, "name" => clienttranslate( "Mercator ex Tabriz" ), "description" => clienttranslate( "<p>4 players: Whenever another player chooses to go to the bazaar, you receive one of the goods that the other player chose. This also counts for camels.</p><p>3 players: Same as the 4-player version.  Additionally, whenever another player seeks the Khan’s favor you receive 1 camel</p><p>2 players: Same as the 3-player version.  Additionally, whenever the other player takes 5 coins, you receive 2 coins.</p>" ), "default_player" => 4 ),     //get goods when others go to bazzar
-  1 => array( "type" => 1, "name" => clienttranslate( "Kubilai Khan" ), "description" => clienttranslate( "<p>You place your figure in Beijing (not Venezia) at the start of the game. This means that your travels will start from there. Additionally, place 1 trading post onto the 10 victory point space in Beijing.</p>" ) ),  //start in beijing
-  2 => array( "type" => 2, "name" => clienttranslate( "Raschid ad-Din Sinan" ), "description" => clienttranslate( "<p>You do not roll your dice.  Whenever you choose an action, you choose the die values yourself. Note: You cannot receive compensation.</p>" ), "default_player" => 1 ),   //make die any value
-  3 => array( "type" => 3, "name" => clienttranslate( "Johannes Carprini" ), "description" => clienttranslate( '<p>You can move from one oasis on the map to another during movement.</p>Whenever you choose to travel, you are allowed to move from one oasis to another.</p><p>This counts as one move. You can start your travel on the oasis, or first move to an oasis from a city and then move to another oasis afterward. You are allowed to keep moving to another city afterward. You are only allowed to move if you have paid for the necessary spaces. You also receive 3 coins at the start of each round.</p>'), "award" => [ "coin" => 3 ], "auto" => true ),                             //teleport between oasis, 3 coins at beginning of round
-  4 => array( "type" => 4, "name" => clienttranslate( "Wilhelm von Rubruk" ), "description" => clienttranslate( "<p>You receive 2 black trading posts at the start of the game. Add them to your other trading posts. If you manage to place all 11 of your trading posts by the end of the game, you score an additional 10 victory points. </p><p>You also place trading posts in any city, large or small, that you move through while traveling. This means that you do not need to end your movement in a city to place a trading post there. However, you will only receive the bonuses from trading posts, if any, after ending your movement.</p><p>Note: You are allowed to move back and forth over a city, even one that you have already visited. You may still only have 1 trading post in each city.</p>" ) ),  //two extra trading, place trading posts without stopping
-  5 => array( "type" => 5, "name" => clienttranslate( "Niccolo & Marco Polo" ), "description" => clienttranslate( "<p>You receive another figure with which to move across the map at the start of the game. Your second figure also starts in Venezia.</p><p>You also receive 1 camel at the start of each round.</p><p>Note: You are allowed to split your movement between the two figures when traveling. However, you must pay all travel and additional costs before moving both figures.</p>" ), "award" => [ "camel" => 1 ], "auto" => true ),                          //two figures, camel at beginning of round
-  6 => array( "type" => 6, "name" => clienttranslate( "Berke Khan" ), "description" => clienttranslate( "<p>You do not have to pay anything to use an occupied action space.</p><p>Note: This does not allow you to use occupied city cards.</p>" ), "default_player" => 3 ),             //no need to pay coins to place die
   7 => array( "type" => 7, "name" => clienttranslate( "Matteo Polo" ), "description" => clienttranslate( "<p>You receive the white die at the start of each round. Roll it and add it to the remaining dice on your player board. You also receive the topmost contract in the special pile at the start of each round. Look at page 1 of this supplement for more information.</p>" ), "default_player" => 2, "award" => [ "contract" => 1 ] ),            //white die & contract at beginning of round
   8 => array( "type" => 8, "name" => "Fratre Nicolao", "description" => "<p>At the beginning of each round, you draw 3 gifts. Choose 1 of these gifts to take and discard the other 2 faceup</p><p>You also receive this token, which allows you to instead take 2 of the 3 drawn gifts once during the game.</p>", "award" => [ "pick_gift" => 1 ], "expansion" => 0 ),
   9 => array( "type" => 9, "name" => "Khan Arghun", "description" => "<p>Once per turn, you may use 1 of these city cards.  This counts as a bonus action.</p><p>By using a card, you perform the action depicted on the city card as though you had placed a 6 value die on it. No die is required.</p><p>After you have completed the action on the city card, discard it.</p>", "expansion" => 0 ),
-  10 => array( "type" => 10, "name" => "Altan Ord", "description" => "<p>You receive a bonus each time you place a trading post. When you place your 1st trading post, you receive 1 point. When you place your 2nd trading post, you receive 1 point and 1 coin. When you place your 3rd trading post, you receive 1 point, 1 coin, and 1 camel, etc..</p>", "expansion" => 0 ),    
+  10 => array( "type" => 10, "name" => "Altan Ord", "description" => "<p>You receive a bonus each time you place a trading post. When you place your 1st trading post, you receive 1 point. When you place your 2nd trading post, you receive 1 point and 1 coin. When you place your 3rd trading post, you receive 1 point, 1 coin, and 1 camel, etc..</p>", "expansion" => 0 ),
   11 => array( "type" => 11, "name" => "Gunj Kököchin", "description" => "<p>You have 2 additional action spaces that only you may use. To use them, simply place 1 of your dice on one of the action spaces. This counts as your turn’s action.</p><p>This die will be retrieved and rolled at the beginning of the next round, as usual. This means that these action spaces are available to be used in each new round</p><p>1st action space: Take 2 camels and 2 goods of your choice. Each of your opponents take 1 good of their choice. These goods are taken from the supply, as usual</p><p>2nd action space: Move your figure 1 space on the map</p>", "expansion" => 0,
                "places" => array(
                       [ "place" => "gunj", "index" => 0, "name" => "Gunj Kököchin goods", "description" => "", "owns_place" => true, "num_dice" => 1, "award" => [ "camel" => 2, "choice_of_good" => 2 ], "allow_multiple" => false, "ui_location" => "gunj_0" ],
