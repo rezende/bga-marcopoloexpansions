@@ -760,6 +760,8 @@ function (dojo, declare) {
             {
                 this.sendFulfillGift(uiItem, null);
             }
+            else if (uiItem.uiType == "city_card")
+                this.sendFulfillArghun(uiItem);
             else
             {
                 actionSent = false;
@@ -802,6 +804,7 @@ function (dojo, declare) {
                 if (selectedDice.length == 0)
                 {
                     selectableItems = selectableItems.concat(this.getFulfillableContracts(playerId));
+                    selectableItems = selectableItems.concat(this.getSelectableCityCardsUIItemsForPlayerTurnState(playerId));
                 }
                 
                 if (this.mainActionAvailable && selectedPlace && this.getAwardSpots(selectedPlace, selectedDice).length > 1)     //place selected, show award spots
@@ -1798,8 +1801,8 @@ function (dojo, declare) {
 
         getSelectableGiftUIItemsForPlayerTurnState : function(selectedDice, playerId)
         {
-            var validGiftTypes = [];
-            var giftItems = this.uiItems.getByUiType("gift").filter(function(g) { return g.data.location_arg == playerId; });
+            let validGiftTypes = [];
+            const giftItemsOnPlayerHand = this.uiItems.getByUiType("gift").filter(function(g) { return g.data.location_arg == playerId; });
             if (selectedDice.length > 0)
             {
                 validGiftTypes = [ 7 ];
@@ -1810,9 +1813,14 @@ function (dojo, declare) {
             }
             else if (selectedDice.length == 0)
             {
-                var validGiftTypes = [1, 2, 14];
+                validGiftTypes = [1, 2, 14];
             }
-            return giftItems.filter(function(g) { return validGiftTypes.includes(parseInt(g.data.type_arg)) });
+            return giftItemsOnPlayerHand.filter(function(g) { return validGiftTypes.includes(parseInt(g.data.type_arg)) });
+        },
+
+        getSelectableCityCardsUIItemsForPlayerTurnState : function(playerId)
+        {
+            return this.uiItems.getByUiType("city_card").filter(function(g) { return g.data.location_arg == playerId; });
         },
 
         getFulfillableContracts : function(playerId)
@@ -2962,6 +2970,15 @@ function (dojo, declare) {
                 this[this.currentMove]();
                 this.updatePlayerTurnButtons([]);                
             }
+        },
+
+        sendFulfillArghun : function(selectedCityCard)
+        {
+            this.checkAction("fulfillArghun");
+            this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/fulfillArghun.html", { lock : true, "citycard_id" : selectedCityCard.data.id },
+                function (result) {},
+                function (error) {}
+            );
         },
 
         sendPlaceDie : function(selectedDice, selectedPlace, selectedAward, usedAgentsGifts)

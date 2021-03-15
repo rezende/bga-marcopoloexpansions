@@ -110,7 +110,9 @@ $machinestates = array(
         "type" => "activeplayer",
         "args" => "argPlayerTurn",
         "updateGameProgression" => true,
-        "possibleactions" => array( "placeDie", "rerollDie", "bumpDie", "buyBlackDie", "changeDice", "fulfillContract", "fulfillGift", "pass", "undo" ),
+        "possibleactions" => array(
+            "placeDie", "rerollDie", "bumpDie", "buyBlackDie", "changeDice", "fulfillContract", "fulfillGift", "fulfillArghun" , "pass", "undo"
+        ),
         "transitions" => array( "travel" => 11, "chooseResource" => 12, "chooseCityCardAward" => 13, "pickContract" => 14, 
             "triggerOtherCityBonus" => 16, "pass" => 6, "continue" => 10 )
     ),

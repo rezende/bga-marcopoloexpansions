@@ -126,6 +126,14 @@
       self::ajaxResponse();
     }
 
+    public function fullFillArghun()
+    {
+      self::setAjaxMode();
+      $city_card_id = self::getArg( "citycard_id", AT_posint, true );
+      $this->game->fulFillArghun( $city_card_id );
+      self::ajaxResponse();
+    }
+
     public function fulfillGift()
     {
       self::setAjaxMode();

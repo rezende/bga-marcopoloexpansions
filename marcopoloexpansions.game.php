@@ -744,6 +744,15 @@ class MarcoPoloExpansions extends Table
         }
     }
 
+    function checkAndTriggerFulfillArghun($pending_action, $player_id)
+    {
+        if ($pending_action["remaining_count"] == 1 && strpos($pending_action["location"], "city_card_") === 0)       //trigger arghun fulfil now
+        {
+            $contract_id = str_replace("contract_", "", $pending_action["location"]);
+            self::notifyAllPlayers("fulfillArghun", '', array("player_id" => $player_id, "city_card_id" => $contract_id, "resources_awarded" => true));
+        }
+    }
+
     function checkAndTriggerDiscardGift($pending_action, $player_id)
     {
         if ($pending_action["remaining_count"] == 1 && strpos($pending_action["location"], "gift_") === 0) {
@@ -1904,6 +1913,7 @@ class MarcoPoloExpansions extends Table
 
         $this->checkAndTriggerDiscardGift($pending_action, $player_id);
         $this->checkAndTriggerFulfillContract($pending_action, $player_id);
+        $this->checkAndTriggerFulfillArghun($pending_action, $player_id);
         $this->updateNextPendingAction($drop_by, $pending_action);
         $this->gamestate->nextState($this->getNextTransitionBasedOnPendingActions($player_id));
     }
@@ -1984,6 +1994,25 @@ class MarcoPoloExpansions extends Table
         $this->gamestate->nextState($this->getNextTransitionBasedOnPendingActions($player_id));
     }
 
+    function fulFillArghun($city_card_id) {
+        self::checkAction("fulFillArghun");
+        $player_id = self::getActivePlayerId();
+        $city_card = self::getObjectFromDB("SELECT piece_id id, piece_type type, piece_type_arg type_arg, piece_player_id player_id, piece_location location, piece_location_arg location_arg
+                FROM piece WHERE piece_type = 'city_card' AND piece_location = 'player_mat' AND piece_player_id = {$player_id} AND type_arg = {$city_card_id}");
+        self::setGameStateValue("can_undo", 1);
+
+        if ($city_card == null)
+            throw new BgaVisibleSystemException(self::_("fulfill city_card: no city_card or does not belong to you"));
+
+        $city_card_type = $this->city_card_types[$city_card["type"]];
+        $this->giveCityAward($city_card_type, ['6'], $player_id);
+
+        /* self::notifyAllPlayers($fulfill_notif_type, clienttranslate('${player_name} fulfills city_card ${$city_card_type}'), array("player_id" => $player_id,
+            "player_name" => self::getActivePlayerName(), "city_card_type" => $contract_id, "resources_awarded" => false, "contract_type" => $contract_data["type"])); */
+        //self::incStat(1, "contracts_fulfilled", $player_id);
+        $this->gamestate->nextState($this->getNextTransitionBasedOnPendingActions($player_id));
+    }
+
     function fulfillGift($gift_id, $board_id)
     {
         self::checkAction("fulfillGift");
@@ -2038,6 +2067,7 @@ class MarcoPoloExpansions extends Table
 
         $this->placeTradingPostAndGiveAward($dst_id, $pending_action, $player_id);
         $this->checkAndTriggerFulfillContract($pending_action, $player_id);
+        $this->checkAndTriggerFulfillArghun($pending_action, $player_id);
         $this->updateNextPendingAction(-1, $pending_action);
         self::incStat(1, "travel_movements", $player_id);
         $this->gamestate->nextState($this->getNextTransitionBasedOnPendingActions($player_id));
@@ -2054,6 +2084,7 @@ class MarcoPoloExpansions extends Table
             $this->placeTradingPostAndGiveAward($figure["piece_location_arg"], $pending_action, $player_id);
         }
         $this->checkAndTriggerFulfillContract($pending_action, $player_id);
+        $this->checkAndTriggerFulfillArghun($pending_action, $player_id);
         $this->deletePendingAction($pending_action["pending_id"]);
         $this->gamestate->nextState($this->getNextTransitionBasedOnPendingActions($player_id));
     }
