@@ -10,7 +10,7 @@
  * marcopoloexpansions.js
  *
  * MarcoPoloExpansions user interface script
- * 
+ *
  * In this file, you are describing the logic of your user interface, in Javascript language.
  *
  */
@@ -23,7 +23,7 @@ define([
 function (dojo, declare) {
     return declare("bgagame.marcopoloexpansions", ebg.core.gamegui, {
         constructor: function(){
-            console.log('marcopoloexpansions constructor');            
+            console.log('marcopoloexpansions constructor');
             this.uiItems = [];
             this.myCharacterType = 0;
             this.currentMove;
@@ -49,7 +49,7 @@ function (dojo, declare) {
             }
 
             this.uiItems.getByUiType = function(uiType)
-            {                
+            {
                 return this.filter(function(u) { return u.uiType == uiType });
             }
 
@@ -71,10 +71,10 @@ function (dojo, declare) {
             this.uiItems.getPlayerId = function(uiItem)
             {
                 var playerId = ["contract", "goal_card", "gift"].includes(uiItem.uiType) ? uiItem.data.location_arg : uiItem.data.player_id;
-                if (uiItem.uiType == "contract" && uiItem.data.location == "board") 
+                if (uiItem.uiType == "contract" && uiItem.data.location == "board")
                 {
                     playerId = null;
-                }                
+                }
                 return playerId;
             }
 
@@ -100,7 +100,7 @@ function (dojo, declare) {
             }
 
             this.uiItems.getSelectedItems = function()
-            {                
+            {
                 return this.filter(function(u) { return u.isSelected; });
             }
 
@@ -112,7 +112,7 @@ function (dojo, declare) {
             this.uiItems.getFirstSelectedItemByUiType = function(uiType)
             {
                 var items = this.getSelectedItemsByUiType(uiType);
-                return items.length > 0 ? items[0] : null;                
+                return items.length > 0 ? items[0] : null;
             }
 
             this.uiItems.getFirstSelectedItemByUiTypes = function(uiTypes)
@@ -130,7 +130,7 @@ function (dojo, declare) {
             {
                 if (includeSelected)
                     return this.filter(function(u) { return u.isSelectable; });
-                
+
                 return this.filter(function(u) { return u.isSelectable && !u.isSelected; });
             }
 
@@ -149,7 +149,7 @@ function (dojo, declare) {
                 if (uiItem.isSelectable)
                 {
                     if (uiItem.isSelected)
-                    {                    
+                    {
                         dojo.addClass(uiItem.htmlNode, "selectable");
                         dojo.removeClass(uiItem.htmlNode, "selected");
                     }
@@ -160,7 +160,7 @@ function (dojo, declare) {
                     }
                     uiItem.isSelected = !uiItem.isSelected;
                 }
-            }            
+            }
 
             this.uiItems.resetSelectable = function(items)
             {
@@ -201,7 +201,7 @@ function (dojo, declare) {
             }
 
             this.uiItems.createItems = function(uiType, dataArray)
-            {                
+            {
                 this.createItemsViaCallback(function(d) { return uiType; }, dataArray);
             }
 
@@ -226,7 +226,7 @@ function (dojo, declare) {
             this.uiItems.adjustBackgroundPositionForFullGoalCard = function(background)
             {
                 background.x += 4;
-                background.y += 110;                
+                background.y += 110;
                 return background;
             }
 
@@ -344,7 +344,7 @@ function (dojo, declare) {
             this.uiItems.extractDescriptionFromResourceArray = function(resources)
             {
                 var description = "";
-                var resourceNameMap = { 
+                var resourceNameMap = {
                     "camel" : _("camel(s)"), "pepper" : _("pepper"), "silk" : _("silk"), "gold" : _("gold"), "black_die" : _("black die"), "vp" : _("victory point"),
                     "contract" : _("new contract"), "travel" : _("travel movement"), "choice_of_good" : _("choice of pepper/silk/gold"), "2_diff_goods" : _("choice of two different resources"),
                     "coin" : _("coin"), "trigger_other_city_bonus" : _("trigger another city bonus (you do not have to have a trading post there)"),
@@ -352,10 +352,10 @@ function (dojo, declare) {
                 };
                 for(var resourceId in resources)
                 {
-                    description += resources[resourceId] + " ";                    
+                    description += resources[resourceId] + " ";
                     description += resourceNameMap[resourceId] + ", ";
                 }
-                if (description.length > 0) { description = description.substr(0, description.length - 2);  }                
+                if (description.length > 0) { description = description.substr(0, description.length - 2);  }
                 return description;
             }
 
@@ -398,7 +398,7 @@ function (dojo, declare) {
                     {
                         description = dojo.string.substitute(_("Trade in sets of ${cost} for ${award} upto die value placed"), { cost: this.extractDescriptionFromResourceArray(cityCardData.cost), award: this.extractDescriptionFromResourceArray(cityCardData.award) });
                     }
-                    description = dojo.string.substitute("${fullDescription}", { cardNumber : uiItem.data.type_arg, fullDescription : description });                    
+                    description = dojo.string.substitute("${fullDescription}", { cardNumber : uiItem.data.type_arg, fullDescription : description });
                 }
                 else if (uiItem.uiType == "board_spot")
                 {
@@ -417,7 +417,7 @@ function (dojo, declare) {
                     else
                     {
                         description = award;
-                    }            
+                    }
                 }
                 else if (uiItem.uiType == "map_node" && uiItem.data.id == 8)
                 {
@@ -433,7 +433,7 @@ function (dojo, declare) {
             {
                 var divId = dojo.getAttr(uiItem.htmlNode, 'id');
                 if (uiItem.uiType == "board_spot" || uiItem.uiType == "award_spot")
-                {                    
+                {
                     _self.addTooltip(divId, this.getTooltipDescription(uiItem), "");
                 }
                 else if (uiItem.uiType == "map_node" && uiItem.data.id == 8)
@@ -521,10 +521,10 @@ function (dojo, declare) {
                 {
                     dojo.addClass(htmlNode, this.getColorName(uiType, params));
                 }
-                
-                dojo.setAttr(htmlNode, "data-uid", "uid-" + this._lastUid);                
+
+                dojo.setAttr(htmlNode, "data-uid", "uid-" + this._lastUid);
                 clickHandler = dojo.connect(htmlNode, "onclick", _self, "onClickUiItem");
-                
+
                 var item = { "uid" : this._lastUid, "uiType" : uiType, "data" : params, "htmlNode" : htmlNode, "clickHandler" : clickHandler, isSelected: false, isSelectable: false, uiPosition: 0 };
                 if (this["_extendUiItem_" + uiType] != undefined) { this["_extendUiItem_" + uiType](item); }
                 this.setBackgroundUiItem(item);
@@ -536,7 +536,7 @@ function (dojo, declare) {
 
         setupGoalCards : function(goalCardData)
         {
-            this.uiItems.createItems("goal_card", goalCardData);        //create fake ones            
+            this.uiItems.createItems("goal_card", goalCardData);        //create fake ones
             for(var playerId in this.gamedatas.players)
             {
                 var playerGoalCard = this.uiItems.getByUiType("goal_card").filter(function(g) { return g.data.location_arg == playerId; }.bind(this));
@@ -551,15 +551,15 @@ function (dojo, declare) {
                     var fakeGoalCardData = [ { type: 29, type_arg: 29, location: "goal_hand", location_arg : playerId }, { type: 29, type_arg: 29, location: "goal_hand", location_arg : playerId } ];
                     this.uiItems.createItems("goal_card", fakeGoalCardData);
                 }
-            }            
+            }
             var backOnlyCards = this.uiItems.getByUiType("goal_card").filter(function(g) { return g.data.type_arg == 29; });     //add goal card 29 class
             dojo.forEach(backOnlyCards, function(c) {
                 dojo.addClass(c.htmlNode, "goal_card_back");
             });
         },
-        
+
         resetSetup : function()
-        {            
+        {
             for(var i = 0 ; i < this.uiItems.length; i++)
             {
                 if (this.uiItems[i].onClickHandle)
@@ -571,20 +571,20 @@ function (dojo, declare) {
                     dojo.destroy(this.uiItems[i].htmlNode);
                 }
             }
-            
+
             this.uiItems = [];
         },
 
         /*
             setup:
-            
+
             This method must set up the game user interface according to current game situation specified
             in parameters.
-            
+
             The method is called each time the game interface is displayed to a player, ie:
             _ when the game starts
             _ when a player refreshes the game page (F5)
-            
+
             "gamedatas" argument contains all datas retrieved by your "getAllDatas" PHP method.
         */
         getValuesFromObject : function(data)
@@ -608,11 +608,11 @@ function (dojo, declare) {
 
             this.resetSetup();
             this.attachFunctionsToUiItems();
-                        
+
             this.uiItems.createItems("contract", this.getValuesFromObject(gamedatas.contracts));
-            this.uiItems.createItems("contract", this.getValuesFromObject(gamedatas.player_contracts));            
+            this.uiItems.createItems("contract", this.getValuesFromObject(gamedatas.player_contracts));
             this.uiItems.createItems("gift", this.getValuesFromObject(gamedatas.player_gifts));
-            this.uiItems.createItems("map_node", gamedatas.material.board);            
+            this.uiItems.createItems("map_node", gamedatas.material.board);
             this.uiItems.createItemsViaCallback(function(s) { return s.is_award_spot ? "award_spot" : "board_spot" }, gamedatas.material.spots);
             this.uiItems.createItemsViaCallback(function(d) { return d.type; }, this.getValuesFromObject(gamedatas.pieces));
             this.uiItems.createItems("die", this.getValuesFromObject(gamedatas.dice));
@@ -622,10 +622,10 @@ function (dojo, declare) {
                 var player = gamedatas.players[playerId];
                 this.playerResources[playerId] = {};
 
-                dojo.forEach(['coin', 'camel', 'pepper', 'silk', 'gold', 'vp'], function(r) {                    
+                dojo.forEach(['coin', 'camel', 'pepper', 'silk', 'gold', 'vp'], function(r) {
                     this.playerResources[playerId][r] = parseInt(player[r]);
                 }.bind(this));
-                
+
                 var completedContracts = gamedatas.player_contracts_completed[playerId] == undefined ? 0 : parseInt(gamedatas.player_contracts_completed[playerId].num_of);
                 gamedatas.player_contracts_completed[playerId] = completedContracts;
                 dojo.setAttr($('contracts-complete-' + playerId), "innerHTML", completedContracts);
@@ -635,19 +635,19 @@ function (dojo, declare) {
                     this.uiItems.createItems("character", [{ player_id : playerId, character_type : player.character_type }]);
                     if (this.player_id == playerId)
                     {
-                        this.myCharacterType = player.character_type;                        
+                        this.myCharacterType = player.character_type;
                     }
                 }
                 if (this.player_id == playerId) { dojo.setStyle($('myCharacterAndGoalArea-' + playerId), "display", "block"); }
 
-                dojo.place(this.format_block('jstpl_player_panel', { player_id : playerId }), $('player_board_' + playerId));            
+                dojo.place(this.format_block('jstpl_player_panel', { player_id : playerId }), $('player_board_' + playerId));
                 this.updateResourceInfo(playerId);
-                if (player.hourglass == "1") { this.updateHourGlass(playerId); }                                
+                if (player.hourglass == "1") { this.updateHourGlass(playerId); }
             }
 
             this.setupGoalCards(this.getValuesFromObject(gamedatas.goal_cards));
             this.updateCurrentRound(gamedatas.current_round);
-            this.setupNotifications();      // Setup game notifications to handle (see "setupNotifications" method below)            
+            this.setupNotifications();      // Setup game notifications to handle (see "setupNotifications" method below)
             this.drawUi();
 
             this.addTooltipToClass('.panel.trading_post', _("Number of trading posts placed + remaining"), "");
@@ -666,7 +666,7 @@ function (dojo, declare) {
             dojo.connect($("preference_control_100"), "onchange", this, "onChangeGoalAnchorPreference");
 
             console.log( "Ending game setup" );
-        },        
+        },
         ///////////////////////////////////////////////////
         //// Game & client states
         pickCharacter : function(uiItem)
@@ -677,7 +677,7 @@ function (dojo, declare) {
             {
                 dojo.setStyle("btnConfirm", "display", "inline-block");
             }
-            
+
             for(var i = 0; i < selectedItems.length; i++)
             {
                 if (selectedItems[i] != uiItem)
@@ -687,7 +687,7 @@ function (dojo, declare) {
             }
             var selectedCharacter = this.uiItems.getFirstSelectedItemByUiType("character");
             if (selectedCharacter != null)
-            {                
+            {
                 var description = _(this.gamedatas.material.character_types[selectedCharacter.data.character_type].description);
                 dojo.setStyle("characterSelectionDescription", "display", "block");
                 dojo.setAttr("characterSelectionDescription", "innerHTML", description);
@@ -715,7 +715,7 @@ function (dojo, declare) {
         },
 
         playerTurnSendAction : function(selectedDice, selectedPlace, selectedGifts, uiItem)
-        {            
+        {
             var actionSent = true;
             if (uiItem.uiType == "contract")
             {
@@ -734,7 +734,7 @@ function (dojo, declare) {
                 this.sendPlaceDie(selectedDice, uiItem, null, selectedGifts);
             }
             else if (uiItem.uiType == "board_spot" && this.getAwardSpots(selectedPlace, selectedDice).length == 1)
-            {                
+            {
                 var awardSpot = this.getAwardSpots(selectedPlace, selectedDice);
                 this.sendPlaceDie(selectedDice, uiItem, awardSpot[0], selectedGifts);
             }
@@ -756,7 +756,7 @@ function (dojo, declare) {
                 else if (boardIds.length > 1)
                     this.switchToClientGiftPickTradingPost(uiItem.data.id, boardIds);
             }
-            else if (uiItem.uiType == "gift")     
+            else if (uiItem.uiType == "gift")
             {
                 this.sendFulfillGift(uiItem, null);
             }
@@ -776,7 +776,7 @@ function (dojo, declare) {
             var selectableItems = [];
             var selectedDice = this.uiItems.getSelectedItemsByUiType("die");
             var selectedPlace = this.uiItems.getFirstSelectedItemByUiTypes(["board_spot", "city_card"]);
-            var selectedGifts = this.uiItems.getSelectedItemsByUiType("gift");            
+            var selectedGifts = this.uiItems.getSelectedItemsByUiType("gift");
             var actionSent = false;
             this.updatePlayerTurnButtons(selectedDice);
             this.uiItems.resetAllNotSelected();
@@ -786,10 +786,10 @@ function (dojo, declare) {
                 this.uiItems.resetAllSelectableByType("gift", uiItem);
             }
             if (uiItem && uiItem.isSelected)
-            { 
+            {
                 actionSent = this.playerTurnSendAction(selectedDice, selectedPlace, selectedGifts, uiItem);
             }
-            
+
             if (uiItem && uiItem.uiType == "die" && !actionSent)       //reset selected places if any die changed
             {
                 selectedPlace = null;
@@ -800,13 +800,16 @@ function (dojo, declare) {
             if (!actionSent)
             {
                 selectableItems = selectableItems.concat(this.uiItems.getPlayerUiItems("die", "player_mat", playerId));
-                selectableItems = selectableItems.concat(this.getSelectableGiftUIItemsForPlayerTurnState(selectedDice, playerId));                
+                selectableItems = selectableItems.concat(this.getSelectableGiftUIItemsForPlayerTurnState(selectedDice, playerId));
                 if (selectedDice.length == 0)
                 {
                     selectableItems = selectableItems.concat(this.getFulfillableContracts(playerId));
-                    selectableItems = selectableItems.concat(this.getSelectableCityCardsUIItemsForPlayerTurnState(playerId));
+                    const city_cards = this.getSelectableCityCardsUIItemsForPlayerTurnState(playerId);
+                    console.log("city_cards");
+                    console.log(city_cards);
+                    selectableItems = selectableItems.concat(city_cards);
                 }
-                
+
                 if (this.mainActionAvailable && selectedPlace && this.getAwardSpots(selectedPlace, selectedDice).length > 1)     //place selected, show award spots
                 {
                     selectableItems.push(selectedPlace);
@@ -818,12 +821,12 @@ function (dojo, declare) {
                     var filteredPlaces = allPlaces.filter(function(u) { return _self.isPlaceSpotAvailable(u, selectedDice, playerId) });
                     selectableItems = selectableItems.concat(this.getSelectableCharacterSpotUIItemsForPlayerTurnState(selectedDice, playerId));
                     this.uiItems.resetSelectable(allPlaces);
-                    selectableItems = selectableItems.concat(filteredPlaces);                    
+                    selectableItems = selectableItems.concat(filteredPlaces);
                 }
                 else if (!this.mainActionAvailable && selectedDice.length == 1)     //always make coin3 available
                 {
                     var coin3 = this.uiItems.getByUiType("board_spot").find(function(s) { return s.data.place == "coin3"; });
-                    selectableItems.push(coin3);                    
+                    selectableItems.push(coin3);
                 }
             }
             this.uiItems.makeSelectable(selectableItems);
@@ -864,10 +867,10 @@ function (dojo, declare) {
             }
 
             if (figures.length > 1)     //lift over map_node if more than one choice
-            {                
+            {
                 if (selectedFigure && selectedMapNode)
                 {
-                    this.resetUiItemsZIndex(figures);                    
+                    this.resetUiItemsZIndex(figures);
                 }
                 else
                 {
@@ -880,12 +883,12 @@ function (dojo, declare) {
             {
                 var currentMapNode = this.uiItems.getByUiType("map_node").find(function(m) { return m.data.id == selectedFigure.data.location_arg });
                 var nodes = this.uiItems.getByUiType("map_node").filter(function(m) { return _self.isMapNodeAvailable(currentMapNode, m); } );
-                this.uiItems.makeSelectable(nodes);                
+                this.uiItems.makeSelectable(nodes);
             }
             else if (selectedFigure && selectedMapNode)
             {
                 this.sendTravel(selectedFigure, selectedMapNode);
-            }            
+            }
         },
 
         playerPickContract : function()
@@ -899,10 +902,10 @@ function (dojo, declare) {
             if (selectedContract.length == 0)
             {
                 var contracts = this.uiItems.getByUiType("contract").filter(function(c) { return c.data.location == "board" && parseInt(c.data.location_arg) <= dieValue; });
-                this.uiItems.makeSelectable(contracts);    
+                this.uiItems.makeSelectable(contracts);
             }
             else if (selectedContract.length > 0 && myContracts.length > 1)
-            {   
+            {
                 myContracts = myContracts.filter(function(c) { return validContractIds.includes(c.data.id); });
                 this.uiItems.resetAllNotSelected();
                 this.uiItems.makeSelectable(myContracts);
@@ -920,7 +923,7 @@ function (dojo, declare) {
             var cityBonus = this.uiItems.getByUiType("city_bonus");
             var tradingPostOnly = this.currentMoveArgs.trading_post_only;
             var offlimitCities = this.currentMoveArgs.offlimit_city_bonuses.split(',');
-                        
+
             for(var i = 0; i < cityBonus.length; i++)
             {
                 var c = cityBonus[i];
@@ -951,7 +954,7 @@ function (dojo, declare) {
             var mapNode = this.uiItems.getByUiTypeAndId("map_node", mapNodeId).htmlNode;
             dojo.setStyle(mapNode, "border", "4px solid yellow");
 
-            this.forceChangeUiItemsZIndex(items, 600);            
+            this.forceChangeUiItemsZIndex(items, 600);
             this.uiItems.makeSelectable(items);
             if (uiItem) { this.uiItems.toggleSelection(uiItem); }       //re-select
         },
@@ -959,7 +962,7 @@ function (dojo, declare) {
         client_gift10PickBoardId : function(uiItem)
         {
             var boardIds = this.currentMoveArgs.boardIds;
-            var mapNodes = this.uiItems.getByUiType("map_node").filter(function(m) { return boardIds.includes(m.data.id) });            
+            var mapNodes = this.uiItems.getByUiType("map_node").filter(function(m) { return boardIds.includes(m.data.id) });
             if (uiItem)
             {
                 this.sendFulfillGift(this.currentMoveArgs.giftId, uiItem.data.id);
@@ -998,21 +1001,21 @@ function (dojo, declare) {
         {
             var giftIds = this.currentMoveArgs.giftIds;
             var gifts = this.uiItems.getByUiType("gift").filter(function(g) { return giftIds.includes(g.data.id); });
-            
+
             var keepGiftItem = this.uiItems.getByUiType("1x_gift").find(function(i) { return i.data.location == "player_mat" });
             if (keepGiftItem) { gifts.push(keepGiftItem); }
-            this.uiItems.makeSelectable(gifts);            
+            this.uiItems.makeSelectable(gifts);
             if (uiItem && uiItem.uiType == "gift")
             {
                 this.onClickChooseResource(uiItem.data.id);
             }
-            else if (uiItem && uiItem.uiType == "1x_gift") // Nicolao -- pick 2 gifts piece
+            else if (uiItem && uiItem.uiType == "1x_gift") // Fratre Nicolao -- pick 2 gifts piece
             {
-                this.confirmationDialog( _('Are you sure you want to use this piece?  This move cannot be undone'), 
+                this.confirmationDialog( _('Are you sure you want to use this piece?  This move cannot be undone'),
                     dojo.hitch( this, function() { this.onClickUsePlayerPiece(uiItem.data.id); } ),
-                    dojo.hitch( this, function() { 
-                        this.uiItems.toggleSelection(uiItem); 
-                        this.client_playerForceDiscardGift(null); 
+                    dojo.hitch( this, function() {
+                        this.uiItems.toggleSelection(uiItem);
+                        this.client_playerForceDiscardGift(null);
                     } )
                 );
             }
@@ -1022,10 +1025,10 @@ function (dojo, declare) {
         {
             if (this.isCurrentPlayerActive() && action)
             {
-                var actionType = action.type;                
+                var actionType = action.type;
                 switch(actionType)
                 {
-                    case "trigger_other_city_bonus":                        
+                    case "trigger_other_city_bonus":
                         this.setClientState("playerTriggerOtherCityBonus", { descriptionmyturn: _("${you} must select another city bonus") , args: { offlimit_city_bonuses : action.type_arg, trading_post_only: false } } );
                         break;
                     default:
@@ -1039,7 +1042,7 @@ function (dojo, declare) {
         {
             if (this.isCurrentPlayerActive() && action)
             {
-                var actionType = action.type;                
+                var actionType = action.type;
                 switch(actionType)
                 {
                     case "discard_contract":
@@ -1056,6 +1059,7 @@ function (dojo, declare) {
             }
         },
 
+        /* Highlight Player bonuses like Matteo Polo's extra contract */
         highlightBonuses : function(bonuses)
         {
             var items = [];
@@ -1093,8 +1097,8 @@ function (dojo, declare) {
             for(var i = 0; i < characterTypes.length; i++)
             {
                 var charType = characterTypes[i].character_type;
-                var charUiItem = this.uiItems.getByUiType("character").find(function(c) { return c.data.character_type == charType; });                
-                if (charUiItem == null) 
+                var charUiItem = this.uiItems.getByUiType("character").find(function(c) { return c.data.character_type == charType; });
+                if (charUiItem == null)
                 {
                     charUiItem = this.uiItems.createAndAddItem("character", { player_id : "99", character_type : charType });
                     dojo.place(charUiItem.htmlNode, "characterSelection", "first");
@@ -1102,7 +1106,7 @@ function (dojo, declare) {
                 items.push(charUiItem);
             }
             if (this.gamedatas.players[this.player_id])
-            {                
+            {
                 this.uiItems.makeSelectable(items);
             }
             if (this.isCurrentPlayerActive())
@@ -1112,10 +1116,10 @@ function (dojo, declare) {
         },
 
         transitionPlayerBonusState : function(pendingActions, pendingBonuses)
-        {            
+        {
             if (!this.isCurrentPlayerActive())          //not active player, nothing to do
                 return;
-            
+
             var playerId = this.player_id;
             var myPendingAction = pendingActions.find(function(a) { return a.pending_player_id == playerId; });
             var myPendingBonuses = pendingBonuses.filter(function(b) { return b.player_id == playerId; });
@@ -1127,7 +1131,7 @@ function (dojo, declare) {
             else if (myPendingBonuses)
             {
                 this.uiItems.resetAllSelectable();
-                this.highlightBonuses(myPendingBonuses);           //highlight bonuses available                                                
+                this.highlightBonuses(myPendingBonuses);           //highlight bonuses available
             }
         },
 
@@ -1140,14 +1144,14 @@ function (dojo, declare) {
             this.currentMove = stateName;
             this.currentMoveArgs = args.args;
             switch( stateName )
-            {                       
+            {
                 case 'pickCharacter':
                     dojo.setStyle("characterSelection", "display", "block");
                     this.showCharacterSelection(args.args.characters);
                     break;
                 case 'pickGoals':
                     dojo.setStyle("characterSelection", "display", "none");
-                    this.showGoalSelection();    
+                    this.showGoalSelection();
                     break;
                 case 'playerBonus':
                 case 'playerGunjBonus':
@@ -1160,13 +1164,13 @@ function (dojo, declare) {
                     this.mainActionAvailable = args.args.main_action_available;
                     this.canBuyBlackDie = args.args.can_buy_black_die;
                     if (!this.mainActionAvailable)          //swap sentences (bug #21345)
-                    {                        
+                    {
                         this.gamedatas.gamestate.descriptionmyturn = this.gamedatas.gamestate.descriptionmyturn_bonus;
                         this.gamedatas.gamestate.description = this.gamedatas.gamestate.description_bonus;
                         this.updatePageTitle();
                     }
                     break;
-                case 'playerChooseResource':                    
+                case 'playerChooseResource':
                     this.uiItems.resetAllSelectable();
                     this.transitionPlayerChooseResource(this.currentMoveArgs.action);
                     break;
@@ -1202,27 +1206,27 @@ function (dojo, declare) {
             console.log( 'Leaving state: '+stateName );
             switch( stateName )
             {
-                case 'rollAllDice':                
+                case 'rollAllDice':
                     this.uiItems.resetAllSelectable();
                     break;
                 case 'pickGoals':
-                    dojo.empty("goalSelection");                    
+                    dojo.empty("goalSelection");
                     break;
             }
         },
-        
+
         // onUpdateActionButtons: in this method you can manage "action buttons" that are displayed in the
         //                        action status bar (ie: the HTML links in the status bar).
-        //                
+        //
         onUpdateActionButtons: function( stateName, args )
         {
             console.log( 'onUpdateActionButtons: '+ stateName );
             if( this.isCurrentPlayerActive() )
-            {            
+            {
                 switch( stateName )
                 {
-                    case 'pickCharacter':                        
-                        this.addActionButton('btnConfirm', _('Confirm'), 'onClickConfirmCharacter'); 
+                    case 'pickCharacter':
+                        this.addActionButton('btnConfirm', _('Confirm'), 'onClickConfirmCharacter');
                         break;
                     case 'pickGoals':
                         this.addActionButton('btnConfirm', _('Confirm'), 'onClickConfirmGoals');
@@ -1231,18 +1235,18 @@ function (dojo, declare) {
                         var amount = args.compensation_amount[this.player_id];
                         for(var i = 0; i < amount + 1; i++)
                         {
-                            this.addActionButton( 'btnCompensation_camel_' + i, this.getHtmlForActionButtons({ camel: amount - i, coin: i }),                                 
+                            this.addActionButton( 'btnCompensation_camel_' + i, this.getHtmlForActionButtons({ camel: amount - i, coin: i }),
                                 dojo.hitch(this, dojo.partial(this.onClickPickCompensation, amount - i, i)));
                         }
                         break;
                     case 'playerTurn':
                         var passText = args.only_remaining_player ? _('Pass to main action') : _('Pass');
-                        this.addActionButton('btnRerollDie', _('Re-roll die for 1 ') + this.getHtmlForActionButtons({ camel: 1 }), 'onClickRerollDie'); 
-                        this.addActionButton('btnBumpUpDie', _('+1 to die for ') + this.getHtmlForActionButtons({ camel: 2 }), dojo.hitch(this, function() { this.onClickBumpDie("up") })); 
-                        this.addActionButton('btnBumpDownDie', _('-1 to die for ') + this.getHtmlForActionButtons({ camel: 2 }), dojo.hitch(this, function() { this.onClickBumpDie("down") })); 
+                        this.addActionButton('btnRerollDie', _('Re-roll die for 1 ') + this.getHtmlForActionButtons({ camel: 1 }), 'onClickRerollDie');
+                        this.addActionButton('btnBumpUpDie', _('+1 to die for ') + this.getHtmlForActionButtons({ camel: 2 }), dojo.hitch(this, function() { this.onClickBumpDie("up") }));
+                        this.addActionButton('btnBumpDownDie', _('-1 to die for ') + this.getHtmlForActionButtons({ camel: 2 }), dojo.hitch(this, function() { this.onClickBumpDie("down") }));
                         this.addActionButton('btnBuyBlackDie', _('Buy black die for ') + this.getHtmlForActionButtons({ camel: 3 }), 'onClickBuyBlackDie');
-                        this.addActionButton('btnChangeDie', _('Change die value'), 'onClickChangeDie'); 
-                        this.addActionButton('btnCancel', _('Cancel'), 'onClickCancel', null, false, "red"); 
+                        this.addActionButton('btnChangeDie', _('Change die value'), 'onClickChangeDie');
+                        this.addActionButton('btnCancel', _('Cancel'), 'onClickCancel', null, false, "red");
                         this.addActionButton('btnPass', passText, 'onClickPass');
                         if (this.blinkPassHandle) { clearTimeout(this.blinkPassHandle); }
                         this.blinkPassHandle = setTimeout(function() {
@@ -1251,7 +1255,7 @@ function (dojo, declare) {
                         }, 20000);
                         break;
                     case 'playerChooseResource':
-                    case 'playerBonus':                        
+                    case 'playerBonus':
                         var pendingAction = args.action;
                         if (pendingAction)
                         {
@@ -1260,13 +1264,13 @@ function (dojo, declare) {
                                 case "camel_coin":
                                     var num = parseInt(pendingAction.remaining_count);
                                     this.addActionButton('btnCoin', this.getHtmlForActionButtons({ coin: num }), dojo.hitch(this, function() { this.onClickChooseResource('coin') } ) );
-                                    this.addActionButton('btnCamel', this.getHtmlForActionButtons({ camel: num }), dojo.hitch(this, function() { this.onClickChooseResource('camel') } ) );                                
+                                    this.addActionButton('btnCamel', this.getHtmlForActionButtons({ camel: num }), dojo.hitch(this, function() { this.onClickChooseResource('camel') } ) );
                                     break;
                                 case "choice_of_good":
                                     if (pendingAction.type_arg == "" || (pendingAction.type_arg == "pay" && this.hasResources({ "pepper" : 1 }, this.player_id)))
                                         this.addActionButton('btnPepper', this.getHtmlForActionButtons( { pepper: 1 }), dojo.hitch(this, function() { this.onClickChooseResource('pepper') } ) );
                                     if (pendingAction.type_arg == "" || (pendingAction.type_arg == "pay" && this.hasResources({ "silk" : 1 }, this.player_id)))
-                                        this.addActionButton('btnSilk', this.getHtmlForActionButtons( { silk: 1 }), dojo.hitch(this, function() { this.onClickChooseResource('silk') } ) );                                                                
+                                        this.addActionButton('btnSilk', this.getHtmlForActionButtons( { silk: 1 }), dojo.hitch(this, function() { this.onClickChooseResource('silk') } ) );
                                     if (pendingAction.type_arg == "" || (pendingAction.type_arg == "pay" && this.hasResources({ "gold" : 1 }, this.player_id)))
                                         this.addActionButton('btnGold', this.getHtmlForActionButtons( { gold: 1 }), dojo.hitch(this, function() { this.onClickChooseResource('gold') } ) );
                                     break;
@@ -1288,7 +1292,7 @@ function (dojo, declare) {
                         break;
                     case 'playerChooseCityCardAward':
                     case 'client_playerChooseCityCardAward':
-                        var cardTypeData = this.gamedatas.material.city_cards[args.card_type];                        
+                        var cardTypeData = this.gamedatas.material.city_cards[args.card_type];
                         if (cardTypeData.type == 30)
                         {
                             var goods = this.getTwoDiffGoods(this.player_id);
@@ -1305,7 +1309,7 @@ function (dojo, declare) {
                             }
                         }
                         else if (cardTypeData.kind == "choice")
-                        {                            
+                        {
                             for(var i = 0; i < cardTypeData.choice.length; i++)
                             {
                                 var choice = cardTypeData.choice[i];
@@ -1318,15 +1322,15 @@ function (dojo, declare) {
                             for(var i = 0; i < args.num_remaining; i++)
                             {
                                 this.addActionButton('btnNumTimes_' + i, i + 1, dojo.hitch(this, dojo.partial(this.onClickActivateMultipleCityCard, i+1, null)));
-                            }                            
-                        }                        
+                            }
+                        }
                         else if (cardTypeData.kind == "exchange")
                         {
                             var labelCostToAward = this.getHtmlForActionButtons(cardTypeData.cost) + " → " + this.getHtmlForActionButtons(cardTypeData.award);
-                            var labelAwardToCost = this.getHtmlForActionButtons(cardTypeData.award) + " → " + this.getHtmlForActionButtons(cardTypeData.cost);                            
+                            var labelAwardToCost = this.getHtmlForActionButtons(cardTypeData.award) + " → " + this.getHtmlForActionButtons(cardTypeData.cost);
                             if (this.hasResources(cardTypeData.cost, this.player_id) || cardTypeData.type == 19)       //allow vp to go negative
                                 this.addActionButton('btnCostToAward', labelCostToAward, dojo.hitch(this, dojo.partial(this.onClickActivateExchangeCityCard, "cost_to_award")));
-                            
+
                             if (this.hasResources(cardTypeData.award, this.player_id))
                                 this.addActionButton('btnAwardToCost', labelAwardToCost, dojo.hitch(this, dojo.partial(this.onClickActivateExchangeCityCard, "award_to_cost")));
                         }
@@ -1336,10 +1340,10 @@ function (dojo, declare) {
                         }
                         break;
                     case 'playerPickContract':
-                        if (args.can_skip)                        
+                        if (args.can_skip)
                             this.addActionButton('btnSkipContract', _("Skip"), 'onClickSkipPickContract', null, false, "red");
                         break;
-                    case 'client_playerDiscardContract':                        
+                    case 'client_playerDiscardContract':
                             this.addActionButton('btnCancel', _("Cancel"), 'onClickCancel', null, false, "red");
                         break;
                     case 'playerTravel':
@@ -1352,7 +1356,7 @@ function (dojo, declare) {
                         this.addActionButton('btnChangeDie4', 4, dojo.hitch(this, function() { this.onClickChangeDieValue(4) }));
                         this.addActionButton('btnChangeDie5', 5, dojo.hitch(this, function() { this.onClickChangeDieValue(5) }));
                         this.addActionButton('btnChangeDie6', 6, dojo.hitch(this, function() { this.onClickChangeDieValue(6) }));
-                        this.addActionButton('btnCancel', _('Cancel'), 'onClickCancel', null, false, "red"); 
+                        this.addActionButton('btnCancel', _('Cancel'), 'onClickCancel', null, false, "red");
                         break;
                     case 'playerTriggerOtherCityBonus':
                         this.addActionButton('btnSkipTriggerOtherCityBonus', _("Skip"), 'onClickSkipTriggerOtherCityBonus', null, false, "red");
@@ -1366,23 +1370,23 @@ function (dojo, declare) {
                 if (args && args.can_undo && args.can_undo == 1)
                 {
                     this.canUndo = true;
-                    this.addActionButton('btnUndo', _('Undo'), 'onClickUndo', null, false, "gray"); 
+                    this.addActionButton('btnUndo', _('Undo'), 'onClickUndo', null, false, "gray");
                 }
                 else
                 {
                     this.canUndo = false;
-                }                
+                }
             }
             if (stateName != "gameEnd")
                 this.addActionButton('btnPlayerAid', _('Player Aid'), 'onClickPlayerAid', null, false, 'gray');
         },
 
         ///////////////////////////////////////////////////
-        //// Utility methods        
+        //// Utility methods
         /*
-        
+
             Here, you can defines some utility methods that you can use everywhere in your javascript
-            script.        
+            script.
         */
         onScreenWidthChange : function()
         {
@@ -1410,37 +1414,37 @@ function (dojo, declare) {
 
         format_string_recursive : function(log, args)
         {
-            try 
-            {                
-                if (log && args && !args.processed) 
+            try
+            {
+                if (log && args && !args.processed)
                 {
-                    args.processed = true;                    
+                    args.processed = true;
                     if (!this.isSpectator)
                         args.You = this.divYou(); // will replace ${You} with colored version
-                    
+
                     var keys = ["resource_type", "camel", "gift_type"];
-                    for (var i in keys) 
+                    for (var i in keys)
                     {
                         var key = keys[i];
-                        if (typeof args[key] == 'string') 
+                        if (typeof args[key] == 'string')
                         {
-                            args[key] = this.getPieceForLog(key, args);                            
+                            args[key] = this.getPieceForLog(key, args);
                         }
                     }
                 }
             }
-            catch (e) 
+            catch (e)
             {
                 console.error(log,args,"Exception thrown", e.stack);
             }
             return this.inherited(arguments);
         },
 
-        divYou : function() 
+        divYou : function()
         {
             var color = this.gamedatas.players[this.player_id].color;
             var color_bg = "";
-            if (this.gamedatas.players[this.player_id] && this.gamedatas.players[this.player_id].color_back) 
+            if (this.gamedatas.players[this.player_id] && this.gamedatas.players[this.player_id].color_back)
             {
                 color_bg = "background-color:#" + this.gamedatas.players[this.player_id].color_back + ";";
             }
@@ -1452,13 +1456,13 @@ function (dojo, declare) {
         {
             var htmlLog = "";
             if (key == "resource_type")
-            {                
+            {
                 var resources = {};
                 resources[args.resource_type] = 1;
                 htmlLog = this.getHtmlForActionButtons(resources);
             }
             else if (key == "gift_type")
-            {                
+            {
                 var backgroundCoords = this.uiItems.getBackgroundPosition("gift", args.gift_type);
                 var giftTitle = "gift " + args.gift_type;
                 backgroundPosition = "background-position:" + backgroundCoords.x + "px " + backgroundCoords.y + "px;";
@@ -1468,11 +1472,11 @@ function (dojo, declare) {
         },
 
         getHtmlForActionButtons : function(resources)
-        {            
+        {
             var totalAmount = 0;
             var html = '';
 
-            for(var resourceType in resources) 
+            for(var resourceType in resources)
             {
                 totalAmount += resources[resourceType];
             }
@@ -1492,10 +1496,10 @@ function (dojo, declare) {
                         {
                             html += amount + ' ';
                         }
-                        html += ' <span class="small_piece small_' + resourceType + '" title="' + resourceType + '"></span>  ';    
+                        html += ' <span class="small_piece small_' + resourceType + '" title="' + resourceType + '"></span>  ';
                     }
                 }
-            }            
+            }
             return html;
         },
 
@@ -1533,7 +1537,7 @@ function (dojo, declare) {
         {
             var description = dojo.create("div");
             if (characterType == 9)     //Khan Arghun
-            {                
+            {
                 var items = this.uiItems.getByUiType("city_card").filter(function(c) { return c.data.location == "pick_character" });
                 for(var i = 0; i < items.length; i++)
                 {
@@ -1571,7 +1575,7 @@ function (dojo, declare) {
                     }
                 }
                 else if (place == "bazaar" && (placeIndex == 0 || (lowestDie != 4 && lowestDie != 6)))
-                {                    
+                {
                     awardSpots = [ awardSpots[awardSpots.length - 1] ];     //make a new array of just last element
                 }
                 else if (place == "bazaar" && (lowestDie == 4 || lowestDie == 6))
@@ -1581,7 +1585,7 @@ function (dojo, declare) {
             }
             return awardSpots;
         },
-        
+
         isMapNodeAvailable : function(currentMapNode, futureMapNode)
         {
             var futureMapNodeId = futureMapNode.data.id;
@@ -1608,11 +1612,11 @@ function (dojo, declare) {
         },
 
         getValidBoardIdsFiguresAreOn : function(playerId)
-        {            
+        {
             var figures = this.uiItems.getByUiType("figure").filter(function(f) { return f.data.player_id == playerId; })
             var tradingPosts = this.uiItems.getPlayerUiItems("trading_post", "board", this.player_id);
             var boardIds = [];
-            dojo.forEach(figures, function(f) { 
+            dojo.forEach(figures, function(f) {
                 var hasTradingPostOnSpot = tradingPosts.find(function(t) { return t.data.location_arg == f.data.location_arg; });
                 if (this.gamedatas.material.board[f.data.location_arg].type.endsWith("city") && hasTradingPostOnSpot == null)
                 {
@@ -1624,7 +1628,7 @@ function (dojo, declare) {
 
         getDiceOnSpot : function(location, locationArg)
         {
-            return this.uiItems.getByUiType("die").filter(function(d) { return d.data.location == location && d.data.location_arg == locationArg });            
+            return this.uiItems.getByUiType("die").filter(function(d) { return d.data.location == location && d.data.location_arg == locationArg });
         },
 
         getDiceOnUiItem : function(uiItem)
@@ -1638,7 +1642,7 @@ function (dojo, declare) {
             {
                 dice = this.getDiceOnSpot("city_card", uiItem.data.type_arg);
             }
-            return dice;            
+            return dice;
         },
 
         isPlayerDiceOnUiItem : function(uiItem, playerId)
@@ -1649,7 +1653,7 @@ function (dojo, declare) {
 
         isPlayerDiceOnBoardSpotArea : function(spotArea, playerId)     //when we want to treat multiple board spots as one "area" (i.e. khan)
         {
-            var dice = this.uiItems.filter(function(d) { return d.uiType == "die" && d.data.type == "regular" && d.data.player_id == playerId  
+            var dice = this.uiItems.filter(function(d) { return d.uiType == "die" && d.data.type == "regular" && d.data.player_id == playerId
                 && d.data.location == spotArea });
             return dice.length > 0;
         },
@@ -1675,20 +1679,20 @@ function (dojo, declare) {
         isPlaceSpotAvailable : function(uiItem, selectedDice, playerId)
         {
             var usingRegularDice = selectedDice.filter(function(d) { return d.data.type == "regular"; }).length > 0;
-            var isPlayerDiceOnSpot = usingRegularDice && this.isPlayerDiceOnUiItem(uiItem, playerId);            
+            var isPlayerDiceOnSpot = usingRegularDice && this.isPlayerDiceOnUiItem(uiItem, playerId);
             var boardMaterial = this.getPlaceDataByUiItem(uiItem);
             var isAvailable = boardMaterial.num_dice == selectedDice.length;
 
             if (boardMaterial["allow_multiple"] == false)       //only one player can go here
                 isAvailable &= this.getDiceOnUiItem(uiItem).length == 0;
-                
+
             if (uiItem.uiType == "board_spot" && uiItem.data.place == "khan")
-            {                
+            {
                 isAvailable &= this.getDiceOnSpot("khan", uiItem.data.index).length == 0;
                 if (isAvailable && uiItem.data.index > 0)
                 {
                     var diceOnSpot = this.getDiceOnSpot("khan", uiItem.data.index - 1);
-                    isAvailable &= diceOnSpot.length == 1 && diceOnSpot[0].data.value <= selectedDice[0].data.value;     //assume only one die in selectedDice                    
+                    isAvailable &= diceOnSpot.length == 1 && diceOnSpot[0].data.value <= selectedDice[0].data.value;     //assume only one die in selectedDice
                 }
                 isAvailable &= !this.isPlayerDiceOnBoardSpotArea("khan", playerId) || !usingRegularDice;        //can only go here if not using regular dice or not on board spot
             }
@@ -1698,7 +1702,7 @@ function (dojo, declare) {
             }
             else if (uiItem.uiType == "city_card")      //make sure trading post is in the city containing the card
             {
-                isAvailable &= this.uiItems.getPlayerUiItems("trading_post", "board", playerId).filter(function(t) { return t.data.location_arg == uiItem.data.location_arg }).length > 0;                
+                isAvailable &= this.uiItems.getPlayerUiItems("trading_post", "board", playerId).filter(function(t) { return t.data.location_arg == uiItem.data.location_arg }).length > 0;
             }
 
             return isAvailable;
@@ -1749,9 +1753,9 @@ function (dojo, declare) {
             if (this.myCharacterType != 2)
             {
                 var die = selectedDice.length == 1 ? selectedDice[0] : null;
-                if (die && die.data.value != 6)            
+                if (die && die.data.value != 6)
                     dojo.setStyle("btnBumpUpDie", "display", "inline-block");
-                
+
                 if (die && die.data.value != 1)
                     dojo.setStyle("btnBumpDownDie", "display", "inline-block");
 
@@ -1809,7 +1813,7 @@ function (dojo, declare) {
                 if (selectedDice.length == 1)
                 {
                     validGiftTypes.push(4);
-                }    
+                }
             }
             else if (selectedDice.length == 0)
             {
@@ -1820,6 +1824,8 @@ function (dojo, declare) {
 
         getSelectableCityCardsUIItemsForPlayerTurnState : function(playerId)
         {
+            console.log("HEY MAN");
+            console.log(this.uiItems.getByUiType("city_card"));
             return this.uiItems.getByUiType("city_card").filter(function(g) { return g.data.location_arg == playerId; });
         },
 
@@ -1842,22 +1848,22 @@ function (dojo, declare) {
         //// Drawing & Animation methods
         createShakeDieAnimation : function(dieNode)
         {
-            var shakeDieAnimation = [];            
+            var shakeDieAnimation = [];
             var nodeStyle = dojo.getComputedStyle(dieNode);
             var curTop = parseInt(nodeStyle.top.replace('px', ''));
-            var curLeft = parseInt(nodeStyle.left.replace('px', ''));            
+            var curLeft = parseInt(nodeStyle.left.replace('px', ''));
             var pipNode = dojo.query(".die_pip:first-child", dieNode)[0];
 
             for(var i = 0; i < 10; i++)     //10 shakes
             {
                 var randTop = Math.floor(Math.random() * 10) - 5;
-                var randLeft = Math.floor(Math.random() * 10) - 5;   
-                var randPip = Math.floor(Math.random() * 6);             
+                var randLeft = Math.floor(Math.random() * 10) - 5;
+                var randPip = Math.floor(Math.random() * 6);
                 var anim = dojo.animateProperty({
                     node : dieNode,
-                    properties: { 
+                    properties: {
                         top: { start : curTop + randTop, end: curTop },
-                        left : { start : curLeft + randLeft, end: curLeft },                        
+                        left : { start : curLeft + randLeft, end: curLeft },
                     },
                     duration : 50
                 });
@@ -1888,13 +1894,13 @@ function (dojo, declare) {
         shakeDice : function(dice)
         {
             var allDiceShakes = [];
-            var triggerCombineOnEndCounter = 0;            
+            var triggerCombineOnEndCounter = 0;
             for(var i = 0; i < dice.length; i++)
             {
                 var die = dice[i];
                 if (die.data.after_shake_value != undefined)
                 {
-                    var dieAnim = this.createShakeDieAnimation(die.htmlNode);                    
+                    var dieAnim = this.createShakeDieAnimation(die.htmlNode);
                     dieAnim.onEnd = function()
                     {
                         triggerCombineOnEndCounter -= 1;
@@ -1905,11 +1911,11 @@ function (dojo, declare) {
                     }.bind(this);
                     die.data.value = die.data.after_shake_value;
                     die.uiPosition = 0;
-                    delete die.data.after_shake_value; 
-                    triggerCombineOnEndCounter += 1                   
+                    delete die.data.after_shake_value;
+                    triggerCombineOnEndCounter += 1
                     allDiceShakes.push(dieAnim);
                 }
-            }                    
+            }
             if (allDiceShakes.length > 0)
             {
                 //onEnd fires before inner animations for some reason, cannot rely on it (dojo bug?  https://bugs.dojotoolkit.org/ticket/16305)
@@ -1917,17 +1923,17 @@ function (dojo, declare) {
                 allDiceAnimation.play();
             }
         },
-        
+
         createShakeDiceClosure : function(dice)
         {
             return function() {
-                this.shakeDice(dice);                
+                this.shakeDice(dice);
             }.bind(this);
         },
 
         getMapNodeMarginBox : function(locationArg)
         {
-            var mapNode = $("map_node_" + locationArg);            
+            var mapNode = $("map_node_" + locationArg);
             var result = dojo.marginBox(mapNode);
             return result;
         },
@@ -1935,7 +1941,7 @@ function (dojo, declare) {
         getPositionForUiItem : function(uiItem)
         {
             var position = { top: null, left: null };
-            
+
             if (uiItem.uiType == "character_spot")
             {
                 position.left = -120;
@@ -1951,7 +1957,7 @@ function (dojo, declare) {
                 {
                     position.top = -104;
                 }
-                else if (uiItem.data.character_type == 11 && uiItem.data.index == 1)      //Gunj Kököchin   
+                else if (uiItem.data.character_type == 11 && uiItem.data.index == 1)      //Gunj Kököchin
                 {
                     position.top = -65;
                 }
@@ -1963,7 +1969,7 @@ function (dojo, declare) {
                 position.left = mapNode.l + 6;
             }
             else if (uiItem.uiType == "contract" && uiItem.data.location == "board")
-            {                
+            {
                 var mapNode = dojo.marginBox($("board_spot_contracts_0"));
                 position.top = mapNode.t;
                 position.left = mapNode.l + (uiItem.data.location_arg * 85) + 44;
@@ -1994,7 +2000,7 @@ function (dojo, declare) {
                 }
             }
             else if (uiItem.uiType == "figure")
-            {                                
+            {
                 var mapNode = this.getMapNodeMarginBox(uiItem.data.location_arg);
                 var boardType = this.gamedatas.material.board[parseInt(uiItem.data.location_arg)].type;
                 position.top = mapNode.t - 20;
@@ -2020,25 +2026,25 @@ function (dojo, declare) {
 
                 if (boardType == "small_city")
                 {
-                    leftOffset = [5, 44, 5, 44, 22];      
-                    topOffset = [25, 25, 50, 50, 30];    
+                    leftOffset = [5, 44, 5, 44, 22];
+                    topOffset = [25, 25, 50, 50, 30];
                 }
                 else if (boardType == "bejing")
                 {
                     leftOffset = [32, 70, 32, 8, 8];
                     topOffset = [15, 30, 46, 30, 66];
                 }
-                                    
+
                 var mapNode = this.getMapNodeMarginBox(uiItem.data.location_arg);
                 position.top = mapNode.t + topOffset[uiItem.uiPosition];
                 position.left = mapNode.l + leftOffset[uiItem.uiPosition];
             }
             else if (uiItem.uiType == "die" && !uiItem.data.location.endsWith("mat"))
-            {                
+            {
                 var dest = this.getDestinationForBoardUiItem(uiItem);
                 var mapNode = dojo.marginBox(dest);
 
-                if (uiItem.data.location == "travel")       
+                if (uiItem.data.location == "travel")
                 {
                     position.top = mapNode.t + uiItem.uiPosition * this.uiItems.itemConfig["die"].height - 8;       //8px for travel spot offset
                     position.left = mapNode.l;
@@ -2046,7 +2052,7 @@ function (dojo, declare) {
                 else if (uiItem.data.location == "city_card")
                 {
                     position.top = mapNode.t + 14;
-                    position.left = mapNode.l + 2;                    
+                    position.left = mapNode.l + 2;
                 }
                 else if (uiItem.data.location == "bazaar")
                 {
@@ -2056,7 +2062,7 @@ function (dojo, declare) {
                 else if (uiItem.data.location == "gunj")
                 {
                     position.left = -120;
-                    position.top = uiItem.data.location_arg == 0 ? -104 : -64;                    
+                    position.top = uiItem.data.location_arg == 0 ? -104 : -64;
                 }
                 else
                 {
@@ -2080,8 +2086,8 @@ function (dojo, declare) {
             if (position.top != null && position.left != null)
             {
                 dojo.setStyle(uiItem.htmlNode, "top", position.top + "px");
-                dojo.setStyle(uiItem.htmlNode, "left", position.left + "px");    
-            }            
+                dojo.setStyle(uiItem.htmlNode, "left", position.left + "px");
+            }
         },
 
         sortUiItemsByWeightPosition : function(a, b)
@@ -2092,7 +2098,7 @@ function (dojo, declare) {
         },
 
         placeOnNewParent : function(top, left, parent, node)
-        {            
+        {
             dojo.setStyle(node, "top", top + "px");
             dojo.setStyle(node, "left", left + "px");
             dojo.place(node, parent);
@@ -2100,7 +2106,7 @@ function (dojo, declare) {
 
         getPlayerItemsForPlayerMatContainer : function(itemContainer, playerId)
         {
-            var items = this.uiItems.getByUiTypes(this.playerMatContainerUiTypes[itemContainer]).filter(function(d) { 
+            var items = this.uiItems.getByUiTypes(this.playerMatContainerUiTypes[itemContainer]).filter(function(d) {
                 return (d.data.location.endsWith("mat") && d.data.player_id == playerId) || (d.data.location.endsWith("hand") && d.data.location_arg == playerId)
             });
             items.sort(this.sortUiItemsByWeightPosition.bind(this.uiItems));
@@ -2110,7 +2116,7 @@ function (dojo, declare) {
         getDestinationForBoardUiItem : function(uiItem)
         {
             if (uiItem.uiType == "die" && uiItem.data.location == "city_card")
-            {                                
+            {
                 return this.uiItems.getByUiType("city_card").find(function(c) { return c.data.type_arg == uiItem.data.location_arg }).htmlNode;
             }
             else if (uiItem.uiType == "die" && uiItem.data.location == "gunj")
@@ -2118,11 +2124,11 @@ function (dojo, declare) {
                 return this.uiItems.getByUiType("character_spot").find(function(c) { return c.data.character_type == 11 && c.data.index == uiItem.data.location_arg }).htmlNode;
             }
 
-            return "board_spot_" + uiItem.data.location + "_" + uiItem.data.location_arg;            
+            return "board_spot_" + uiItem.data.location + "_" + uiItem.data.location_arg;
         },
 
         buildBoardAnimationFromUiItem : function(uiItem)
-        {            
+        {
             var position = this.getPositionForUiItem(uiItem);
             var parentContainer = this.getParentContainerForUiItem(uiItem);
             var anim = this.slideToObjectPos(uiItem.htmlNode, parentContainer, position.left, position.top);
@@ -2151,7 +2157,7 @@ function (dojo, declare) {
                 dojo.setStyle(uiItem.htmlNode, "pointer-events", "auto");
             }
         },
-        
+
         forceChangeUiItemsZIndex : function(uiItems, newZIndex)
         {
             for(var i = 0; i < uiItems.length; i++)
@@ -2169,14 +2175,14 @@ function (dojo, declare) {
         },
 
         changeUiItemZIndex : function(uiItem)
-        {            
+        {
             var baseZIndex = this.uiItems.itemConfig[uiItem.uiType];
             baseZIndex = baseZIndex.zIndex != undefined ? baseZIndex.zIndex : 10;
 
             if (uiItem.uiType == "die")
             {
                 if (uiItem.data.location == "bazaar")
-                {                    
+                {
                     baseZIndex += 100 - parseInt(uiItem.data.location_arg) * 10;
                 }
 
@@ -2186,8 +2192,8 @@ function (dojo, declare) {
                 }
             }
             else if (uiItem.uiType == "trading_post")
-            {                
-                baseZIndex += parseInt(uiItem.data.position);                
+            {
+                baseZIndex += parseInt(uiItem.data.position);
             }
             dojo.setStyle(uiItem.htmlNode, "zIndex", baseZIndex);
         },
@@ -2195,7 +2201,7 @@ function (dojo, declare) {
         onEndAnimateGoalCards : function(goalCardsUiItems)
         {
             return function()
-            {                
+            {
                 var container = this.getContainerTypeByUiType("goal_card");
                 for(var i = 0; i < goalCardsUiItems.length; i++)
                 {
@@ -2264,9 +2270,9 @@ function (dojo, declare) {
                 this.changeUiItemPointerEvents(uiItem);
                 this.changeUiItemZIndex(uiItem);
             }
-            
+
             for(var playerId in modifiedItems)     //play player mat animations if any
-            {                
+            {
                 for(var containerType in modifiedItems[playerId])
                 {
                     this.repositionPlayerMatWithCallback(containerType, modifiedItems[playerId][containerType], onAnimateEndCallback, playerId);
@@ -2279,7 +2285,7 @@ function (dojo, declare) {
                 dojo.fx.combine(anims).play();
             }
             else if (!onAnimateEndCallbackCalled)
-            {                
+            {
                 onAnimateEndCallback();
             }
         },
@@ -2293,7 +2299,7 @@ function (dojo, declare) {
         {
             var items = this.getPlayerItemsForPlayerMatContainer(itemContainer, playerId);
             var anims = [];
-            var container = itemContainer == "small" ? $("small-container-" + playerId) : $("large-container-" + playerId);            
+            var container = itemContainer == "small" ? $("small-container-" + playerId) : $("large-container-" + playerId);
             var containerTop = itemContainer == "small" ? 40 : 90;
             var containerWidth = dojo.getComputedStyle(container).width.replace("px", "") - 130;        //buffer for character card
 
@@ -2311,7 +2317,7 @@ function (dojo, declare) {
                 var modifiedLeft = totalWidth;
 
                 if (item.uiType == "contract") { contracts = true; }                                //adjust for contracts
-                if (contracts && item.uiType != "contract" && modifiedTop == 0) 
+                if (contracts && item.uiType != "contract" && modifiedTop == 0)
                 {
                     totalWidth = Math.max(420, modifiedLeft);               //width of 2 goal cards & 2 contracts
                     modifiedLeft = Math.max(420, modifiedLeft);
@@ -2332,7 +2338,7 @@ function (dojo, declare) {
                     anim.onEnd = dojo.partial(this.placeOnNewParent, modifiedTop, modifiedLeft, container);
                 }
                 anims.push(anim);
-                
+
                 if (i > 0 && item.uiType != items[i-1].uiType) { tmpUiPosition = 0; }
                 item.uiPosition = tmpUiPosition;
                 totalWidth += uiItemWidth;
@@ -2360,10 +2366,10 @@ function (dojo, declare) {
         },
 
         setUiPositionForDiceOnBoard : function(location, locationArg, locationHeight, playerId)
-        {            
+        {
             var dice = this.uiItems.getByUiType("die").filter(function(d) { return d.data.location == location && d.data.location_arg == locationArg &&
                 d.data.location_height == locationHeight && d.data.player_id == playerId });
-            
+
             dice.sort(this.sortUiItemsByWeightPosition.bind(this.uiItems));
             for(var i = 0; i < dice.length; i++)
             {
@@ -2381,7 +2387,7 @@ function (dojo, declare) {
         },
 
         getNextAvailableUiPosition : function(uiType, location, locationArg)
-        {   
+        {
             var nextPosition = 0;
             var items = this.uiItems.getByUiType(uiType).filter(function(f) { return f.data.location == location && f.data.location_arg == locationArg });
             for(var i = 0; i < items.length; i++)
@@ -2423,7 +2429,7 @@ function (dojo, declare) {
                 this.repositionPlayerMat("large", null, playerId);
             }
         },
-        
+
         moveUiItemToParentContainer : function(uiItem, parentContainer)
         {
             if (parentContainer != null)
@@ -2461,10 +2467,10 @@ function (dojo, declare) {
         drawUiItem : function(uiItem)
         {
             var parentContainer = this.getParentContainerForUiItem(uiItem);
-            
+
             if (uiItem.uiType == "die" && parentContainer == "board")
             {
-                this.setUiPositionForDiceOnBoard(uiItem.data.location, uiItem.data.location_arg, uiItem.data.location_height, uiItem.data.player_id);                    
+                this.setUiPositionForDiceOnBoard(uiItem.data.location, uiItem.data.location_arg, uiItem.data.location_height, uiItem.data.player_id);
             }
             else if (uiItem.uiType == "figure")
             {
@@ -2474,7 +2480,7 @@ function (dojo, declare) {
             {
                 uiItem.uiPosition = uiItem.data.location_position;
             }
-            
+
             this.moveUiItemToParentContainer(uiItem, parentContainer);
             this.uiItems.addTooltip(uiItem);
         },
@@ -2580,16 +2586,16 @@ function (dojo, declare) {
         },
         ///////////////////////////////////////////////////
         //// Player's action
-        
+
         /*
-        
-            Here, you are defining methods to handle player's action (ex: results of mouse click on 
+
+            Here, you are defining methods to handle player's action (ex: results of mouse click on
             game objects).
-            
+
             Most of the time, these methods:
             _ check the action is possible at this game state.
             _ make a call to the game server
-        
+
         */
         onClickUiItem : function(evt)
         {
@@ -2604,7 +2610,7 @@ function (dojo, declare) {
                     this[this.currentMove](uiItem);
                 }
                 else if (uiItem.uiType == "figure")
-                {                    
+                {
                     var name = this.gamedatas.material.board[uiItem.data.location_arg].name;
                     if (name == "Oasis") { name = _("an oasis") };
                     this.showMessage(dojo.string.substitute(_("This figure is in ${location_name}" ), { location_name : name }), "info" );
@@ -2622,7 +2628,7 @@ function (dojo, declare) {
             this.summaryDialog.create('gameSummaryDialog');
             this.summaryDialog.setTitle( _("Player Aid") );
             this.summaryDialog.setMaxWidth(640);
-            var html = this.format_block("jstpl_player_aid", { 
+            var html = this.format_block("jstpl_player_aid", {
                 "player_aid_bonus_actions_title" : _("Bonus Actions – Always freely chosen."),
                 "player_aid_bonus_contract" : _("1.	 Complete 1 contract"),
                 "player_aid_bonus_coin" : _("2.	 Take 3 coins"),
@@ -2636,7 +2642,7 @@ function (dojo, declare) {
                 "player_aid_bonus_blackdie_desc" : _("Return <b>3 camels</b> to the supply and take <b>1 black die</b>, roll it, and add it to your player board. <b>Note:</b> You can only take <b>1 black die per turn</b>."),
             });
             this.summaryDialog.setContent(html);
-            this.summaryDialog.show();  
+            this.summaryDialog.show();
         },
 
         onClickTransparentFigure : function(evt)
@@ -2652,9 +2658,9 @@ function (dojo, declare) {
 
         onClickConfirmCharacter : function(evt)
         {
-            this.checkAction("pickCharacter");            
+            this.checkAction("pickCharacter");
             var uiItem = this.uiItems.getFirstSelectedItemByUiType("character");
-            this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/pickCharacter.html", { lock : true, "character_type" : uiItem.data.character_type }, this, 
+            this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/pickCharacter.html", { lock : true, "character_type" : uiItem.data.character_type }, this,
                 function (result) {},
                 function (error) {}
             );
@@ -2671,7 +2677,7 @@ function (dojo, declare) {
             else
             {
                 var card_ids = goalCards.map(function(g) { return g.data.id; }).join("_");
-                this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/pickGoalCards.html", { lock : true, "card_ids" : card_ids }, this, 
+                this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/pickGoalCards.html", { lock : true, "card_ids" : card_ids }, this,
                     function (result) { this.animateGoalCards(goalCards); },
                     function (error) {}
                 );
@@ -2722,7 +2728,7 @@ function (dojo, declare) {
         onClickUsePlayerPiece : function(pieceId)
         {
             this.checkAction("usePlayerPiece");
-            this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/usePlayerPiece.html", { lock : true, "piece_id" : pieceId }, this, 
+            this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/usePlayerPiece.html", { lock : true, "piece_id" : pieceId }, this,
                 function (result) {},
                 function (error) {}
             );
@@ -2731,7 +2737,7 @@ function (dojo, declare) {
         onClickChooseResource : function(resourceType)
         {
             this.checkAction("chooseResource");
-            this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/chooseResource.html", { lock : true, "choice" : resourceType }, this, 
+            this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/chooseResource.html", { lock : true, "choice" : resourceType }, this,
                 function (result) {},
                 function (error) {}
             );
@@ -2741,7 +2747,7 @@ function (dojo, declare) {
         {
             this.checkAction("rerollDie");
             var die = this.uiItems.getFirstSelectedItemByUiType("die");
-            this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/rerollDie.html", { lock : true, "die_id" : die.data.id }, this, 
+            this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/rerollDie.html", { lock : true, "die_id" : die.data.id }, this,
                 function (result) {},
                 function (error) {}
             );
@@ -2751,14 +2757,14 @@ function (dojo, declare) {
         {
             this.checkAction("bumpDie");
             var die = this.uiItems.getFirstSelectedItemByUiType("die");
-            this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/bumpDie.html", { lock : true, "die_id" : die.data.id, "up_or_down" : direction }, this, 
+            this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/bumpDie.html", { lock : true, "die_id" : die.data.id, "up_or_down" : direction }, this,
                 function (result) {},
                 function (error) {}
             );
         },
 
         switchToClientChangeDie : function(gift_id)
-        {            
+        {
             this.setClientState("client_changeDie", { descriptionmyturn: _("Change dice to value"), args: { gift_id : gift_id } } );
         },
 
@@ -2778,7 +2784,7 @@ function (dojo, declare) {
             var selectedDice = this.uiItems.getSelectedItemsByUiType("die");
             var dice_ids = selectedDice.map(function(d) { return d.data.id; });
             var gift_id = this.currentMoveArgs.gift_id;
-            this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/changeDice.html" , { lock : true, "dice_ids" : dice_ids.join("_"), "new_value" : value, "gift_id" : gift_id }, this, 
+            this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/changeDice.html" , { lock : true, "dice_ids" : dice_ids.join("_"), "new_value" : value, "gift_id" : gift_id }, this,
                 function(result) {},
                 function(error) {}
             );
@@ -2792,7 +2798,7 @@ function (dojo, declare) {
             }
             else
             {
-                this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/buyBlackDie.html", { lock : true }, this, 
+                this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/buyBlackDie.html", { lock : true }, this,
                     function(result) {},
                     function(error) {}
                 );
@@ -2802,14 +2808,14 @@ function (dojo, declare) {
         onClickPickCompensation : function(camel, coin)
         {
             this.checkAction("pickCompensation");
-            this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/pickCompensation.html" , { lock : true, "camel" : camel, "coin" : coin }, this, 
+            this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/pickCompensation.html" , { lock : true, "camel" : camel, "coin" : coin }, this,
                 function(result) {},
                 function(error) {}
-            );            
+            );
         },
 
         onClickCancel : function(evt)
-        {            
+        {
             this.restoreServerGameState();
         },
 
@@ -2827,7 +2833,7 @@ function (dojo, declare) {
         onClickPass : function(evt)
         {
             this.checkAction("pass");
-            this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/pass.html", { lock : true }, this, 
+            this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/pass.html", { lock : true }, this,
                 function (result) {},
                 function (error) {}
             );
@@ -2836,7 +2842,7 @@ function (dojo, declare) {
         onClickSkipTravel : function(evt)
         {
             this.checkAction("skipTravel");
-            this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/skipTravel.html", { lock : true }, this, 
+            this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/skipTravel.html", { lock : true }, this,
                 function (result) {},
                 function (error) {}
             );
@@ -2845,7 +2851,7 @@ function (dojo, declare) {
         onClickSkipPickContract : function(evt)
         {
             this.checkAction("skipContract");
-            this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/skipContract.html", { lock : true }, this, 
+            this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/skipContract.html", { lock : true }, this,
                 function (result) {},
                 function (error) {}
             );
@@ -2854,19 +2860,19 @@ function (dojo, declare) {
         onClickSkipCityAward : function(evt)
         {
             this.checkAction("skipChooseCityAward");
-            this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/skipChooseCityAward.html", { lock : true }, this, 
+            this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/skipChooseCityAward.html", { lock : true }, this,
                 function (result) {},
                 function (error) {}
-            );            
+            );
         },
 
         onClickSkipTriggerOtherCityBonus : function(evt)
         {
             this.checkAction("skipTriggerOtherCityBonus");
-            this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/skipTriggerOtherCityBonus.html", { lock : true }, this, 
+            this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/skipTriggerOtherCityBonus.html", { lock : true }, this,
                 function (result) {},
                 function (error) {}
-            );            
+            );
         },
 
         onClickConfirmMoveTradingPost : function(evt)
@@ -2875,9 +2881,9 @@ function (dojo, declare) {
             var tradingPost = this.uiItems.getFirstSelectedItemByUiType("trading_post");
             if(tradingPost != null)
             {
-                this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/moveTradingPost.html", { lock : true, selectedTradingPostId : tradingPost.data.id }, this, 
-                    function (result) { 
-                        this.resetUiItemsZIndex(this.uiItems.getPlayerUiItems("trading_post", "board", this.player_id)); 
+                this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/moveTradingPost.html", { lock : true, selectedTradingPostId : tradingPost.data.id }, this,
+                    function (result) {
+                        this.resetUiItemsZIndex(this.uiItems.getPlayerUiItems("trading_post", "board", this.player_id));
                         this.uiItems.resetAllMapNodeBorders();
                     },
                     function (error) {}
@@ -2892,9 +2898,9 @@ function (dojo, declare) {
         onClickSkipMoveTradingPost : function(evt)
         {
             this.checkAction("skipMoveTradingPost");
-            this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/skipMoveTradingPost.html", { lock : true }, this, 
-                function (result) { 
-                    this.resetUiItemsZIndex(this.uiItems.getPlayerUiItems("trading_post", "board", this.player_id)); 
+            this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/skipMoveTradingPost.html", { lock : true }, this,
+                function (result) {
+                    this.resetUiItemsZIndex(this.uiItems.getPlayerUiItems("trading_post", "board", this.player_id));
                     this.uiItems.resetAllMapNodeBorders();
                 },
                 function (error) {}
@@ -2902,9 +2908,9 @@ function (dojo, declare) {
         },
 
         onClickActivateMultipleCityCard : function(numTimes, paymentDetails, evt)
-        {            
+        {
             this.checkAction("activateMultipleCityCard");
-            this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/activateMultipleCityCard.html", { lock : true, "num_times" : numTimes, "payment_details" : paymentDetails }, this, 
+            this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/activateMultipleCityCard.html", { lock : true, "num_times" : numTimes, "payment_details" : paymentDetails }, this,
                 function (result) {},
                 function (error) {}
             );
@@ -2917,27 +2923,27 @@ function (dojo, declare) {
             var costs = cardData.choice[choiceIndex].cost;
             for(var costType in costs)
             {
-                var amount = costs[costType]; 
+                var amount = costs[costType];
                 numRemaining = this.playerResources[this.player_id][costType] / amount;
             }
             numRemaining = Math.min(numRemaining, maxValue);
-            this.setClientState("client_playerChooseCityCardAward", { descriptionmyturn: _("${you} must select number of times to activate choice"), 
-                args : { card_type: cardType, choiceIndex: choiceIndex, num_remaining: numRemaining, isMultipleViaChoice: true } } );            
+            this.setClientState("client_playerChooseCityCardAward", { descriptionmyturn: _("${you} must select number of times to activate choice"),
+                args : { card_type: cardType, choiceIndex: choiceIndex, num_remaining: numRemaining, isMultipleViaChoice: true } } );
         },
 
         onClickActivateExchangeCityCard : function(exchangeType, evt)
         {
             this.checkAction("activateExchangeCityCard");
-            this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/activateExchangeCityCard.html", { lock : true, "exchange_type" : exchangeType }, this, 
+            this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/activateExchangeCityCard.html", { lock : true, "exchange_type" : exchangeType }, this,
                 function (result) {},
                 function (error) {}
             );
         },
 
         sendTriggerBonus : function(bonusId)
-        {            
+        {
             this.checkAction("triggerBonus");
-            this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/triggerBonus.html", { lock : true, "bonus_id" : bonusId }, this, 
+            this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/triggerBonus.html", { lock : true, "bonus_id" : bonusId }, this,
                 function (result) {},
                 function (error) {}
             );
@@ -2946,7 +2952,7 @@ function (dojo, declare) {
         sendFulfillGift : function(selectedGift, boardId)
         {
             this.checkAction("fulfillGift");
-            this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/fulfillGift.html", { lock : true, "gift_id" : selectedGift.data.id, "board_id" : boardId }, this, 
+            this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/fulfillGift.html", { lock : true, "gift_id" : selectedGift.data.id, "board_id" : boardId }, this,
                 function (result) {},
                 function (error) {}
             );
@@ -2965,10 +2971,10 @@ function (dojo, declare) {
             }
             else
             {
-                this.uiItems.toggleSelection(selectedContract);                
+                this.uiItems.toggleSelection(selectedContract);
                 this.showMessage(_( "You don't have the resources to fulfill this contract" ), "error");
                 this[this.currentMove]();
-                this.updatePlayerTurnButtons([]);                
+                this.updatePlayerTurnButtons([]);
             }
         },
 
@@ -2999,8 +3005,8 @@ function (dojo, declare) {
 
             if (this.hasResources({ "coin" : numCoins }, this.player_id) || place == "coin3")
             {
-                this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/placedie.html", { lock : true, "place" : place, "index" : index, "award_index" : selectedAwardIndex, 
-                    "die_ids" : die_ids.join("_"), "gift_free_placement_id" : giftFreeDiePlacementId }, this, 
+                this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/placedie.html", { lock : true, "place" : place, "index" : index, "award_index" : selectedAwardIndex,
+                    "die_ids" : die_ids.join("_"), "gift_free_placement_id" : giftFreeDiePlacementId }, this,
                     function (result) { this.uiItems.resetAllSelectable() },
                     function (error) { this.onClickCancel(); }
                 );
@@ -3015,7 +3021,7 @@ function (dojo, declare) {
         sendTravel : function(selectedFigure, selectedDstNode)
         {
             this.checkAction("travel");
-            this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/travel.html", { lock : true, "figure_id" : selectedFigure.data.id, "dst_id" : selectedDstNode.data.id }, this, 
+            this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/travel.html", { lock : true, "figure_id" : selectedFigure.data.id, "dst_id" : selectedDstNode.data.id }, this,
                 function (result) {},
                 function (error) { this.restoreServerGameState(); }
             );
@@ -3025,12 +3031,12 @@ function (dojo, declare) {
         {
             this.checkAction("pickContract");
             var replacedContractId = replacedContract != null ? replacedContract.data.id : null;
-            this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/pickcontract.html", { lock : true, "contract_id" : selectedContract.data.id, 
+            this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/pickcontract.html", { lock : true, "contract_id" : selectedContract.data.id,
                 "replaced_contract_id" : replacedContractId },
                 function (result) {},
                 function (error) {}
             );
-        },        
+        },
 
         sendTriggerOtherCityBonus : function(cityBonus)
         {
@@ -3045,17 +3051,17 @@ function (dojo, declare) {
 
         /*
             setupNotifications:
-            
+
             In this method, you associate each of your game notifications with your local method to handle it.
-            
+
             Note: game notification names correspond to "notifyAllPlayers" and "notifyPlayer" calls in
                   your marcopoloexpansions.game.php file.
-        
+
         */
         setupNotifications: function()
         {
-            console.log( 'notifications subscriptions setup' );                        
-            
+            console.log( 'notifications subscriptions setup' );
+
             dojo.subscribe('pickCharacter', this, "notif_pickCharacter");
             dojo.subscribe('characterUpdate', this, "notif_characterUpdate");
             dojo.subscribe('goalCard', this, "notif_goalCard");
@@ -3081,32 +3087,32 @@ function (dojo, declare) {
         },
 
         notif_pickCharacter: function(notif)
-        {            
-            var playerId = notif.args.player_id;            
+        {
+            var playerId = notif.args.player_id;
             var characterType = notif.args.character_type;
             var uiItem = this.uiItems.getByUiType("character").find(function(c) { return c.data.character_type == characterType; });
-            uiItem.data.player_id = playerId;            
+            uiItem.data.player_id = playerId;
             if (this.player_id == playerId) { this.myCharacterType = characterType }
             this.setupCharacterUiItems(characterType, playerId);
-            
+
             dojo.setStyle("characterSelectionDescription", "display", "none");
             dojo.setStyle(uiItem.htmlNode, "zIndex", 500);
             var anim = this.slideToObject(uiItem.htmlNode, "playerCharacter-" + uiItem.data.player_id, 1000);
-            anim.onEnd = function(fx) 
-            { 
+            anim.onEnd = function(fx)
+            {
                 dojo.setStyle(fx, "top", "");
                 dojo.setStyle(fx, "left", "");
                 this.changeUiItemZIndex(uiItem);
-                dojo.place(fx, "playerCharacter-" + playerId); 
-                this.uiItems.addTooltip(uiItem);                
+                dojo.place(fx, "playerCharacter-" + playerId);
+                this.uiItems.addTooltip(uiItem);
             }.bind(this);
             anim.play();
         },
 
         notif_characterUpdate : function(notif)
-        {                    
+        {
             for(var i = 0; i < notif.args.data.length; i++)
-            {                                
+            {
                 var uiItem = this.uiItems.createAndAddItem(notif.args.new_type, notif.args.data[i]);
                 this.drawUiItem(uiItem);
             }
@@ -3119,7 +3125,7 @@ function (dojo, declare) {
                 this.updateResourceInfo(notif.args.player_id);
             }
         },
-        
+
         notif_goalCard : function(notif)
         {
             for(var cardId in notif.args.cards)
@@ -3166,16 +3172,16 @@ function (dojo, declare) {
             var diceArray = [];
             var uiItemsToAnimate = [];
             for(var dieId in dice)
-            {            
+            {
                 var dieInfo = dice[dieId];
-                var die = this.uiItems.getByUiTypeAndId("die", dieInfo.die_id);                
-                if (dieInfo.die_value != undefined && notif.args.shake == false) 
-                { 
-                    die.data.value = dieInfo.die_value; 
+                var die = this.uiItems.getByUiTypeAndId("die", dieInfo.die_id);
+                if (dieInfo.die_value != undefined && notif.args.shake == false)
+                {
+                    die.data.value = dieInfo.die_value;
                 }
                 else if (dieInfo.die_value != undefined && notif.args.shake == true)
                 {
-                    die.data.after_shake_value = dieInfo.die_value;                    
+                    die.data.after_shake_value = dieInfo.die_value;
                 }
                 die.data.location = dieInfo.die_location;
                 die.data.location_arg = dieInfo.die_location_arg;
@@ -3191,19 +3197,19 @@ function (dojo, declare) {
             }
 
             if (notif.args.shake)
-            {                
+            {
                 var shakeDiceClosure = this.createShakeDiceClosure(diceArray);
                 this.animateAndMoveUiItemsWithCallback(uiItemsToAnimate, shakeDiceClosure);
             }
             else
             {
                 this.animateAndMoveUiItems(uiItemsToAnimate);
-            }            
+            }
         },
 
         notif_resourceChange : function(notif)
         {
-            var playerId = notif.args.player_id;            
+            var playerId = notif.args.player_id;
             if (notif.args.location.startsWith("city_card"))
             {
                 var cityCardType = notif.args.location.replace("city_card_", "");
@@ -3230,7 +3236,7 @@ function (dojo, declare) {
             var runningDelay = 0;
             for(var resourceType in notif.args.resource_changes)
             {
-                var amount = parseInt(notif.args.resource_changes[resourceType]);                
+                var amount = parseInt(notif.args.resource_changes[resourceType]);
                 for(var i = 0; i < amount; i++)
                 {
                     var tempHtml = '<span class="piece panel ' + resourceType + '"><span>';
@@ -3260,7 +3266,7 @@ function (dojo, declare) {
         {
             var figure = this.uiItems.getByUiType("figure").find(function(f) { return f.data.id == notif.args.figure_id });
             figure.uiPosition = this.getNextAvailableUiPosition("figure", figure.data.location, notif.args.dst_id);
-            figure.data.location_arg = notif.args.dst_id;            
+            figure.data.location_arg = notif.args.dst_id;
             this.animateAndMoveUiItems([figure]);
         },
 
@@ -3270,10 +3276,10 @@ function (dojo, declare) {
             tradingPost.uiPosition = notif.args.location_position;
             tradingPost.data.location = notif.args.location;
             tradingPost.data.location_arg = notif.args.location_arg;
-            dojo.place(tradingPost.htmlNode, $("playerMat-" + tradingPost.data.player_id));            
+            dojo.place(tradingPost.htmlNode, $("playerMat-" + tradingPost.data.player_id));
             var tradingPostPanel = dojo.marginBox($("panel-trading_post-" + tradingPost.data.player_id));
             dojo.setStyle(tradingPost.htmlNode, "top", tradingPostPanel.t + "px");
-            dojo.setStyle(tradingPost.htmlNode, "left", tradingPostPanel.l + "px");            
+            dojo.setStyle(tradingPost.htmlNode, "left", tradingPostPanel.l + "px");
             this.animateAndMoveUiItems([tradingPost]);
             this.updateResourceInfo(tradingPost.data.player_id);
         },
@@ -3293,7 +3299,7 @@ function (dojo, declare) {
         },
 
         notif_contract : function(notif)
-        {                        
+        {
             if (notif.args.discard_contract_id)
             {
                 this.animateDiscardContract(notif.args.discard_contract_id, 0, notif.args.player_id);
@@ -3304,7 +3310,7 @@ function (dojo, declare) {
                 var contract = this.uiItems.getByUiTypeAndId("contract", notif.args.contract_id);
                 if (contract == null)
                 {
-                    contract = this.uiItems.createAndAddItem("contract", notif.args.contract_data);                    
+                    contract = this.uiItems.createAndAddItem("contract", notif.args.contract_data);
                     dojo.place(contract.htmlNode, "roundContainer");
                     this.placeOnObject(contract.htmlNode, "contract_special_pile");
                     this.uiItems.addTooltip(contract);
@@ -3312,7 +3318,7 @@ function (dojo, declare) {
                 contract.data.location = "hand";
                 contract.data.location_arg = notif.args.player_id;
                 contract.uiPosition = this.getNextAvailableUiPosition("contract", "hand", notif.args.player_id);
-                
+
                 this.animateAndMoveUiItems([contract]);
             }
         },
@@ -3339,13 +3345,13 @@ function (dojo, declare) {
                     this.animateDiscardContract(existingContracts[i].data.id, 0, 0);         //playerId = 0 = board
                 }
             }
-            
+
             for(var contractId in contracts)
-            {                
+            {
                 var contract = this.uiItems.getByUiTypeAndId("contract", contractId);
                 if (contract == null)
                 {
-                    contract = this.uiItems.createAndAddItem("contract", contracts[contractId]);                    
+                    contract = this.uiItems.createAndAddItem("contract", contracts[contractId]);
                     dojo.place(contract.htmlNode, "roundContainer");
                     this.placeOnObject(contract.htmlNode, notif.args.trigger_by);
                     this.uiItems.addTooltip(contract);
@@ -3383,6 +3389,6 @@ function (dojo, declare) {
                 boxedPiece.data.location = "box";
                 this.repositionPlayerMat("large", null, notif.args.player_id);
             }
-        },        
-   });             
+        },
+   });
 });
