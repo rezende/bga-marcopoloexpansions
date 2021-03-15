@@ -126,11 +126,11 @@
       self::ajaxResponse();
     }
 
-    public function fulFillArghun()
+    public function fulfillArghun()
     {
       self::setAjaxMode();
       $city_card_id = self::getArg( "citycard_id", AT_posint, true );
-      $this->game->fulFillArghun( $city_card_id );
+      $this->game->fulfillArghun( $city_card_id );
       self::ajaxResponse();
     }
 

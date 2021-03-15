@@ -2003,9 +2003,9 @@ class MarcoPoloExpansions extends Table
         $this->gamestate->nextState($this->getNextTransitionBasedOnPendingActions($player_id));
     }
 
-    function fulFillArghun($city_card_id) {
+    function fulfillArghun($city_card_id) {
         self::debug("before_php");
-        self::checkAction("fulFillArghun");
+        self::checkAction("fulfillArghun");
         self::debug("after_php");
         $player_id = self::getActivePlayerId();
         $city_card = self::getObjectFromDB("SELECT piece_id id, piece_type type, piece_type_arg type_arg, piece_player_id player_id, piece_location location, piece_location_arg location_arg
