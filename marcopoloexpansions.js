@@ -1006,7 +1006,7 @@ function (dojo, declare) {
             {
                 this.onClickChooseResource(uiItem.data.id);
             }
-            else if (uiItem && uiItem.uiType == "1x_gift")
+            else if (uiItem && uiItem.uiType == "1x_gift") // Nicolao -- pick 2 gifts piece
             {
                 this.confirmationDialog( _('Are you sure you want to use this piece?  This move cannot be undone'), 
                     dojo.hitch( this, function() { this.onClickUsePlayerPiece(uiItem.data.id); } ),

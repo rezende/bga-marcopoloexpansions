@@ -164,7 +164,7 @@ class MarcoPoloExpansions extends Table
         $result['player_gifts'] = $this->deck->getCardsInLocation("gift_hand");
         $result['expansions'] = $this->getExpansionsEnabled();
         if ($this->gamestate->state() && $this->gamestate->state()["name"] == "gameEnd") {
-            $result['goal_cards'] = $this->deck->getCardsInLocation("goal_hand");
+            $result['goal_cards'] = $this->deck->getCardsInLocation("goal_hand"); //replay bug?
         } else {
             $result['goal_cards'] = $this->deck->getCardsInLocation("goal_hand", $current_player_id);
         }
@@ -328,7 +328,7 @@ class MarcoPoloExpansions extends Table
         foreach ($players as $player_id => $player) {
             $this->deck->pickCard('deck', $player_id);
         }
-        $this->deck->moveAllCardsInLocation('deck', 'box');
+        $this->deck->moveAllCardsInLocation('deck', 'box'); //move remaining starter contracts to the box
         $this->deck->createCards($remaining_contracts, 'deck');
         $this->deck->shuffle('deck');
     }
@@ -395,11 +395,12 @@ class MarcoPoloExpansions extends Table
 
         foreach ($this->board_map as $map_node_id => $map_node) {
             if ($map_node["type"] == $matching_map_type) {
-                $num_of = 1;
-                if ($piece_type == "city_card" && array_key_exists("num_cards", $map_node)) {
+                $num_of = 1; //number_of_cards_to_place_in_city
+                // random city cards on board
+                if ($piece_type == "city_card" && array_key_exists("num_cards", $map_node)) { //Sumatra
                     $num_of = $map_node["num_cards"];
                 }
-                for ($i = 0; $i < $num_of; $i++) {
+                for ($i = 0; $i < $num_of; $i++) { //this loop is basically for sumatra
                     $bonus_type = $bonus_type_materials[$bonus_index]["type"];
                     $piece_values[] = "('{$piece_type}', '{$bonus_type}', 'board', '{$map_node_id}', '{$i}')";
                     $bonus_index += 1;
@@ -454,8 +455,9 @@ class MarcoPoloExpansions extends Table
             shuffle($shuffled_city_cards);
             while ($current_count < 6) {
                 $shuffled_city_type = $shuffled_city_cards[$shuffled_card_index]["type"];
-                if (in_array($shuffled_city_type, $current_city_cards) == false) {
+                if (in_array($shuffled_city_type, $current_city_cards_types) == false) { //if the random card is not a selected city card already
                     $current_count += 1;
+                    /* this is to make the pieces show on the player character select screen  */
                     self::DbQuery("INSERT INTO piece (piece_type, piece_type_arg, piece_location) VALUES ('city_card', '{$shuffled_city_type}', 'pick_character')");
                 }
                 $shuffled_card_index += 1;
@@ -501,6 +503,7 @@ class MarcoPoloExpansions extends Table
             self::notifyAllPlayers("characterUpdate", "", array("new_type" => "1x_gift", "data" => [$piece], "player_id" => $player_id));
         } else if ($character_type == 9)       //9 = Khan Arghun
         {
+            /* move cards from player select to the 'player_mat' of the player playing Arghun */
             self::DbQuery("UPDATE piece SET piece_player_id = '${player_id}', piece_location = 'player_mat' WHERE piece_type = 'city_card' AND piece_location = 'pick_character'");
             $city_cards = self::getObjectListFromDB("SELECT piece_id id, piece_type type, piece_type_arg type_arg, piece_player_id player_id, piece_location location, piece_location_arg location_arg
                 FROM piece WHERE piece_type = 'city_card' AND piece_location = 'player_mat' AND piece_player_id = {$player_id}");
@@ -524,6 +527,7 @@ class MarcoPoloExpansions extends Table
         return self::getUniqueValueFromDB("SELECT player_id FROM player WHERE character_type = {$character_type}");
     }
 
+    // ui_location: serves to animate where resources come from / go to
     function changePlayerResources($resource_changes, $negate, $ui_location, $player_id)
     {
         $sql_changes = [];
@@ -737,7 +741,7 @@ class MarcoPoloExpansions extends Table
 
     function checkAndTriggerFulfillContract($pending_action, $player_id)
     {
-        if ($pending_action["remaining_count"] == 1 && strpos($pending_action["location"], "contract_") === 0)       //trigger contract fulfil now
+        if ($pending_action["remaining_count"] == 1 && strpos($pending_action["location"], "contract_") === 0)       //trigger contract fulfill now
         {
             $contract_id = str_replace("contract_", "", $pending_action["location"]);
             self::notifyAllPlayers("fulfillContract", '', array("player_id" => $player_id, "contract_id" => $contract_id, "resources_awarded" => true));
@@ -1172,6 +1176,8 @@ class MarcoPoloExpansions extends Table
         }
     }
 
+    // Returns the item data as listed on the materials list.
+    // Example: getBoardSpot('city_card', 0) gets the first city card
     function getBoardSpot($place, $index, $award_index)
     {
         if ($place == "city_card") {
