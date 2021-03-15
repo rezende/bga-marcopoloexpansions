@@ -964,7 +964,7 @@ class MarcoPoloExpansions extends Table
         }
     }
 
-    function altanOrdResourcesForTradingPost($number_of_trading_posts): array
+    function getAltanOrdResourcesForTradingPost($number_of_trading_posts): array
     {
         $resources = [];
         $altan_ord_bonus_table = [
@@ -981,25 +981,27 @@ class MarcoPoloExpansions extends Table
         return $resources;
     }
 
-    function scoreAltanOrdPlacement($board_id, $player_id)
+    function scoreAltanOrdPlacement($board_id, $player_id, $num_trading_posts)
     {
-        $num_trading_posts = $this->getNumberOfTradingPostsPlaced($player_id);
         if ($num_trading_posts > 7 || $num_trading_posts < 1) {
             return;
         }
-        $resources = $this->altanOrdResourcesForTradingPost($num_trading_posts);
-        $this->changePlayerResources($resources, false, "map_node_" . $board_id, $player_id);
-        self::notifyAllPlayers("message", clienttranslate('${player_name} scores for placing trading post number ${num_trading_post} as Altan Ord'), array(
-            'player_id' => $player_id, 'player_name' => $this->getPlayerName($player_id), 'num_trading_post' => $num_trading_posts
-        ));
+        if($num_trading_posts < 7)  {
+            $resources = $this->getAltanOrdResourcesForTradingPost($num_trading_posts);
+            $this->changePlayerResources($resources, false, "map_node_" . $board_id, $player_id);
+        }
         if ($num_trading_posts == 7) {
+            $resources = $this->getAltanOrdResourcesForTradingPost(6);
+            $this->changePlayerResources($resources, false, "map_node_" . $board_id, $player_id);
             $this->giveAward("", ["black_die" => 1], $player_id);
         }
+        self::notifyAllPlayers("message", clienttranslate('${player_name} scores for placing trading post number ${num_trading_post}'), array(
+            'player_id' => $player_id, 'player_name' => $this->getPlayerName($player_id), 'num_trading_post' => $num_trading_posts
+        ));
     }
 
-    function scoreTradePostPlacement($board_id, $player_id)      //bonus points for placing 8th, 9th, 11th trade post
+    function scoreTradePostPlacement($board_id, $player_id, $num_trading_posts)      //bonus points for placing 8th, 9th, 11th trade post
     {
-        $num_trading_posts = $this->getNumberOfTradingPostsPlaced($player_id);
         $num_vp = 0;
         if ($num_trading_posts == 8) {
             $num_vp = 5;
@@ -1050,9 +1052,10 @@ class MarcoPoloExpansions extends Table
 
         if ($success && $via_move_trading_post == false) {
             self::incStat(1, "trading_posts", $player_id);
-            $this->scoreTradePostPlacement($board_id, $player_id);
+            $num_trading_posts = $this->getNumberOfTradingPostsPlaced($player_id);
+            $this->scoreTradePostPlacement($board_id, $player_id, $num_trading_posts);
             if ($this->getPlayerIdByCharacterType(10) == $player_id) // Altan Ord bonuses
-                $this->scoreAltanOrdPlacement($board_id, $player_id);
+                $this->scoreAltanOrdPlacement($board_id, $player_id, $num_trading_posts);
         }
 
         return $success;
