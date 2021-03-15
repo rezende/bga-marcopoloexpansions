@@ -752,7 +752,7 @@ class MarcoPoloExpansions extends Table
     {
         if ($pending_action["remaining_count"] == 1 && strpos($pending_action["location"], "city_card_") === 0)       //trigger arghun fulfil now
         {
-            $contract_id = str_replace("contract_", "", $pending_action["location"]);
+            $contract_id = str_replace("city_card_", "", $pending_action["location"]);
             self::notifyAllPlayers("fulfillArghun", '', array("player_id" => $player_id, "city_card_id" => $contract_id, "resources_awarded" => true));
         }
     }
@@ -1922,7 +1922,7 @@ class MarcoPoloExpansions extends Table
 
         $this->checkAndTriggerDiscardGift($pending_action, $player_id);
         $this->checkAndTriggerFulfillContract($pending_action, $player_id);
-        $this->checkAndTriggerFulfillArghun($pending_action, $player_id);
+        //$this->checkAndTriggerFulfillArghun($pending_action, $player_id);
         $this->updateNextPendingAction($drop_by, $pending_action);
         $this->gamestate->nextState($this->getNextTransitionBasedOnPendingActions($player_id));
     }
@@ -2004,7 +2004,9 @@ class MarcoPoloExpansions extends Table
     }
 
     function fulFillArghun($city_card_id) {
+        self::debug("before_php");
         self::checkAction("fulFillArghun");
+        self::debug("after_php");
         $player_id = self::getActivePlayerId();
         $city_card = self::getObjectFromDB("SELECT piece_id id, piece_type type, piece_type_arg type_arg, piece_player_id player_id, piece_location location, piece_location_arg location_arg
                 FROM piece WHERE piece_type = 'city_card' AND piece_location = 'player_mat' AND piece_player_id = {$player_id} AND type_arg = {$city_card_id}");
@@ -2076,7 +2078,6 @@ class MarcoPoloExpansions extends Table
 
         $this->placeTradingPostAndGiveAward($dst_id, $pending_action, $player_id);
         $this->checkAndTriggerFulfillContract($pending_action, $player_id);
-        $this->checkAndTriggerFulfillArghun($pending_action, $player_id);
         $this->updateNextPendingAction(-1, $pending_action);
         self::incStat(1, "travel_movements", $player_id);
         $this->gamestate->nextState($this->getNextTransitionBasedOnPendingActions($player_id));

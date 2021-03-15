@@ -2981,7 +2981,9 @@ function (dojo, declare) {
 
         sendFulfillArghun : function(selectedCityCard)
         {
+            console.log("before_js");
             this.checkAction("fulfillArghun");
+            console.log("after_js");
             this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/fulfillArghun.html", { lock : true, "citycard_id" : selectedCityCard.data.id },
                 function (result) {},
                 function (error) {}
