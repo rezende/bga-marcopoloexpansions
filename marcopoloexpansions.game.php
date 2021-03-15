@@ -455,7 +455,7 @@ class MarcoPoloExpansions extends Table
             shuffle($shuffled_city_cards);
             while ($current_count < 6) {
                 $shuffled_city_type = $shuffled_city_cards[$shuffled_card_index]["type"];
-                if (in_array($shuffled_city_type, $current_city_cards_types) == false) { //if the random card is not a selected city card already
+                if (in_array($shuffled_city_type, $current_city_cards) == false) { //if the random card is not a selected city card already
                     $current_count += 1;
                     /* this is to make the pieces show on the player character select screen  */
                     self::DbQuery("INSERT INTO piece (piece_type, piece_type_arg, piece_location) VALUES ('city_card', '{$shuffled_city_type}', 'pick_character')");
