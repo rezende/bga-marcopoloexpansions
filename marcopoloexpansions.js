@@ -1826,7 +1826,7 @@ function (dojo, declare) {
         {
             console.log("HEY MAN");
             console.log(this.uiItems.getByUiType("city_card"));
-            return this.uiItems.getByUiType("city_card").filter(function(g) { return g.data.location_arg == playerId; });
+            return this.uiItems.getByUiType("city_card").filter(function(g) { return g.data.location == 'player_mat'; });
         },
 
         getFulfillableContracts : function(playerId)
