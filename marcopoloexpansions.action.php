@@ -7,7 +7,7 @@
  * This code has been produced on the BGA studio platform for use on https://boardgamearena.com.
  * See http://en.doc.boardgamearena.com/Studio for more information.
  * -----
- * 
+ *
  * marcopoloexpansions.action.php
  *
  * MarcoPoloExpansions main action entry point
@@ -15,13 +15,13 @@
  *
  * In this file, you are describing all the methods that can be called from your
  * user interface logic (javascript).
- *       
+ *
  * If you define a method "myAction" here, then you can call it from your javascript code with:
  * this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/myAction.html", ...)
  *
  */
   class action_marcopoloexpansions extends APP_GameAction
-  { 
+  {
     // Constructor: please do not modify
     public function __default()
     {
@@ -35,26 +35,26 @@
         $this->view = "marcopoloexpansions_marcopoloexpansions";
         self::trace( "Complete reinitialization of board game" );
       }
-    } 
+    }
 
     public function undo()
     {
-      self::setAjaxMode();     
+      self::setAjaxMode();
       $this->game->undo();
       self::ajaxResponse();
     }
-    
+
     public function pickCharacter()
     {
-      self::setAjaxMode();     
-      $character_type = self::getArg( "character_type", AT_posint, true );                
+      self::setAjaxMode();
+      $character_type = self::getArg( "character_type", AT_posint, true );
       $this->game->pickCharacter( $character_type );
       self::ajaxResponse();
     }
 
     public function pickGoalCards()
     {
-      self::setAjaxMode();     
+      self::setAjaxMode();
       $card_ids = self::getArg( "card_ids", AT_alphanum, true );
       $card_ids = explode( "_", $card_ids );
       $this->game->pickGoalCards( $card_ids );
@@ -82,7 +82,7 @@
       $this->game->placeDie( $place, $index, $award_index, $dice_ids, $gift_free_placement_id );
       self::ajaxResponse();
     }
-    
+
     public function rerollDie()
     {
       self::setAjaxMode();
@@ -90,7 +90,7 @@
       $this->game->rerollDie( $die_id );
       self::ajaxResponse();
     }
-    
+
     public function bumpDie()
     {
       self::setAjaxMode();
@@ -99,10 +99,10 @@
       $this->game->bumpDie( $die_id, $up_or_down );
       self::ajaxResponse();
     }
-    
+
     public function buyBlackDie()
     {
-      self::setAjaxMode();      
+      self::setAjaxMode();
       $this->game->buyBlackDie();
       self::ajaxResponse();
     }
@@ -117,16 +117,16 @@
       $this->game->changeDice( $dice_ids, $new_value, $gift_id );
       self::ajaxResponse();
     }
-    
+
     public function fulfillContract()
     {
       self::setAjaxMode();
-      $contract_id = self::getArg( "contract_id", AT_posint, true );      
+      $contract_id = self::getArg( "contract_id", AT_posint, true );
       $this->game->fulfillContract( $contract_id );
       self::ajaxResponse();
     }
 
-    public function fullFillArghun()
+    public function fulFillArghun()
     {
       self::setAjaxMode();
       $city_card_id = self::getArg( "citycard_id", AT_posint, true );
@@ -155,7 +155,7 @@
     public function triggerOtherCityBonus()
     {
       self::setAjaxMode();
-      $city_bonus_type_arg = self::getArg( "city_bonus_type_arg", AT_posint, true );      
+      $city_bonus_type_arg = self::getArg( "city_bonus_type_arg", AT_posint, true );
       $this->game->triggerOtherCityBonus( $city_bonus_type_arg );
       self::ajaxResponse();
     }
@@ -199,7 +199,7 @@
     public function activateMultipleCityCard()
     {
       self::setAjaxMode();
-      $num_times = self::getArg( "num_times", AT_posint, true );      
+      $num_times = self::getArg( "num_times", AT_posint, true );
       $payment_details = self::getArg( "payment_details", AT_alphanum, false );
       $this->game->activateMultipleCityCard( $num_times, $payment_details );
       self::ajaxResponse();
@@ -212,12 +212,12 @@
       $this->game->activateExchangeCityCard( $exchange_type );
       self::ajaxResponse();
     }
-    
+
     public function pass()
     {
       self::setAjaxMode();
       $this->game->pass();
-      self::ajaxResponse();      
+      self::ajaxResponse();
     }
 
     public function triggerBonus()
@@ -225,18 +225,18 @@
       self::setAjaxMode();
       $bonus_id = self::getArg( "bonus_id", AT_posint, true );
       $this->game->triggerBonus( $bonus_id );
-      self::ajaxResponse();            
+      self::ajaxResponse();
     }
 
     public function chooseResource()
     {
       self::setAjaxMode();
-      $choice = self::getArg( "choice", AT_alphanum, true );      
+      $choice = self::getArg( "choice", AT_alphanum, true );
       $this->game->chooseResource( $choice );
-      self::ajaxResponse();            
+      self::ajaxResponse();
     }
 
-    public function pickContract()      
+    public function pickContract()
     {
       self::setAjaxMode();
       $contract_id = self::getArg( "contract_id", AT_posint, true );
@@ -250,7 +250,7 @@
       self::setAjaxMode();
       $this->game->skipContract();
       self::ajaxResponse();
-    }    
+    }
 
     public function usePlayerPiece()
     {

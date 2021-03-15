@@ -725,6 +725,10 @@ function (dojo, declare) {
             {
                 this.sendPlaceDie(selectedDice, selectedPlace, uiItem, selectedGifts);
             }
+            else if (uiItem.uiType == "city_card" && uiItem.data.location === 'player_mat')
+            {
+                this.sendFulfillArghun(uiItem);
+            }
             else if (uiItem.uiType == "city_card")
             {
                 this.sendPlaceDie(selectedDice, uiItem, null, selectedGifts);
@@ -760,8 +764,7 @@ function (dojo, declare) {
             {
                 this.sendFulfillGift(uiItem, null);
             }
-            else if (uiItem.uiType == "city_card")
-                this.sendFulfillArghun(uiItem);
+
             else
             {
                 actionSent = false;
@@ -805,8 +808,6 @@ function (dojo, declare) {
                 {
                     selectableItems = selectableItems.concat(this.getFulfillableContracts(playerId));
                     const city_cards = this.getSelectableCityCardsUIItemsForPlayerTurnState(playerId);
-                    console.log("city_cards");
-                    console.log(city_cards);
                     selectableItems = selectableItems.concat(city_cards);
                 }
 
