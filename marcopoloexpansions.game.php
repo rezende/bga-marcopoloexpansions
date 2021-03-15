@@ -2009,10 +2009,10 @@ class MarcoPoloExpansions extends Table
         self::debug("after_php");
         $player_id = self::getActivePlayerId();
         $city_card = self::getObjectFromDB("SELECT piece_id id, piece_type type, piece_type_arg type_arg, piece_player_id player_id, piece_location location, piece_location_arg location_arg
-                FROM piece WHERE piece_type = 'city_card' AND piece_location = 'player_mat' AND piece_player_id = {$player_id} AND type_arg = {$city_card_id}");
+                FROM piece WHERE id = {$city_card_id}");
         self::setGameStateValue("can_undo", 1);
 
-        if ($city_card == null)
+        if ($city_card == null || $city_card['player_id'] != $player_id || $city_card['location'] != 'player_mat')
             throw new BgaVisibleSystemException(self::_("fulfill city_card: no city_card or does not belong to you"));
 
         $city_card_type = $this->city_card_types[$city_card["type"]];
