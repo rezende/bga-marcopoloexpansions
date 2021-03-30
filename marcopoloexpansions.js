@@ -31,7 +31,7 @@ function (dojo, declare) {
             this.canUndo = false;
             this.mainActionAvailable = false;
             this.canBuyBlackDie = false;
-            this.canArghunUsePersonalCityCard = false;
+            this.canArghunUsePersonalCityCard = true;
             this.playerResources = {};
             this.playerMatContainerUiTypes = { "small" : [ "die", "gift" ], "large" : [ "goal_card", "contract", "1x_gift", "city_card" ] };
             this.runningPlayerMatAnimations = {};
@@ -1827,8 +1827,16 @@ function (dojo, declare) {
 
         getSelectableCityCardsUIItemsForPlayerTurnState : function(playerId)
         {
-            if (this.canArghunUsePersonalCityCard)
-                return this.uiItems.getByUiType("city_card").filter(function(g) { return g.data.location == 'player_mat'; });
+            console.log("arghun pode usar cartas?");
+            console.log(this.canArghunUsePersonalCityCard);
+            if (this.canArghunUsePersonalCityCard) {
+                const cartas = this.uiItems.getByUiType("city_card").filter(function (g) {
+                    return g.data.location == 'player_mat';
+                });
+                console.log("cartas para serem selecionadas");
+                console.log(cartas);
+                return cartas;
+            }
             return [];
         },
 
