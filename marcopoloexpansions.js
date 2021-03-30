@@ -31,6 +31,7 @@ function (dojo, declare) {
             this.canUndo = false;
             this.mainActionAvailable = false;
             this.canBuyBlackDie = false;
+            this.canArghunUsePersonalCityCard = false;
             this.playerResources = {};
             this.playerMatContainerUiTypes = { "small" : [ "die", "gift" ], "large" : [ "goal_card", "contract", "1x_gift", "city_card" ] };
             this.runningPlayerMatAnimations = {};
@@ -1164,6 +1165,7 @@ function (dojo, declare) {
                 case 'playerTurn':
                     this.mainActionAvailable = args.args.main_action_available;
                     this.canBuyBlackDie = args.args.can_buy_black_die;
+                    this.canArghunUsePersonalCityCard = args.args.can_arghun_use_personal_city_card;
                     if (!this.mainActionAvailable)          //swap sentences (bug #21345)
                     {
                         this.gamedatas.gamestate.descriptionmyturn = this.gamedatas.gamestate.descriptionmyturn_bonus;
@@ -1825,9 +1827,9 @@ function (dojo, declare) {
 
         getSelectableCityCardsUIItemsForPlayerTurnState : function(playerId)
         {
-            console.log("HEY MAN");
-            console.log(this.uiItems.getByUiType("city_card"));
-            return this.uiItems.getByUiType("city_card").filter(function(g) { return g.data.location == 'player_mat'; });
+            if (this.canArghunUsePersonalCityCard)
+                return this.uiItems.getByUiType("city_card").filter(function(g) { return g.data.location == 'player_mat'; });
+            return [];
         },
 
         getFulfillableContracts : function(playerId)
@@ -2430,6 +2432,27 @@ function (dojo, declare) {
                 this.repositionPlayerMat("large", null, playerId);
             }
         },
+
+        animateDiscardCityCard : function(cityCardId, delay, playerId)
+        {
+            console.log("VAI DESCARTAR OU NAO?!?!?!?")
+            var discardedCityCard = this.uiItems.getByUiTypeAndId("city_card", cityCardId);
+            discardedCityCard.data.id = -1;
+            discardedCityCard.data.location = "box";
+            this.fadeOutAndDestroy(discardedCityCard.htmlNode, 500, delay);      //give time for resources
+
+            if (playerId > 0 && delay > 0)
+            {
+                setTimeout(function() {
+                    this.repositionPlayerMat("large", null, playerId);
+                }.bind(this), delay);
+            }
+            else if (playerId > 0)
+            {
+                this.repositionPlayerMat("large", null, playerId);
+            }
+        },
+
 
         moveUiItemToParentContainer : function(uiItem, parentContainer)
         {
@@ -3078,6 +3101,7 @@ function (dojo, declare) {
             dojo.subscribe('gift', this, "notif_gift");
             dojo.subscribe('slideContracts', this, "notif_slideContracts");
             dojo.subscribe('fulfillContract', this, "notif_fulfillContract");
+            dojo.subscribe('fulfillArghun', this, "notif_fulfillArghun");
             dojo.subscribe('moveHourGlass', this, "notif_moveHourGlass");
 
             this.notifqueue.setSynchronous('gift', 500);
@@ -3333,6 +3357,16 @@ function (dojo, declare) {
             this.animateDiscardContract(notif.args.contract_id, delay, playerId);
             this.gamedatas.player_contracts_completed[playerId] += 1;
             dojo.setAttr($('contracts-complete-' + playerId), "innerHTML", this.gamedatas.player_contracts_completed[playerId]);
+        },
+
+        notif_fulfillArghun : function(notif)
+        {
+            console.log("ENTROU AQUI???")
+            var playerId = notif.args.player_id;
+            var delay = 0;
+            this.animateDiscardCityCard(notif.args.city_card_id, delay, playerId);
+            //this.gamedatas.player_contracts_completed[playerId] += 1;
+            //dojo.setAttr($('contracts-complete-' + playerId), "innerHTML", this.gamedatas.player_contracts_completed[playerId]);
         },
 
         notif_slideContracts : function(notif)
