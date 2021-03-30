@@ -2384,11 +2384,13 @@ class MarcoPoloExpansions extends Table
 
     function argPlayerChooseCityCardAward()
     {
+        self::debug("ARGCHOOSECITYAWARD");
         $player_id = self::getActivePlayerId();
         $next_action = $this->getNextPendingAction($player_id);
         $die_value = $this->getCurrentDiceValueOnPlace("city_card", $next_action["type_arg"]);
         $card_type = $next_action["type_arg"];
         $can_skip = ($this->city_card_types[$card_type]["kind"] != "multiple" || $card_type == 30) && $next_action["remaining_count"] != $die_value;
+        self::debug("ARGCHOOSECITYAWARDEXIT");
         return array(
             'card_type' => $card_type,
             'num_remaining' => $next_action["remaining_count"],

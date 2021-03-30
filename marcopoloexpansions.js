@@ -1829,7 +1829,7 @@ function (dojo, declare) {
         {
             console.log("arghun pode usar cartas?");
             console.log(this.canArghunUsePersonalCityCard);
-            if (this.canArghunUsePersonalCityCard) {
+            if (this.canArghunUsePersonalCityCard == true) {
                 const cartas = this.uiItems.getByUiType("city_card").filter(function (g) {
                     return g.data.location == 'player_mat';
                 });
@@ -3247,8 +3247,11 @@ function (dojo, declare) {
             var playerId = notif.args.player_id;
             if (notif.args.location.startsWith("city_card"))
             {
+                console.log("resourcecgang1");
                 var cityCardType = notif.args.location.replace("city_card_", "");
                 notif.args.location = "uid-" + this.uiItems.getByUiType("city_card").find(function(c) { return c.data.type_arg == cityCardType }).uid;
+                console.log("resourcecgang1b");
+
             }
             else if(notif.args.location.startsWith("character"))
             {
