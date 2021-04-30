@@ -1829,7 +1829,7 @@ function (dojo, declare) {
         {
             console.log("arghun pode usar cartas?");
             console.log(this.canArghunUsePersonalCityCard);
-            if (this.canArghunUsePersonalCityCard == true) {
+            if (this.canArghunUsePersonalCityCard === "1") {
                 const cartas = this.uiItems.getByUiType("city_card").filter(function (g) {
                     return g.data.location == 'player_mat';
                 });
