@@ -3287,6 +3287,27 @@ function (dojo, declare) {
                         destId = notif.args.location;
                         parentId = "panel_" + notif.args.player_id;
                     }
+                    // STANDARD SILK GATHERING
+                    console.log(tempHtml); // <span class="piece panel silk"><span>
+                    console.log(parentId); // board
+                    console.log(sourceId); // award_spot_bazaar_2_3
+                    console.log(destId); // panel_silk_2336893
+                    console.log(runningDelay); // 0
+
+                    // BUG
+                    console.log(tempHtml); // <span class="piece panel camel"><span>
+                    console.log(parentId); // panel_2336893
+                    console.log(sourceId); // panel_camel_2336893
+                    console.log(destId); // uid-133
+                    console.log(runningDelay); // 0
+
+                    console.log(tempHtml); // <span class="piece panel coin"><span>
+                    console.log(parentId); // board
+                    console.log(sourceId); // uid-133
+                    console.log(destId); // panel_coin_2336893
+                    console.log(runningDelay); // 0
+
+
                     this.slideTemporaryObject(tempHtml, parentId, sourceId, destId, 500, runningDelay + 100 * i);
                 }
                 runningDelay += amount * 100 + 100;
