@@ -1832,10 +1832,10 @@ function (dojo, declare) {
         getSelectableCityCardsUIItemsForPlayerTurnState : function(playerId)
         {
             if (this.canArghunUsePersonalCityCard === "1") {
-                const cartas = this.uiItems.getByUiType("city_card").filter(function (g) {
+                const arghun_city_cards = this.uiItems.getByUiType("city_card").filter(function (g) {
                     return g.data.location == 'player_mat';
                 });
-                return cartas;
+                return arghun_city_cards;
             }
             return [];
         },
