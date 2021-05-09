@@ -2443,7 +2443,6 @@ function (dojo, declare) {
 
         animateDiscardCityCard : function(cityCardId, delay, playerId)
         {
-            console.log("TODO HERE BEACH");
             var discardedCityCard = this.uiItems.getByUiTypeAndTypeArg("city_card", cityCardId);
             discardedCityCard.data.id = -1;
             discardedCityCard.data.location = "box";

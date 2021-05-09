@@ -755,12 +755,10 @@ class MarcoPoloExpansions extends Table
 
     function checkAndTriggerFulfillArghun($pending_action, $player_id)
     {
-        self::debug("OILALA");
         self::dump("pending_action", $pending_action);
         /* if ($pending_action["remaining_count"] == 1 && strpos($pending_action["location"], "city_card_") === 0)       //trigger arghun fulfill now */
         if (strpos($pending_action["location"], "city_card_") === 0)       //trigger arghun fulfill now
         {
-            self::debug("OILELE");
             /* $city_card_type, $city_card_id */
             $city_card_id = str_replace("city_card_", "", $pending_action["location"]);
             self::notifyAllPlayers(
@@ -1942,7 +1940,6 @@ class MarcoPoloExpansions extends Table
             $this->changePlayerResources($resources, $negate, $pending_action["location"], $player_id);
         }
 
-        self::debug("YOOOOO");
         $this->checkAndTriggerDiscardGift($pending_action, $player_id);
         $this->checkAndTriggerFulfillContract($pending_action, $player_id);
         $this->checkAndTriggerFulfillArghun($pending_action, $player_id);
@@ -2401,13 +2398,11 @@ class MarcoPoloExpansions extends Table
 
     function argPlayerChooseCityCardAward()
     {
-        self::debug("ARGCHOOSECITYAWARD");
         $player_id = self::getActivePlayerId();
         $next_action = $this->getNextPendingAction($player_id);
         $die_value = $this->getCurrentDiceValueOnPlace("city_card", $next_action["type_arg"]);
         $card_type = $next_action["type_arg"];
         $can_skip = ($this->city_card_types[$card_type]["kind"] != "multiple" || $card_type == 30) && $next_action["remaining_count"] != $die_value;
-        self::debug("ARGCHOOSECITYAWARDEXIT");
         return array(
             'card_type' => $card_type,
             'num_remaining' => $next_action["remaining_count"],
