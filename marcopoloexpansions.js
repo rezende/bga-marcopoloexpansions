@@ -23,7 +23,6 @@ define([
 function (dojo, declare) {
     return declare("bgagame.marcopoloexpansions", ebg.core.gamegui, {
         constructor: function(){
-            console.log('marcopoloexpansions constructor');
             this.uiItems = [];
             this.myCharacterType = 0;
             this.currentMove;
@@ -1827,14 +1826,10 @@ function (dojo, declare) {
 
         getSelectableCityCardsUIItemsForPlayerTurnState : function(playerId)
         {
-            console.log("arghun pode usar cartas?");
-            console.log(this.canArghunUsePersonalCityCard);
             if (this.canArghunUsePersonalCityCard === "1") {
                 const cartas = this.uiItems.getByUiType("city_card").filter(function (g) {
                     return g.data.location == 'player_mat';
                 });
-                console.log("cartas para serem selecionadas");
-                console.log(cartas);
                 return cartas;
             }
             return [];
@@ -2443,7 +2438,7 @@ function (dojo, declare) {
 
         animateDiscardCityCard : function(cityCardId, delay, playerId)
         {
-            console.log("VAI DESCARTAR OU NAO?!?!?!?")
+            console.log("TODO HERE BEACH");
             var discardedCityCard = this.uiItems.getByUiTypeAndId("city_card", cityCardId);
             discardedCityCard.data.id = -1;
             discardedCityCard.data.location = "box";
@@ -3012,9 +3007,7 @@ function (dojo, declare) {
 
         sendFulfillArghun : function(selectedCityCard)
         {
-            console.log("before_js");
             this.checkAction("fulfillArghun");
-            console.log("after_js");
             this.ajaxcall( "/marcopoloexpansions/marcopoloexpansions/fulfillArghun.html", { lock : true, "citycard_id" : selectedCityCard.data.id },
                 function (result) {},
                 function (error) {}
@@ -3247,11 +3240,8 @@ function (dojo, declare) {
             var playerId = notif.args.player_id;
             if (notif.args.location.startsWith("city_card"))
             {
-                console.log("resourcecgang1");
                 var cityCardType = notif.args.location.replace("city_card_", "");
                 notif.args.location = "uid-" + this.uiItems.getByUiType("city_card").find(function(c) { return c.data.type_arg == cityCardType }).uid;
-                console.log("resourcecgang1b");
-
             }
             else if(notif.args.location.startsWith("character"))
             {
@@ -3287,27 +3277,6 @@ function (dojo, declare) {
                         destId = notif.args.location;
                         parentId = "panel_" + notif.args.player_id;
                     }
-                    // STANDARD SILK GATHERING
-                    console.log(tempHtml); // <span class="piece panel silk"><span>
-                    console.log(parentId); // board
-                    console.log(sourceId); // award_spot_bazaar_2_3
-                    console.log(destId); // panel_silk_2336893
-                    console.log(runningDelay); // 0
-
-                    // BUG
-                    console.log(tempHtml); // <span class="piece panel camel"><span>
-                    console.log(parentId); // panel_2336893
-                    console.log(sourceId); // panel_camel_2336893
-                    console.log(destId); // uid-133
-                    console.log(runningDelay); // 0
-
-                    console.log(tempHtml); // <span class="piece panel coin"><span>
-                    console.log(parentId); // board
-                    console.log(sourceId); // uid-133
-                    console.log(destId); // panel_coin_2336893
-                    console.log(runningDelay); // 0
-
-
                     this.slideTemporaryObject(tempHtml, parentId, sourceId, destId, 500, runningDelay + 100 * i);
                 }
                 runningDelay += amount * 100 + 100;
@@ -3393,12 +3362,10 @@ function (dojo, declare) {
 
         notif_fulfillArghun : function(notif)
         {
-            console.log("ENTROU AQUI???")
+            console.log("OILALA");
             var playerId = notif.args.player_id;
             var delay = 0;
             this.animateDiscardCityCard(notif.args.city_card_id, delay, playerId);
-            //this.gamedatas.player_contracts_completed[playerId] += 1;
-            //dojo.setAttr($('contracts-complete-' + playerId), "innerHTML", this.gamedatas.player_contracts_completed[playerId]);
         },
 
         notif_slideContracts : function(notif)
