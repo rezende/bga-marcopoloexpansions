@@ -58,6 +58,11 @@ function (dojo, declare) {
                 return this.find(function(u) { return u.uiType == uiType && parseInt(u.data.id) == parseInt(id) });
             }
 
+            this.uiItems.getByUiTypeAndTypeArg = function(uiType, typeArg)
+            {
+                return this.find(function(u) { return u.uiType == uiType && parseInt(u.data.type_arg) == parseInt(typeArg) });
+            }
+
             this.uiItems.getByUiTypes = function(uiTypes)
             {
                 return this.filter(function(u) { return uiTypes.includes(u.uiType) });
@@ -2439,7 +2444,7 @@ function (dojo, declare) {
         animateDiscardCityCard : function(cityCardId, delay, playerId)
         {
             console.log("TODO HERE BEACH");
-            var discardedCityCard = this.uiItems.getByUiTypeAndId("city_card", cityCardId);
+            var discardedCityCard = this.uiItems.getByUiTypeAndTypeArg("city_card", cityCardId);
             discardedCityCard.data.id = -1;
             discardedCityCard.data.location = "box";
             this.fadeOutAndDestroy(discardedCityCard.htmlNode, 500, delay);      //give time for resources
@@ -3362,7 +3367,6 @@ function (dojo, declare) {
 
         notif_fulfillArghun : function(notif)
         {
-            console.log("OILALA");
             var playerId = notif.args.player_id;
             var delay = 0;
             this.animateDiscardCityCard(notif.args.city_card_id, delay, playerId);
