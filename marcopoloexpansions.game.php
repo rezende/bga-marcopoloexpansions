@@ -755,6 +755,7 @@ class MarcoPoloExpansions extends Table
 
     function checkAndTriggerFulfillArghun($pending_action, $player_id)
     {
+        self::debug("ARGHUNAHOO");
         self::dump("pending_action", $pending_action);
         /* if ($pending_action["remaining_count"] == 1 && strpos($pending_action["location"], "city_card_") === 0)       //trigger arghun fulfill now */
         if (strpos($pending_action["location"], "city_card_") === 0)       //trigger arghun fulfill now
