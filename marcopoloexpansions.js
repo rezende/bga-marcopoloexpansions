@@ -3366,6 +3366,7 @@ function (dojo, declare) {
 
         notif_fulfillArghun : function(notif)
         {
+            debugger;
             var playerId = notif.args.player_id;
             var delay = 0;
             this.animateDiscardCityCard(notif.args.city_card_id, delay, playerId);

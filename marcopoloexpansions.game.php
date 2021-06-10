@@ -755,9 +755,6 @@ class MarcoPoloExpansions extends Table
 
     function checkAndTriggerFulfillArghun($pending_action, $player_id)
     {
-        self::debug("ARGHUNAHOO");
-        self::dump("pending_action", $pending_action);
-        /* if ($pending_action["remaining_count"] == 1 && strpos($pending_action["location"], "city_card_") === 0)       //trigger arghun fulfill now */
         if (count(self::getNextPendingActions()) < 2 && strpos($pending_action["location"], "city_card_") === 0)       //trigger arghun fulfill now
         {
             /* $city_card_type, $city_card_id */
@@ -2036,9 +2033,22 @@ class MarcoPoloExpansions extends Table
 
         $city_card_type = $this->city_card_types[$city_card_piece_db["type_arg"]];
         $this->giveCityAward($city_card_type, [['die_value' => '6']], $player_id);
+        $pending_action = $this->getNextPendingAction($player_id);
+        if ($pending_action == null) {
+            self::notifyAllPlayers(
+                "fulfillArghun",
+                clienttranslate('${player_name} uses city card ${city_card_id} with a 6 as a bonus action'),
+                array(
+                    "player_id" => $player_id,
+                    "player_name" => self::getActivePlayerName(),
+                    "resources_awarded" => false,
+                    "city_card_id" => $city_card_piece_db["type_arg"],
+                    "city_card_type" => $city_card_type
+                )
+            );
+        }
         self::DbQuery("UPDATE piece SET piece_location = 'box' WHERE piece_id = '{$city_card_piece_db['id']}'");
         self::setGameStateValue("can_arghun_use_city_card", 0);
-
         $this->gamestate->nextState($this->getNextTransitionBasedOnPendingActions($player_id));
     }
 
