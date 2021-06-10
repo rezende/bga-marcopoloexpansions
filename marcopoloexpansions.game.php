@@ -873,7 +873,6 @@ class MarcoPoloExpansions extends Table
                 }
             }
         }
-        die('ok');
     }
 
     /* Function that gives the player bonuses that are not resources */
