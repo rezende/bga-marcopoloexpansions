@@ -1405,7 +1405,7 @@ class MarcoPoloExpansions extends Table
             throw new BgaVisibleSystemException("die placement:  not enough coins");
 
         if (array_key_exists("min_die", $place_info) && $place_info["min_die"] > $lowest_value)
-            throw new BgaVisibleSystemException("die placement:  die value to low for this award");
+            throw new BgaVisibleSystemException("die placement:  die value too low for this award");
     }
 
     function slideRemainingContracts($trigger_by)
