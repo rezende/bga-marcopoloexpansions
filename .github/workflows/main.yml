@@ -1,0 +1,18 @@
+on: push
+name: Publish Website over SFTP
+jobs:
+  FTP-Deploy-Action:
+    name: FTP-Deploy-Action
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2.1.0
+      with:
+        fetch-depth: 2
+
+    - name: FTP-Deploy-Action
+      uses: SamKirkland/FTP-Deploy-Action@3.1.1
+      with:
+        ftp-server: sftp://1.studio.boardgamearena.com/marcopoloexpansions/
+        ftp-username: rezende
+        ftp-password: ${{ secrets.YOUR_BGA_FTP_PASSWORD }}
+        git-ftp-args: --insecure # if your certificate is setup correctly this can be removed (see known-hosts argument)
