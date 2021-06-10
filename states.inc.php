@@ -214,7 +214,7 @@ $machinestates = array(
         "name" => "gamePlayerGunjBonusStart",
         "type" => "game",
         "action" => "stGamePlayerGunjBonusStart",
-        "transitions" => array( "" => 21 ),
+        "transitions" => array( "" => 31 ),
     ),
 
     31 => array( 
@@ -225,7 +225,7 @@ $machinestates = array(
         "args" => "argPlayerGunjBonus",
         "action" => "stPlayerGunjBonus",
         "possibleactions" => array( "chooseResource" ),
-        "transitions" => array( "continue" => 21, "done" => 22 ),
+        "transitions" => array( "continue" => 31, "done" => 32 ),
     ),
 
     32 => array( 
