@@ -1241,7 +1241,7 @@ class MarcoPoloExpansions extends Table
             if ($this->validateCost($place_info["cost"], $player_id) == false)
                 throw new BgaUserException(self::_("Insufficient coins to place die here"));
 
-            self::notifyAllPlayers("message", clienttranslate('${player_name} chooses to travel upto ${steps} steps'), array("player_id" => $player_id,
+            self::notifyAllPlayers("message", clienttranslate('${player_name} chooses to travel up to ${steps} steps'), array("player_id" => $player_id,
                 "player_name" => self::getActivePlayerName(), "steps" => $place_info["index"] + 1));
             $this->changePlayerResources($place_info["cost"], true, $place_info["ui_location"], $player_id);
         }
