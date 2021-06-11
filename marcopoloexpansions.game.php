@@ -23,6 +23,7 @@ class MarcoPoloExpansions extends Table
     const KHAN_ARGHUN_CHARACTER = 9;
     const KUBILAI_CHARACTER = 1;
     const WILHELM_CHARACTER = 4;
+    const BASE_GAME_MAP_SMALL_CITY_SPOTS = 5;
 
 
     function __construct()
@@ -416,13 +417,28 @@ class MarcoPoloExpansions extends Table
         self::DbQuery($sql);
     }
 
-    // TODO: Make sure trigger other cities is always selected
     function assignCityBonuses()
     {
         $valid_city_bonus_types = array_filter($this->city_bonus_types, array("MarcoPoloExpansions", "filterExpansionFromMaterialTypes"));
         if (self::getGameStateValue("expert_variant") == 1) //use random
         {
-            $this->randomlyAssignBonusPieces('city_bonus', $valid_city_bonus_types, "small_city");
+            $required_city_bonuses = array_filter(
+                $this->city_bonus_types,
+                function($city_bonus) {
+                    return $array_key_exists("required", $city_bonus);
+                }
+            );
+            self::dump("required_city_bonus", $required_city_bonuses);
+            $non_required_city_bonuses = array_filter(
+                $this->city_bonus_types,
+                function($city_bonus) {
+                    return !($array_key_exists("required", $city_bonus));
+                }
+            );
+            self::dump("non_required_city_bonus", $non_required_city_bonuses);
+            shuffle($non_required_city_bonuses);
+            $non_required_city_bonuses = array_slice($non_required_city_bonuses, 0, self::BASE_GAME_MAP_SMALL_CITY_SPOTS);
+            $this->randomlyAssignBonusPieces('city_bonus', array_merge($required_city_bonuses, $non_required_city_bonuses), "small_city");
         } else {
             $sql = "INSERT INTO piece (piece_type, piece_type_arg, piece_location, piece_location_arg) VALUES";
             $piece_values = [];
