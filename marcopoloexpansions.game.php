@@ -44,7 +44,7 @@ class MarcoPoloExpansions extends Table
             "black_die_bought" => 14,
             "can_undo" => 15,
             "last_bid_value" => 16,                 //possible future value for auction
-            "can_arghun_use_city_card" => 17,
+            "used_personal_city_card" => 17,
             "expert_variant" => 100,
             "the_new_charaters_expansion" => 101,
         ));
@@ -98,7 +98,7 @@ class MarcoPoloExpansions extends Table
         self::setGameStateInitialValue('first_move_of_round', 1);
         self::setGameStateInitialValue('performed_main_action', 0);
         self::setGameStateInitialValue('black_die_bought', 0);
-        self::setGameStateInitialValue('can_arghun_use_city_card', 1);
+        self::setGameStateInitialValue('used_personal_city_card', 0);
         self::setGameStateInitialValue('last_bid_value', 0);
         self::setGameStateInitialValue('can_undo', 0);
 
@@ -2059,7 +2059,7 @@ class MarcoPoloExpansions extends Table
             );
         }
         self::DbQuery("UPDATE piece SET piece_location = 'box' WHERE piece_id = '{$city_card_piece_db['id']}'");
-        self::setGameStateValue("can_arghun_use_city_card", 0);
+        self::setGameStateValue("used_personal_city_card", 1);
         $this->gamestate->nextState($this->getNextTransitionBasedOnPendingActions($player_id));
     }
 
@@ -2405,7 +2405,7 @@ class MarcoPoloExpansions extends Table
             'only_remaining_player' => $this->isOnlyRemainingPlayer($player_id),
             'can_buy_black_die' => !self::getGameStateValue('black_die_bought') && $this->getNextAvailableBlackDie() != null,
             'can_undo' => self::getGameStateValue("can_undo"),
-            'can_arghun_use_personal_city_card' => self::getGameStateValue('can_arghun_use_city_card'),
+            'can_use_personal_city_card' => self::getGameStateValue('used_personal_city_card'),
         );
     }
 
@@ -2553,7 +2553,7 @@ class MarcoPoloExpansions extends Table
         self::setGameStateValue("first_move_of_round", 1);
         self::setGameStateValue("performed_main_action", 0);
         self::setGameStateValue("black_die_bought", 0);
-        self::setGameStateValue("can_arghun_use_city_card", 1);
+        self::setGameStateValue("used_personal_city_card", 0);
         self::notifyAllPlayers("message", clienttranslate("A new round begins!"), array());
         $this->cleanUpDice();
 
@@ -2691,6 +2691,7 @@ class MarcoPoloExpansions extends Table
             }
             self::setGameStateValue("performed_main_action", 0);
             self::setGameStateValue("black_die_bought", 0);
+            self::setGameStateValue("used_personal_city_card", 0);
             if ($this->deck->countCardInLocation("board") == 0)     //deal new contracts if none left
             {
                 $this->placeNewContractsOutOnBoard(2, "contract_special_pile");

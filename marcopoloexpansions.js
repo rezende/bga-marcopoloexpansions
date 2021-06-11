@@ -30,7 +30,7 @@ function (dojo, declare) {
             this.canUndo = false;
             this.mainActionAvailable = false;
             this.canBuyBlackDie = false;
-            this.canArghunUsePersonalCityCard = true;
+            this.canUsePersonalCityCard = false;
             this.playerResources = {};
             this.playerMatContainerUiTypes = { "small" : [ "die", "gift" ], "large" : [ "goal_card", "contract", "1x_gift", "city_card" ] };
             this.runningPlayerMatAnimations = {};
@@ -1169,7 +1169,7 @@ function (dojo, declare) {
                 case 'playerTurn':
                     this.mainActionAvailable = args.args.main_action_available;
                     this.canBuyBlackDie = args.args.can_buy_black_die;
-                    this.canArghunUsePersonalCityCard = args.args.can_arghun_use_personal_city_card;
+                    this.canUsePersonalCityCard = args.args.can_use_personal_city_card;
                     if (!this.mainActionAvailable)          //swap sentences (bug #21345)
                     {
                         this.gamedatas.gamestate.descriptionmyturn = this.gamedatas.gamestate.descriptionmyturn_bonus;
@@ -1831,7 +1831,7 @@ function (dojo, declare) {
 
         getSelectableCityCardsUIItemsForPlayerTurnState : function(playerId)
         {
-            if (this.canArghunUsePersonalCityCard === "1") {
+            if (this.canUsePersonalCityCard === "1") {
                 const arghun_city_cards = this.uiItems.getByUiType("city_card").filter(function (g) {
                     return g.data.location == 'player_mat';
                 });
