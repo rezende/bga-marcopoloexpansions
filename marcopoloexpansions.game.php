@@ -425,14 +425,14 @@ class MarcoPoloExpansions extends Table
             $required_city_bonuses = array_filter(
                 $this->city_bonus_types,
                 function($city_bonus) {
-                    return $array_key_exists("required", $city_bonus);
+                    return array_key_exists("required", $city_bonus);
                 }
             );
             self::dump("required_city_bonus", $required_city_bonuses);
             $non_required_city_bonuses = array_filter(
                 $this->city_bonus_types,
                 function($city_bonus) {
-                    return !($array_key_exists("required", $city_bonus));
+                    return !(array_key_exists("required", $city_bonus));
                 }
             );
             self::dump("non_required_city_bonus", $non_required_city_bonuses);
