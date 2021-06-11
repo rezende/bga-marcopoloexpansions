@@ -1831,7 +1831,7 @@ function (dojo, declare) {
 
         getSelectableCityCardsUIItemsForPlayerTurnState : function(playerId)
         {
-            if (this.canUsePersonalCityCard === "1") {
+            if (this.canUsePersonalCityCard == true) {
                 const arghun_city_cards = this.uiItems.getByUiType("city_card").filter(function (g) {
                     return g.data.location == 'player_mat';
                 });
