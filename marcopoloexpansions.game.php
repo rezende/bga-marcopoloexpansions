@@ -2405,7 +2405,7 @@ class MarcoPoloExpansions extends Table
             'only_remaining_player' => $this->isOnlyRemainingPlayer($player_id),
             'can_buy_black_die' => !self::getGameStateValue('black_die_bought') && $this->getNextAvailableBlackDie() != null,
             'can_undo' => self::getGameStateValue("can_undo"),
-            'can_use_personal_city_card' => self::getGameStateValue('used_personal_city_card'),
+            'can_use_personal_city_card' => !self::getGameStateValue('used_personal_city_card'),
         );
     }
 
