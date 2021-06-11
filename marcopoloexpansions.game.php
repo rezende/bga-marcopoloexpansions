@@ -428,14 +428,12 @@ class MarcoPoloExpansions extends Table
                     return array_key_exists("required", $city_bonus);
                 }
             );
-            self::dump("required_city_bonus", $required_city_bonuses);
             $non_required_city_bonuses = array_filter(
                 $this->city_bonus_types,
                 function($city_bonus) {
                     return !(array_key_exists("required", $city_bonus));
                 }
             );
-            self::dump("non_required_city_bonus", $non_required_city_bonuses);
             shuffle($non_required_city_bonuses);
             $non_required_city_bonuses = array_slice($non_required_city_bonuses, 0, self::BASE_GAME_MAP_SMALL_CITY_SPOTS);
             $this->randomlyAssignBonusPieces('city_bonus', array_merge($required_city_bonuses, $non_required_city_bonuses), "small_city");
@@ -1592,13 +1590,10 @@ class MarcoPoloExpansions extends Table
 
         $transition_to = "continue";
         $pending_action = $this->getNextPendingAction($player_id);
-        self::dump( 'pending_action', $pending_action );
-        self::dump( 'game_state', $this->gamestate->state() );
         if ($this->gamestate->state()["name"] == "playerBonus" || $this->gamestate->state()["name"] == "playerGunjBonus")       //always continue in player bonus
         {
             $transition_to = "continue";
         } else if ($pending_action != null && array_key_exists($pending_action["type"], $transition_map)) {
-            self::debug( 'enteredif' );
             $transition_to = $transition_map[$pending_action["type"]];
         }
         return $transition_to;
