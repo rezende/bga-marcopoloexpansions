@@ -800,6 +800,7 @@ function (dojo, declare) {
 
             if (uiItem && uiItem.uiType == "die" && !actionSent)       //reset selected places if any die changed
             {
+                debugger
                 selectedPlace = null;
                 var allPlaces = this.uiItems.getByUiTypes(["board_spot", "city_card"]);
                 this.uiItems.resetSelectable(allPlaces);
@@ -1960,7 +1961,7 @@ function (dojo, declare) {
                 {
                     position.top = -68;
                 }
-                else if (uiItem.data.character_type == 8) //Fratre Nicoalo
+                else if (uiItem.data.character_type == 8) //Fratre Nicolao
                 {
                     position.top = -66;
                 }
