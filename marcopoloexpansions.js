@@ -1802,11 +1802,13 @@ function (dojo, declare) {
         getSelectableCharacterSpotUIItemsForPlayerTurnState : function(selectedDice, playerId)
         {
             var spots = [];
+
             if (this.player_id == playerId && this.myCharacterType == 11 && selectedDice.length == 1)
             {
+                const _self = this;
                 debugger
                 spots = this.uiItems.getByUiType("character_spot").filter(function(c) { return c.data.player_id == playerId });
-                available_spots = spots.filter(function(s) { return !(this.getDiceOnSpot(s.data.place, s.data.index)) });
+                available_spots = spots.filter(function(s) { return !(_self.getDiceOnSpot(s.data.place, s.data.index)) });
                 // JULY2021
                 //todo - make sure no dice on them
             }
