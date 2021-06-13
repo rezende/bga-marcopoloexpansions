@@ -800,7 +800,6 @@ function (dojo, declare) {
 
             if (uiItem && uiItem.uiType == "die" && !actionSent)       //reset selected places if any die changed
             {
-                debugger
                 selectedPlace = null;
                 var allPlaces = this.uiItems.getByUiTypes(["board_spot", "city_card"]);
                 this.uiItems.resetSelectable(allPlaces);
@@ -1634,7 +1633,7 @@ function (dojo, declare) {
             return boardIds;
         },
 
-        getDiceOnSpot : function(location, locationArg)
+        getDiceOnSpot : function(location, locationArg)     
         {
             return this.uiItems.getByUiType("die").filter(function(d) { return d.data.location == location && d.data.location_arg == locationArg });
         },
@@ -1805,7 +1804,10 @@ function (dojo, declare) {
             var spots = [];
             if (this.player_id == playerId && this.myCharacterType == 11 && selectedDice.length == 1)
             {
+                debugger
                 spots = this.uiItems.getByUiType("character_spot").filter(function(c) { return c.data.player_id == playerId });
+                available_spots = spots.filter(function(s) { return !(this.getDiceOnSpot(s.data.place, s.data.index)) });
+                // JULY2021
                 //todo - make sure no dice on them
             }
             return spots;
@@ -3367,7 +3369,6 @@ function (dojo, declare) {
 
         notif_fulfillArghun : function(notif)
         {
-            debugger;
             var playerId = notif.args.player_id;
             var delay = 0;
             this.animateDiscardCityCard(notif.args.city_card_id, delay, playerId);
