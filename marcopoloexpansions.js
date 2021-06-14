@@ -1633,7 +1633,7 @@ function (dojo, declare) {
             return boardIds;
         },
 
-        getDiceOnSpot : function(location, locationArg)     
+        getDiceOnSpot : function(location, locationArg)
         {
             return this.uiItems.getByUiType("die").filter(function(d) { return d.data.location == location && d.data.location_arg == locationArg });
         },
@@ -1801,16 +1801,18 @@ function (dojo, declare) {
 
         getSelectableCharacterSpotUIItemsForPlayerTurnState : function(selectedDice, playerId)
         {
+            /**
+            * Function that gets places where a player can use their die on their character card.
+            * Used primarlyby Gunj Kököchin (characterType == 11)
+            * @param {Array} selectedDice - Array that contains the dice the player selected
+            * @param {number} playerId - The playerId of the player using the action
+            * @return {Array} - List of uItems that represent available spots on the character card
+            */
             var spots = [];
-
             if (this.player_id == playerId && this.myCharacterType == 11 && selectedDice.length == 1)
             {
-                const _self = this;
-                debugger
-                spots = this.uiItems.getByUiType("character_spot").filter(function(c) { return c.data.player_id == playerId });
-                available_spots = spots.filter(function(s) { return !(_self.getDiceOnSpot(s.data.place, s.data.index)) });
-                // JULY2021
-                //todo - make sure no dice on them
+                spots = this.uiItems.getByUiType("character_spot").filter(c => c.data.player_id == playerId);
+                spots = spots.filter((uiItem) => !this.getDiceOnUiItem(uiItem).length);
             }
             return spots;
         },
