@@ -782,8 +782,7 @@ class MarcoPoloExpansions extends Table
                     "player_id" => $player_id,
                     "player_name" => self::getActivePlayerName(),
                     "resources_awarded" => false,
-                    "city_card_id" => $city_card_piece_db["type_arg"],
-                    "city_card_type" => $city_card_type
+                    "city_card_id" => $city_card_id,
                 )
             );
         }
