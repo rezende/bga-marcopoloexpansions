@@ -128,9 +128,11 @@ class MarcoPoloExpansions extends Table
         self::initStat('player', 'contract_points', 0);
         self::initStat('player', 'city_card_points', 0);
         self::initStat('player', 'city_bonus_points', 0);
+        self::initStat('player', 'gift_points', 0);
         self::initStat('player', 'trading_post_points', 0);
         self::initStat('player', 'compensation_receive_coin', 0);
         self::initStat('player', 'compensation_receive_camel', 0);
+
 
         $this->createGoalCards();
         $this->createDealAndShuffleContracts($players);
