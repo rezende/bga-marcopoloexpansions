@@ -273,17 +273,23 @@ $this->board_spots = array(
 );
 
 $this->character_types = array(
-  7 => array( "type" => 7, "name" => clienttranslate( "Matteo Polo" ), "description" => clienttranslate( "<p>You receive the white die at the start of each round. Roll it and add it to the remaining dice on your player board. You also receive the topmost contract in the special pile at the start of each round. Look at page 1 of this supplement for more information.</p>" ), "default_player" => 2, "award" => [ "contract" => 1 ] ),            //white die & contract at beginning of round
   8 => array( "type" => 8, "name" => "Fratre Nicolao", "description" => "<p>At the beginning of each round, you draw 3 gifts. Choose 1 of these gifts to take and discard the other 2 faceup</p><p>You also receive this token, which allows you to instead take 2 of the 3 drawn gifts once during the game.</p>", "award" => [ "pick_gift" => 1 ], "expansion" => 0 ),
   9 => array( "type" => 9, "name" => "Khan Arghun", "description" => "<p>Once per turn, you may use 1 of these city cards.  This counts as a bonus action.</p><p>By using a card, you perform the action depicted on the city card as though you had placed a 6 value die on it. No die is required.</p><p>After you have completed the action on the city card, discard it.</p>", "expansion" => 0 ),
   10 => array( "type" => 10, "name" => "Altan Ord", "description" => "<p>You receive a bonus each time you place a trading post. When you place your 1st trading post, you receive 1 point. When you place your 2nd trading post, you receive 1 point and 1 coin. When you place your 3rd trading post, you receive 1 point, 1 coin, and 1 camel, etc..</p>", "expansion" => 0 ),
-  11 => array( "type" => 11, "name" => "Gunj Kököchin", "description" => "<p>You have 2 additional action spaces that only you may use. To use them, simply place 1 of your dice on one of the action spaces. This counts as your turn’s action.</p><p>This die will be retrieved and rolled at the beginning of the next round, as usual. This means that these action spaces are available to be used in each new round</p><p>1st action space: Take 2 camels and 2 goods of your choice. Each of your opponents take 1 good of their choice. These goods are taken from the supply, as usual</p><p>2nd action space: Move your figure 1 space on the map</p>", "expansion" => 0,
-               "places" => array(
-                      [ "place" => "gunj", "index" => 0, "name" => "Gunj Kököchin goods", "description" => "", "owns_place" => true, "num_dice" => 1, "award" => [ "camel" => 2, "choice_of_good" => 2 ], "allow_multiple" => false, "ui_location" => "gunj_0" ],
-                      [ "place" => "gunj", "index" => 1, "name" => "Gunj Kököchin travel", "description" => "", "owns_place" => true, "num_dice" => 1, "award" => [ "travel" => 1 ], "allow_multiple" => false, "ui_location" => "gunj_1" ]
-               )
-  ),
 );
+
+// $this->character_types = array(
+//   7 => array( "type" => 7, "name" => clienttranslate( "Matteo Polo" ), "description" => clienttranslate( "<p>You receive the white die at the start of each round. Roll it and add it to the remaining dice on your player board. You also receive the topmost contract in the special pile at the start of each round. Look at page 1 of this supplement for more information.</p>" ), "default_player" => 2, "award" => [ "contract" => 1 ] ),            //white die & contract at beginning of round
+//   8 => array( "type" => 8, "name" => "Fratre Nicolao", "description" => "<p>At the beginning of each round, you draw 3 gifts. Choose 1 of these gifts to take and discard the other 2 faceup</p><p>You also receive this token, which allows you to instead take 2 of the 3 drawn gifts once during the game.</p>", "award" => [ "pick_gift" => 1 ], "expansion" => 0 ),
+//   9 => array( "type" => 9, "name" => "Khan Arghun", "description" => "<p>Once per turn, you may use 1 of these city cards.  This counts as a bonus action.</p><p>By using a card, you perform the action depicted on the city card as though you had placed a 6 value die on it. No die is required.</p><p>After you have completed the action on the city card, discard it.</p>", "expansion" => 0 ),
+//   10 => array( "type" => 10, "name" => "Altan Ord", "description" => "<p>You receive a bonus each time you place a trading post. When you place your 1st trading post, you receive 1 point. When you place your 2nd trading post, you receive 1 point and 1 coin. When you place your 3rd trading post, you receive 1 point, 1 coin, and 1 camel, etc..</p>", "expansion" => 0 ),
+//   11 => array( "type" => 11, "name" => "Gunj Kököchin", "description" => "<p>You have 2 additional action spaces that only you may use. To use them, simply place 1 of your dice on one of the action spaces. This counts as your turn’s action.</p><p>This die will be retrieved and rolled at the beginning of the next round, as usual. This means that these action spaces are available to be used in each new round</p><p>1st action space: Take 2 camels and 2 goods of your choice. Each of your opponents take 1 good of their choice. These goods are taken from the supply, as usual</p><p>2nd action space: Move your figure 1 space on the map</p>", "expansion" => 0,
+//                "places" => array(
+//                       [ "place" => "gunj", "index" => 0, "name" => "Gunj Kököchin goods", "description" => "", "owns_place" => true, "num_dice" => 1, "award" => [ "camel" => 2, "choice_of_good" => 2 ], "allow_multiple" => false, "ui_location" => "gunj_0" ],
+//                       [ "place" => "gunj", "index" => 1, "name" => "Gunj Kököchin travel", "description" => "", "owns_place" => true, "num_dice" => 1, "award" => [ "travel" => 1 ], "allow_multiple" => false, "ui_location" => "gunj_1" ]
+//                )
+//   ),
+// );
 
 $this->all_material = array(
   "board" => $this->board_map,
