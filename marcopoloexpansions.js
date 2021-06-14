@@ -1838,12 +1838,8 @@ function (dojo, declare) {
 
         getSelectableCityCardsUIItemsForPlayerTurnState : function(playerId)
         {
-            if (this.canUsePersonalCityCard == true) {
-                const arghun_city_cards = this.uiItems.getByUiType("city_card").filter(function (g) {
-                    return g.data.location == 'player_mat';
-                });
-                return arghun_city_cards;
-            }
+            if (this.player_id == playerId && this.canUsePersonalCityCard == true && this.myCharacterType == 9) // 9 = Khan
+                return this.uiItems.getByUiType("city_card").filter(g => g.data.location == 'player_mat');
             return [];
         },
 
