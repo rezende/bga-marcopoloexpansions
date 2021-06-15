@@ -397,21 +397,24 @@ class MarcoPoloExpansions extends Table
     function randomlyAssignBonusPieces($piece_type, $bonus_type_materials, $matching_map_type)
     {
         shuffle($bonus_type_materials);
-        $bonus_index = 0;
         $piece_values = [];
         $sql = "INSERT INTO piece (piece_type, piece_type_arg, piece_location, piece_location_arg, piece_location_position) VALUES";
 
         foreach ($this->board_map as $map_node_id => $map_node) {
             if ($map_node["type"] == $matching_map_type) {
-                $num_of = 1; //number_of_cards_to_place_in_city
-                // random city cards on board
+                $num_of_pieces_on_city = 1;
                 if ($piece_type == "city_card" && array_key_exists("num_cards", $map_node)) { //Sumatra
-                    $num_of = $map_node["num_cards"];
+                    $num_of_pieces_on_city = $map_node["num_cards"];
+                    for ($i = 0; $i < $num_of_pieces_on_city; $i++) {
+                        $bonus_piece = array_pop($bonus_type_materials);
+                        $bonus_type = $bonus_piece["type"];
+                        $piece_values[] = "('{$piece_type}', '{$bonus_type}', 'board', '{$map_node_id}', '{$i}')";
+                    }
                 }
-                for ($i = 0; $i < $num_of; $i++) { //this loop is basically for sumatra
-                    $bonus_type = $bonus_type_materials[$bonus_index]["type"];
-                    $piece_values[] = "('{$piece_type}', '{$bonus_type}', 'board', '{$map_node_id}', '{$i}')";
-                    $bonus_index += 1;
+                else {
+                    $bonus_piece = array_pop($bonus_type_materials);
+                    $bonus_type = $bonus_piece["type"];
+                    $piece_values[] = "('{$piece_type}', '{$bonus_type}', 'board', '{$map_node_id}', '0')";
                 }
             }
         }
