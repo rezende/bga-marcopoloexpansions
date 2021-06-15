@@ -56,7 +56,7 @@ $this->city_bonus_types = array(
   0 => array( "type" => 0, "award" => [ "coin" => 5 ], "default_location" => 3, "auto" => true ),
   1 => array( "type" => 1, "award" => [ "camel" => 3 ], "default_location" => 18, "auto" => true ),
   2 => array( "type" => 2, "award" => [ "2_diff_goods" => 1 ], "default_location" => 12 ),
-  3 => array( "type" => 3, "award" => [ "trigger_other_city_bonus" => 1 ], "default_location" => 14, "required" => true),
+  3 => array( "type" => 3, "award" => [ "trigger_other_city_bonus" => 1 ], "default_location" => 14),
   4 => array( "type" => 4, "award" => [ "camel" => 1, "coin" => 3 ], "default_location" => 23, "auto" => true ),
   5 => array( "type" => 5, "award" => [ "vp" => 3 ], "default_location" => 24, "auto" => true ),
   6 => array( "type" => 6, "award" => [ "gift" => 1 ], "expansion" => 0 ),
