@@ -424,21 +424,20 @@ class MarcoPoloExpansions extends Table
         $valid_city_bonus_types = array_filter($this->city_bonus_types, array("MarcoPoloExpansions", "filterExpansionFromMaterialTypes"));
         if (self::getGameStateValue("expert_variant") == 1) //use random
         {
-            $required_city_bonuses = array_filter(
-                $this->city_bonus_types,
-                function($city_bonus) {
-                    return array_key_exists("required", $city_bonus);
-                }
-            );
-            $non_required_city_bonuses = array_filter(
-                $this->city_bonus_types,
-                function($city_bonus) {
-                    return !(array_key_exists("required", $city_bonus));
-                }
-            );
-            shuffle($non_required_city_bonuses);
-            $non_required_city_bonuses = array_slice($non_required_city_bonuses, 0, self::BASE_GAME_MAP_SMALL_CITY_SPOTS);
-            $this->randomlyAssignBonusPieces('city_bonus', array_merge($required_city_bonuses, $non_required_city_bonuses), "small_city");
+            $all_city_bonuses = $this->city_bonus_types;
+            self::dump('ALL_CITY_BONUSES', $all_city_bonuses);
+            $required_city_bonus = $this->city_bonus_types[3];
+            self::dump('REQUIRED_CITY_BONUS', $required_city_bonus);
+            unset($all_city_bonuses[3]);
+            self::dump('ALL_CITY_BONUSES REMOVE REQUIRED', $all_city_bonuses);
+            self::dump('REQUIRED_CITY_BONUS', $required_city_bonus);
+            shuffle($all_city_bonuses);
+            self::dump('ALL_CITY_BONUSES SHUFFLED', $all_city_bonuses);
+            $picked_city_bonuses = array_slice($all_city_bonuses, 0, self::BASE_GAME_MAP_SMALL_CITY_SPOTS);
+            self::dump('PICKED_CITY_BONUS SLICED', $all_city_bonuses);
+            $picked_city_bonuses[3] = $required_city_bonus;
+            self::dump('PICKED_CITY_BONUS REQUIRED ADDED', $all_city_bonuses);
+            $this->randomlyAssignBonusPieces('city_bonus', $required_city_bonus, "small_city");
         } else {
             $sql = "INSERT INTO piece (piece_type, piece_type_arg, piece_location, piece_location_arg) VALUES";
             $piece_values = [];
