@@ -45,7 +45,6 @@ class MarcoPoloExpansions extends Table
             "can_undo" => 15,
             "last_bid_value" => 16,                 //possible future value for auction
             "used_personal_city_card" => 17,
-            "using_personal_city_card" => 18,
             "expert_variant" => 100,
             "the_new_charaters_expansion" => 101,
         ));
@@ -100,7 +99,6 @@ class MarcoPoloExpansions extends Table
         self::setGameStateInitialValue('performed_main_action', 0);
         self::setGameStateInitialValue('black_die_bought', 0);
         self::setGameStateInitialValue('used_personal_city_card', 0);
-        self::setGameStateInitialValue('using_personal_city_card', 0);
         self::setGameStateInitialValue('last_bid_value', 0);
         self::setGameStateInitialValue('can_undo', 0);
 
@@ -767,16 +765,27 @@ class MarcoPoloExpansions extends Table
         if ($pending_action["remaining_count"] == 1 && strpos($pending_action["location"], "contract_") === 0)       //trigger contract fulfill now
         {
             $contract_id = str_replace("contract_", "", $pending_action["location"]);
-            self::notifyAllPlayers("fulfillContract", '', array("player_id" => $player_id, "contract_id" => $contract_id, "resources_awarded" => true));
+            self::notifyAllPlayers(
+                "fulfillContract",
+                '',
+                array("player_id" => $player_id, "contract_id" => $contract_id, "resources_awarded" => true)
+            );
         }
     }
 
     function checkAndTriggerFulfillArghun($pending_action, $player_id)
     {
-        if (strpos($pending_action["location"], "city_card_") === 0 && self::getGameStateValue('using_personal_city_card') == 1)    //trigger arghun fulfill now
+        $city_card_id = str_replace("city_card_", "", $pending_action["location"]);
+        $city_card_piece_db = self::getObjectFromDB(
+            "SELECT
+                piece_id id,
+                piece_location location,
+            FROM piece WHERE piece_id = {$city_card_id}"
+        );
+        if (strpos($pending_action["location"], "city_card_") === 0 && $city_card_piece_db['location'] == 'player_mat')
         {
             $city_card_id = str_replace("city_card_", "", $pending_action["location"]);
-            self::setGameStateValue('using_personal_city_card', 0);
+            self::DbQuery("UPDATE piece SET piece_location = 'box' WHERE piece_id = '{$city_card_id}'");
             self::notifyAllPlayers(
                 "fulfillArghun",
                 clienttranslate('${player_name} uses city card ${city_card_id} with a 6 as a bonus action'),
@@ -2046,7 +2055,6 @@ class MarcoPoloExpansions extends Table
         $city_card_piece_db = self::getObjectFromDB("SELECT piece_id id, piece_type type, piece_type_arg type_arg, piece_player_id player_id, piece_location location, piece_location_arg location_arg
                 FROM piece WHERE piece_id = {$city_card_id}");
         self::setGameStateValue("can_undo", 1);
-        self::setGameStateValue("using_personal_city_card", 1);
 
         if ($city_card_piece_db == null || $city_card_piece_db['player_id'] != $player_id || $city_card_piece_db['location'] != 'player_mat')
             throw new BgaVisibleSystemException(self::_("fulfill city_card: no city_card or does not belong to you"));
@@ -2055,7 +2063,7 @@ class MarcoPoloExpansions extends Table
         $this->giveCityAward($city_card_type, [['die_value' => '6']], $player_id);
         $pending_action = $this->getNextPendingAction($player_id);
         if ($pending_action == null) {
-            self::setGameStateValue("using_personal_city_card", 0);
+            self::DbQuery("UPDATE piece SET piece_location = 'box' WHERE piece_id = '{$city_card_id}'");
             self::notifyAllPlayers(
                 "fulfillArghun",
                 clienttranslate('${player_name} uses city card ${city_card_id} with a 6 as a bonus action'),
@@ -2068,7 +2076,6 @@ class MarcoPoloExpansions extends Table
                 )
             );
         }
-        self::DbQuery("UPDATE piece SET piece_location = 'box' WHERE piece_id = '{$city_card_piece_db['id']}'");
         self::setGameStateValue("used_personal_city_card", 1);
         $this->gamestate->nextState($this->getNextTransitionBasedOnPendingActions($player_id));
     }
