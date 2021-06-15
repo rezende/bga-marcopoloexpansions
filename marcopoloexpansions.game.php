@@ -777,10 +777,7 @@ class MarcoPoloExpansions extends Table
     {
         $city_card_id = str_replace("city_card_", "", $pending_action["location"]);
         $city_card_piece_db = self::getObjectFromDB(
-            "SELECT
-                piece_id id,
-                piece_location location,
-            FROM piece WHERE piece_id = {$city_card_id}"
+            "SELECT piece_id id, piece_location location FROM piece WHERE piece_id = {$city_card_id}"
         );
         if (strpos($pending_action["location"], "city_card_") === 0 && $city_card_piece_db['location'] == 'player_mat')
         {
