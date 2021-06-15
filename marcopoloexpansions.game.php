@@ -424,9 +424,9 @@ class MarcoPoloExpansions extends Table
         $valid_city_bonus_types = array_filter($this->city_bonus_types, array("MarcoPoloExpansions", "filterExpansionFromMaterialTypes"));
         if (self::getGameStateValue("expert_variant") == 1) //use random
         {
-            $all_city_bonuses = $this->city_bonus_types;
+            $all_city_bonuses = $valid_city_bonus_types;
             self::dump('ALL_CITY_BONUSES', $all_city_bonuses);
-            $required_city_bonus = $this->city_bonus_types[3];
+            $required_city_bonus = $all_city_bonuses[3];
             self::dump('REQUIRED_CITY_BONUS', $required_city_bonus);
             unset($all_city_bonuses[3]);
             self::dump('ALL_CITY_BONUSES REMOVE REQUIRED', $all_city_bonuses);
