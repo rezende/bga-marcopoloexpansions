@@ -1838,7 +1838,6 @@ function (dojo, declare) {
 
         getSelectableCityCardsUIItemsForPlayerTurnState : function(playerId)
         {
-            debugger
             if (this.player_id == playerId && this.canUsePersonalCityCard == true && this.myCharacterType == 9) // 9 = Khan
                 return this.uiItems.getByUiType("city_card").filter(g => g.data.location == 'player_mat');
             return [];
