@@ -783,7 +783,6 @@ class MarcoPoloExpansions extends Table
             );
             if ($city_card_piece_db['location'] == 'player_mat')
             {
-                $city_card_id = str_replace("city_card_", "", $pending_action["location"]);
                 self::DbQuery("UPDATE piece SET piece_location = 'box' WHERE piece_id = '{$city_card_id}'");
                 self::notifyAllPlayers(
                     "fulfillArghun",
