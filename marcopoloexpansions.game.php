@@ -775,24 +775,27 @@ class MarcoPoloExpansions extends Table
 
     function checkAndTriggerFulfillArghun($pending_action, $player_id)
     {
-        $city_card_id = str_replace("city_card_", "", $pending_action["location"]);
-        $city_card_piece_db = self::getObjectFromDB(
-            "SELECT piece_id id, piece_location location FROM piece WHERE piece_id = {$city_card_id}"
-        );
-        if (strpos($pending_action["location"], "city_card_") === 0 && $city_card_piece_db['location'] == 'player_mat')
+        if (strpos($pending_action["location"], "city_card_") === 0)
         {
             $city_card_id = str_replace("city_card_", "", $pending_action["location"]);
-            self::DbQuery("UPDATE piece SET piece_location = 'box' WHERE piece_id = '{$city_card_id}'");
-            self::notifyAllPlayers(
-                "fulfillArghun",
-                clienttranslate('${player_name} uses city card ${city_card_id} with a 6 as a bonus action'),
-                array(
-                    "player_id" => $player_id,
-                    "player_name" => self::getActivePlayerName(),
-                    "resources_awarded" => false,
-                    "city_card_id" => $city_card_id,
-                )
+            $city_card_piece_db = self::getObjectFromDB(
+                "SELECT piece_id id, piece_location location FROM piece WHERE piece_id = {$city_card_id}"
             );
+            if ($city_card_piece_db['location'] == 'player_mat')
+            {
+                $city_card_id = str_replace("city_card_", "", $pending_action["location"]);
+                self::DbQuery("UPDATE piece SET piece_location = 'box' WHERE piece_id = '{$city_card_id}'");
+                self::notifyAllPlayers(
+                    "fulfillArghun",
+                    clienttranslate('${player_name} uses city card ${city_card_id} with a 6 as a bonus action'),
+                    array(
+                        "player_id" => $player_id,
+                        "player_name" => self::getActivePlayerName(),
+                        "resources_awarded" => false,
+                        "city_card_id" => $city_card_id,
+                    )
+                );
+            }
         }
     }
 
