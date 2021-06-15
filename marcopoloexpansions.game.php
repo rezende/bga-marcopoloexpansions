@@ -426,12 +426,12 @@ class MarcoPoloExpansions extends Table
         if (self::getGameStateValue("expert_variant") == 1) //use random
         {
             self::dump('VALID_CITY_BONUS', $valid_city_bonus_types);
-            $required_city_bonus = array_filter($valid_city_bonus_types, function($b) { return $b['type'] == 3;});
+            $required_city_bonus = array_values(array_filter($valid_city_bonus_types, function($b) { return $b['type'] == 3;}));
             self::dump('REQUIRED_CITY_BONUS', $required_city_bonus);
-            $other_city_bonus = array_filter($valid_city_bonus_types, function($b) { return $b['type'] != 3;});
+            $other_city_bonus = array_values(array_filter($valid_city_bonus_types, function($b) { return $b['type'] != 3;}));
             shuffle($other_city_bonus);
             self::dump('OTHER_CITY_BONUS SHUFFLED', $other_city_bonus);
-            $picked_city_bonuses = array_slice($other_city_bonus, 0, self::BASE_GAME_MAP_SMALL_CITY_SPOTS - 1);
+            $picked_city_bonuses = array_slice($other_city_bonus, 0, 5);
             self::dump('PICKED_CITY_BONUS SLICED', $picked_city_bonuses);
             $picked_city_bonuses = array_merge($required_city_bonus, $other_city_bonus);
             self::dump('PICKED_CITY_BONUS REQUIRED ADDED', $picked_city_bonuses);
