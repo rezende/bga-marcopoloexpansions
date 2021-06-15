@@ -434,10 +434,10 @@ class MarcoPoloExpansions extends Table
             shuffle($all_city_bonuses);
             self::dump('ALL_CITY_BONUSES SHUFFLED', $all_city_bonuses);
             $picked_city_bonuses = array_slice($all_city_bonuses, 0, self::BASE_GAME_MAP_SMALL_CITY_SPOTS);
-            self::dump('PICKED_CITY_BONUS SLICED', $all_city_bonuses);
+            self::dump('PICKED_CITY_BONUS SLICED', $picked_city_bonuses);
             $picked_city_bonuses[3] = $required_city_bonus;
-            self::dump('PICKED_CITY_BONUS REQUIRED ADDED', $all_city_bonuses);
-            $this->randomlyAssignBonusPieces('city_bonus', $required_city_bonus, "small_city");
+            self::dump('PICKED_CITY_BONUS REQUIRED ADDED', $picked_city_bonuses);
+            $this->randomlyAssignBonusPieces('city_bonus', $picked_city_bonuses, "small_city");
         } else {
             $sql = "INSERT INTO piece (piece_type, piece_type_arg, piece_location, piece_location_arg) VALUES";
             $piece_values = [];
