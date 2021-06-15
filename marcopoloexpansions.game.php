@@ -23,7 +23,7 @@ class MarcoPoloExpansions extends Table
     const KHAN_ARGHUN_CHARACTER = 9;
     const KUBILAI_CHARACTER = 1;
     const WILHELM_CHARACTER = 4;
-    const BASE_GAME_MAP_SMALL_CITY_SPOTS = 5;
+    const BASE_GAME_MAP_SMALL_CITY_SPOTS = 6;
 
 
     function __construct()
@@ -425,18 +425,15 @@ class MarcoPoloExpansions extends Table
         $valid_city_bonus_types = array_filter($this->city_bonus_types, array("MarcoPoloExpansions", "filterExpansionFromMaterialTypes"));
         if (self::getGameStateValue("expert_variant") == 1) //use random
         {
-            $all_city_bonuses = $valid_city_bonus_types;
-            self::dump('ALL_CITY_BONUSES', $all_city_bonuses);
-            $required_city_bonus = $all_city_bonuses[3];
+            self::dump('VALID_CITY_BONUS', $valid_city_bonus_types);
+            $required_city_bonus = array_filter($valid_city_bonus_types, function($b) { return $b['default_location'] == 14;});
             self::dump('REQUIRED_CITY_BONUS', $required_city_bonus);
-            unset($all_city_bonuses[3]);
-            self::dump('ALL_CITY_BONUSES REMOVE REQUIRED', $all_city_bonuses);
-            self::dump('REQUIRED_CITY_BONUS', $required_city_bonus);
-            shuffle($all_city_bonuses);
-            self::dump('ALL_CITY_BONUSES SHUFFLED', $all_city_bonuses);
-            $picked_city_bonuses = array_slice($all_city_bonuses, 0, self::BASE_GAME_MAP_SMALL_CITY_SPOTS);
+            $other_city_bonus = array_filter($valid_city_bonus_types, function($b) { return $b['default_location'] != 14;});
+            shuffle($other_city_bonus);
+            self::dump('OTHER_CITY_BONUS SHUFFLED', $other_city_bonus);
+            $picked_city_bonuses = array_slice($other_city_bonus, 0, self::BASE_GAME_MAP_SMALL_CITY_SPOTS - 1);
             self::dump('PICKED_CITY_BONUS SLICED', $picked_city_bonuses);
-            $picked_city_bonuses[3] = $required_city_bonus;
+            $picked_city_bonuses = array_merge($required_city_bonus, $other_city_bonus);
             self::dump('PICKED_CITY_BONUS REQUIRED ADDED', $picked_city_bonuses);
             $this->randomlyAssignBonusPieces('city_bonus', $picked_city_bonuses, "small_city");
         } else {
