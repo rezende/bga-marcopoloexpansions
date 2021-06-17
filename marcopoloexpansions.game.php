@@ -170,7 +170,7 @@ class MarcoPoloExpansions extends Table
         $result['player_contracts_completed'] = self::getCollectionFromDB("SELECT card_location_arg location_arg, COUNT(card_id) num_of FROM card WHERE card_location = 'complete' GROUP BY card_location_arg");
         $result['player_gifts'] = $this->deck->getCardsInLocation("gift_hand");
         $result['expansions'] = $this->getExpansionsEnabled();
-        if ($this->gamestate->state() && $this->gamestate->state()["name"] == "gameEnd") {
+        if ($this->gamestate->state() && $this->getGameStateName() == "gameEnd") {
             $result['goal_cards'] = $this->deck->getCardsInLocation("goal_hand"); //replay bug?
         } else {
             $result['goal_cards'] = $this->deck->getCardsInLocation("goal_hand", $current_player_id);
@@ -219,6 +219,11 @@ class MarcoPoloExpansions extends Table
         }
     }
 
+    function getGameStateName()
+    {
+        return $this->gamestate->state()["name"];
+    }
+
     function isExpansionEnabled($expansion)
     {
         if ($expansion == self::EXPANSION_ID_NEW_CHARACTER)      //new characters
@@ -264,7 +269,7 @@ class MarcoPoloExpansions extends Table
     function getRequestingPlayerId()
     {
         $player_id = self::getActivePlayerId();
-        if ($this->gamestate->state()["name"] == "playerBonus" || $this->gamestate->state()["name"] == "playerGunjBonus") {
+        if ($this->getGameStateName() == "playerBonus" || $this->getGameStateName() == "playerGunjBonus") {
             $player_id = self::getCurrentPlayerId();
         }
         return $player_id;
@@ -1624,7 +1629,7 @@ class MarcoPoloExpansions extends Table
 
         $transition_to = "continue";
         $pending_action = $this->getNextPendingAction($player_id);
-        if ($this->gamestate->state()["name"] == "playerBonus" || $this->gamestate->state()["name"] == "playerGunjBonus")       //always continue in player bonus
+        if ($this->getGameStateName() == "playerBonus" || $this->getGameStateName() == "playerGunjBonus")       //always continue in player bonus
         {
             $transition_to = "continue";
         } else if ($pending_action != null && array_key_exists($pending_action["type"], $transition_map)) {
@@ -2110,7 +2115,7 @@ class MarcoPoloExpansions extends Table
 
         $this->validateGiftAgainstAllowable($gift_id, '', $player_id);
         $this->useGift($gift_id, true, $player_id);
-        if ($gift["type_arg"] == 10 && $this->gamestate->state()["name"] == "playerTravel") {
+        if ($gift["type_arg"] == 10 && $this->getGameStateName() == "playerTravel") {
             $pending_action = $this->getNextPendingAction($player_id);
             $success = $this->placeTradingPost($board_id, false, $player_id);
             if ($success) {
