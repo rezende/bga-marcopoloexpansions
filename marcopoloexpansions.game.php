@@ -650,6 +650,9 @@ class MarcoPoloExpansions extends Table
         * @param boolean $via_buy - represents if the die was acquired via turning 3 camels in as a bonus action
         * @param int $player_id - id of player acquiring the die
         */
+        self::dump("BLACK_DIE ID", $die_id);
+        self::dump("VIA_BUY", $via_buy);
+        self::dump("PLAYER_ID", $player_id);
         $die_value = $this->rollDie($die_id, $player_id);
         self::DbQuery("UPDATE die SET die_location = 'player_mat', die_player_id = '{$player_id}' WHERE die_id = {$die_id}");
         $dice = $this->getDiceByIds([$die_id]);
@@ -784,15 +787,15 @@ class MarcoPoloExpansions extends Table
 
     function checkAndTriggerFulfillArghun($pending_action, $player_id)
     {
-        self::dump('ARGHUN_PENDING_ACTION', $pending_action);
+        // self::dump('ARGHUN_PENDING_ACTION', $pending_action);
         if (strpos($pending_action["location"], "city_card_") === 0)
         {
             $city_card_id = str_replace("city_card_", "", $pending_action["location"]);
-            self::dump('ARGHUN_CITY_CARD_ID', $city_card_id);
+            // self::dump('ARGHUN_CITY_CARD_ID', $city_card_id);
             $city_card_piece_db = self::getObjectFromDB(
                 "SELECT piece_id id, piece_location location FROM piece WHERE piece_id = {$city_card_id}"
             );
-            self::dump('ARGHUN_CITY_CARD_DB', $city_card_piece_db);
+            // self::dump('ARGHUN_CITY_CARD_DB', $city_card_piece_db);
             if ($city_card_piece_db['location'] == 'player_mat')
             {
                 self::DbQuery("UPDATE piece SET piece_location = 'box' WHERE piece_id = '{$city_card_id}'");
@@ -926,6 +929,7 @@ class MarcoPoloExpansions extends Table
             } else if ($award_type == "black_die") {
                 $black_die_id = $this->getNextAvailableBlackDie();
                 if ($black_die_id != null) {
+                    self::dump("BLACK_DIE ID CALL", $black_die_id);
                     $this->givePlayerBlackDie($black_die_id, false, $player_id);
                 }
             } else if ($award_type == "trigger_city_bonus_having_trading_post" && sizeof($this->getCityBonuses($player_id)) > 0) {
@@ -948,6 +952,8 @@ class MarcoPoloExpansions extends Table
             } else if ($award_type == "trigger_other_city_bonus") {
                 $this->addToPendingTable($award_type, 3, '', $amount, $location, $player_id);     //3 = this city bonus, can't trigger self
             } else if ($award_type == "blackdie_or_3coins") {
+                // player received gift, need to give them options.
+                // so add to pending table
                 $no_black_die = $this->getNextAvailableBlackDie() == null ? "no_black_die" : "";
                 $this->addToPendingTable("blackdie_or_3coins", $no_black_die, '', 1, $location, $player_id);
             } else if (in_array($award_type, ["choice_of_good", "camel_coin", "2_diff_goods", "travel"])) {
@@ -1934,6 +1940,10 @@ class MarcoPoloExpansions extends Table
         $resources = null;
         $drop_by = -1;
         $negate = false;
+
+        self::dump("CHOOSE_RESOURCE PA", $pending_action);
+        self::dump("CHOOSE_RESOURCE CHOICE", $choice);
+
 
         if ($pending_action == null)
             throw new BgaVisibleSystemException("choose resource : invalid state");
