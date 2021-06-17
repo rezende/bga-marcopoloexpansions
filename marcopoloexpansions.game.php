@@ -655,9 +655,6 @@ class MarcoPoloExpansions extends Table
         * @param boolean $via_buy - represents if the die was acquired via turning 3 camels in as a bonus action
         * @param int $player_id - id of player acquiring the die
         */
-        self::dump("BLACK_DIE ID", $die_id);
-        self::dump("VIA_BUY", $via_buy);
-        self::dump("PLAYER_ID", $player_id);
         $die_value = $this->rollDie($die_id, $player_id);
         self::DbQuery("UPDATE die SET die_location = 'player_mat', die_player_id = '{$player_id}' WHERE die_id = {$die_id}");
         $dice = $this->getDiceByIds([$die_id]);
@@ -933,10 +930,8 @@ class MarcoPoloExpansions extends Table
                 $this->drawContract($amount, $player_id);
             } else if ($award_type == "black_die") {
                 $black_die_id = $this->getNextAvailableBlackDie();
-                if ($black_die_id != null) {
-                    self::dump("BLACK_DIE ID CALL", $black_die_id);
+                if ($black_die_id != null)
                     $this->givePlayerBlackDie($black_die_id, false, $player_id);
-                }
             } else if ($award_type == "trigger_city_bonus_having_trading_post" && sizeof($this->getCityBonuses($player_id)) > 0) {
                 $amount = min($amount, sizeof($this->getCityBonuses($player_id)));
                 $this->addToPendingTable($award_type, '', '', $amount, $location, $player_id);
@@ -1946,11 +1941,7 @@ class MarcoPoloExpansions extends Table
         $drop_by = -1;
         $negate = false;
 
-        self::dump("CHOOSE_RESOURCE PA", $pending_action);
-        self::dump("CHOOSE_RESOURCE CHOICE", $choice);
-
-
-        if ($pending_action == null)
+         if ($pending_action == null)
             throw new BgaVisibleSystemException("choose resource : invalid state");
 
         if ($pending_action["type"] == "choice_of_good" && in_array($choice, ["pepper", "silk", "gold"]) == false)
