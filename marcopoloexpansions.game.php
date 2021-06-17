@@ -2669,7 +2669,7 @@ class MarcoPoloExpansions extends Table
     {
         $running_die_total = [];
 
-        $raschid_player_id = $this->getPlayerIdByCharacterType(2);
+        $raschid_player_id = $this->getPlayerIdByCharacterType(self::CHARACTER_RASCHID);
         $dice = self::getCollectionFromDB("SELECT die_id, die_type, die_player_id, die_location, die_location_arg, die_location_height, die_value FROM die WHERE (die_type <> 'black' AND die_type <> 'fixed')");
         $rolled_dice = [];
         foreach ($dice as $die_id => &$die) {
