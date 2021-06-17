@@ -765,11 +765,10 @@ function (dojo, declare) {
                 else if (boardIds.length > 1)
                     this.switchToClientGiftPickTradingPost(uiItem.data.id, boardIds);
             }
-            else if (uiItem.uiType == "gift")
+            else if (uiItem.uiType == "gift" && uiItem.data.type_arg != 7)
             {
                 this.sendFulfillGift(uiItem, null);
             }
-
             else
             {
                 actionSent = false;
@@ -1823,10 +1822,10 @@ function (dojo, declare) {
             const giftItemsOnPlayerHand = this.uiItems.getByUiType("gift").filter(function(g) { return g.data.location_arg == playerId; });
             if (selectedDice.length > 0)
             {
-                validGiftTypes = [ 7 ];
+                validGiftTypes = [ 7 ]; // no extra cost
                 if (selectedDice.length == 1)
                 {
-                    validGiftTypes.push(4);
+                    validGiftTypes.push(4); // change die value
                 }
             }
             else if (selectedDice.length == 0)
