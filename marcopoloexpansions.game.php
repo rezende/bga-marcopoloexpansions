@@ -2669,11 +2669,6 @@ class MarcoPoloExpansions extends Table
     {
         $running_die_total = [];
 
-        //PATCH - for in-flight games clean up does this as well, can remove once all games are off old version//
-        self::DbQuery("UPDATE die SET die_player_id = NULL, die_location = 'avail_black_die', die_location_arg = 0, die_location_height = 0, die_value = 1 WHERE die_type = 'black'");
-        self::DbQuery("UPDATE die SET die_location = 'player_mat', die_location_arg = '', die_location_height = 0, die_value = 1 WHERE die_type = 'regular' OR die_type = 'white'");
-        //TODO - remove eventually
-
         $raschid_player_id = $this->getPlayerIdByCharacterType(2);
         $dice = self::getCollectionFromDB("SELECT die_id, die_type, die_player_id, die_location, die_location_arg, die_location_height, die_value FROM die WHERE (die_type <> 'black' AND die_type <> 'fixed')");
         $rolled_dice = [];
