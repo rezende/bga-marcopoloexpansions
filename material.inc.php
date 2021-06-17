@@ -106,7 +106,7 @@ $this->gift_types = array(
   6 => array( "type" => 6, "auto" => true, "award" => [ "choice_of_good" => 1 ] ),
   7 => array( "type" => 7, "description" => "free die placement", "award" => [], "invalid_character_type" => 6 ),
   8 => array( "type" => 8, "auto" => true, "award" => [ "coin" => 5 ] ),
-  9 => array( "type" => 9, "auto" => true, "award" => [ "2_diff_goods" => 1 ], "others_award" => [ "gold" => 1 ] ),
+  9 => array( "type" => 9, "auto" => true, "award" => [ "choice_of_good" => 2 ], "others_award" => [ "gold" => 1 ] ),
   10 => array( "type" => 10, "description" => "place a trading post", "award" => [], "invalid_character_type" => 4 ),
   11 => array( "type" => 11, "auto" => true, "cost" => [ "placed_trading_post" => 1 ], "award" => [ "vp" => 1 ], "max_times" => 6 ),
   12 => array( "type" => 12, "auto" => true, "cost" => [ "fulfilled_contracts" => 1 ], "award" => [ "vp" => 1 ], "max_times" => 6 ),
