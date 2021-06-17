@@ -224,6 +224,13 @@ class MarcoPoloExpansions extends Table
         return $this->gamestate->state()["name"];
     }
 
+    // TODO: Remove
+    function getGameStateNameChat()
+    {
+        $message = $this->gamestate->state()["name"];
+        self::notifyAllPlayers("message", $message, array());
+    }
+
     function isExpansionEnabled($expansion)
     {
         if ($expansion == self::EXPANSION_ID_NEW_CHARACTER)      //new characters
