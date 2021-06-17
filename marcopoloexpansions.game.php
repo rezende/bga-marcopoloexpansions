@@ -23,6 +23,7 @@ class MarcoPoloExpansions extends Table
     const KHAN_ARGHUN_CHARACTER = 9;
     const KUBILAI_CHARACTER = 1;
     const WILHELM_CHARACTER = 4;
+    const CHARACTER_RASCHID = 2;
     const BASE_GAME_MAP_SMALL_CITY_SPOTS = 6;
 
 
@@ -643,10 +644,16 @@ class MarcoPoloExpansions extends Table
 
     function givePlayerBlackDie($die_id, $via_buy, $player_id)
     {
+        /**
+        * Function that process the transaction of acquiring a black die and binding to the player
+        * @param int $die_id - id of the black die being acquired
+        * @param boolean $via_buy - represents if the die was acquired via turning 3 camels in as a bonus action
+        * @param int $player_id - id of player acquiring the die
+        */
         $die_value = $this->rollDie($die_id, $player_id);
         self::DbQuery("UPDATE die SET die_location = 'player_mat', die_player_id = '{$player_id}' WHERE die_id = {$die_id}");
         $dice = $this->getDiceByIds([$die_id]);
-        $shake = $player_id == $this->getPlayerIdByCharacterType(2) ? false : true;
+        $shake = !($player_id == $this->getPlayerIdByCharacterType(self::CHARACTER_RASCHID));
         $message = clienttranslate('${player_name} gets a black die and rolls a ${die_value}');
         if ($shake && $via_buy) {
             $message = clienttranslate('${player_name} buys a black die and rolls a ${die_value}');
@@ -655,7 +662,17 @@ class MarcoPoloExpansions extends Table
         } else if ($shake == false) {
             $message = clienttranslate('${player_name} gets a black die');
         }
-        self::notifyAllPlayers("updateDice", $message, array("player_id" => $player_id, "player_name" => $this->getPlayerName($player_id), "dice" => $dice, "die_value" => $die_value, "shake" => $shake));
+        self::notifyAllPlayers(
+            "updateDice",
+            $message,
+            array(
+                "player_id" => $player_id,
+                "player_name" => $this->getPlayerName($player_id),
+                "dice" => $dice,
+                "die_value" => $die_value,
+                "shake" => $shake
+            )
+        );
         self::incStat(1, "black_dice_aquired", $player_id);
         if ($shake) {
             $this->setNewUndoPoint();
