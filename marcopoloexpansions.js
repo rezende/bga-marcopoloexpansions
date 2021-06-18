@@ -2329,7 +2329,7 @@ function (dojo, declare) {
                 var modifiedLeft = totalWidth;
 
                 //adjust space for contracts
-                if (item.uiType != "goal_card" && item.uiType != "contract" && modifiedTop == 0)
+                if (item.uiType == "city_card" || item.uiType == "1x_gift" && modifiedTop == 0)
                 {
                     totalWidth = Math.max(420, modifiedLeft); //420 = width of 2 goal cards & 2 contracts
                     modifiedLeft = Math.max(420, modifiedLeft);
