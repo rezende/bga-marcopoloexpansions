@@ -2310,7 +2310,6 @@ function (dojo, declare) {
 
         repositionPlayerMatWithCallback : function(itemContainer, addedItems, onAnimateEndCallback, playerId)      //updates player mat with new/removed items
         {
-            debugger
             var items = this.getPlayerItemsForPlayerMatContainer(itemContainer, playerId);
             var anims = [];
             var container = itemContainer == "small" ? $("small-container-" + playerId) : $("large-container-" + playerId);
@@ -2322,7 +2321,6 @@ function (dojo, declare) {
             var totalWidth = 0;
             var modifiedTop = 0;
             var tmpUiPosition = 0;
-            var contracts = false;
             for(var i = 0; i < items.length; i++)
             {
                 var item = items[i];
@@ -2330,10 +2328,10 @@ function (dojo, declare) {
                 var uiItemHeight = this.uiItems.itemConfig[item.uiType].height ? this.uiItems.itemConfig[item.uiType].height : 0;
                 var modifiedLeft = totalWidth;
 
-                if (item.uiType == "contract") { contracts = true; }                                //adjust for contracts
-                if (contracts && item.uiType != "contract" && modifiedTop == 0)
+                //adjust space for contracts
+                if (item.uiType != "goal_card" && item.uiType != "contract" && modifiedTop == 0)
                 {
-                    totalWidth = Math.max(420, modifiedLeft);               //width of 2 goal cards & 2 contracts
+                    totalWidth = Math.max(420, modifiedLeft); //420 = width of 2 goal cards & 2 contracts
                     modifiedLeft = Math.max(420, modifiedLeft);
                 }
                 containerTop = Math.max(containerTop, item.htmlNode.getBoundingClientRect().height + 4, uiItemHeight, 50);
