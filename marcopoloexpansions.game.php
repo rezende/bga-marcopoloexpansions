@@ -1610,16 +1610,33 @@ class MarcoPoloExpansions extends Table
             pending_location location FROM pending_action WHERE pending_player_id = {$player_id} AND pending_type <> 'bonus' ORDER BY pending_id DESC LIMIT 1");
     }
 
-    function getNextPendingActions()
+    function getNextPendingActions($player_id = null, $order_by = 'DESC')
     {
         $actions = [];
-        $players = self::loadPlayersBasicInfos();
-        foreach ($players as $player_id => $player) {
-            $player_action = self::getObjectFromDB("SELECT pending_id, pending_type type, pending_type_arg type_arg, pending_type_arg1 type_arg1, pending_remaining_count remaining_count,
-                pending_location location, pending_player_id FROM pending_action WHERE pending_type <> 'bonus' AND pending_player_id = {$player_id} ORDER BY pending_id DESC LIMIT 1");
-            if ($player_action != null) {
-                array_push($actions, $player_action);
+        if (is_null($player_id)) {
+            $players = self::loadPlayersBasicInfos();
+            foreach ($players as $player_id => $player) {
+                $query = "SELECT pending_id, pending_type type, pending_type_arg type_arg,
+                pending_type_arg1 type_arg1, pending_remaining_count remaining_count,
+                pending_location location, pending_player_id
+                FROM pending_action
+                WHERE pending_type <> 'bonus' AND pending_player_id = {$player_id}
+                ORDER BY pending_id {$order_by}
+                LIMIT 1";
+                $player_action = self::getObjectFromDB($query);
+                if ($player_action != null)
+                    array_push($actions, $player_action);
             }
+        }
+        else {
+            $query = "SELECT pending_id, pending_type type, pending_type_arg type_arg,
+            pending_type_arg1 type_arg1, pending_remaining_count remaining_count,
+            pending_location location, pending_player_id
+            FROM pending_action
+            WHERE pending_type <> 'bonus' AND pending_player_id = {$player_id}
+            ORDER BY pending_id {$order_by}
+            LIMIT 1";
+            $actions = self::getObjectFromDB($query);
         }
         return $actions;
     }
