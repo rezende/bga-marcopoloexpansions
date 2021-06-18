@@ -2257,6 +2257,7 @@ class MarcoPoloExpansions extends Table
         if ($this->getNumberOfTimesCostSatisfied($city_card_info["cost"], $player_id) > 0) {
             $this->updateNextPendingAction(-1, $pending_action);
         } else {
+            $this->checkAndTriggerFulfillArghun($pending_action, $player_id);
             $this->deletePendingAction($pending_action["pending_id"]);
         }
     }
@@ -2275,9 +2276,9 @@ class MarcoPoloExpansions extends Table
         if ($pending_action["remaining_count"] < $num_times)
             throw new BgaVisibleSystemException("cannot activate so many times");
 
-        if ($city_card_info["type"] == 30) { //assume payment will go through and give reward.  player can undo if stuck. only one at a time
+        if ($city_card_info["type"] == 30)            //assume payment will go through and give reward.  player can undo if stuck. only one at a time
+        {
             $this->activateMultipleCityCardType30($payment_details, $city_card_info, $pending_action, $player_id);
-            $this->checkAndTriggerFulfillArghun($pending_action, $player_id);
         } else {
             $cost = $city_card_info["kind"] == "choice" ? $city_card_info["choice"][$payment_details]["cost"] : $city_card_info["cost"];
             $award = $city_card_info["kind"] == "choice" ? $city_card_info["choice"][$payment_details]["award"] : $city_card_info["award"];
