@@ -1656,7 +1656,7 @@ class MarcoPoloExpansions extends Table
         self::DbQuery("DELETE FROM pending_action WHERE pending_id = {$pending_action_id}");
     }
 
-    function getNextTransitionBasedOnPendingActions($player_id, $pending_action = null)
+    function getNextTransitionBasedOnPendingAction($player_id, $pending_action = null)
     {
         $transition_map = [
             "pick_contract" => "pickContract",
@@ -1968,7 +1968,7 @@ class MarcoPoloExpansions extends Table
             return $c + $v;
         }, 0), "total_dice_value", $player_id);
         self::setStat(self::getStat("total_dice_value", $player_id) / self::getStat("total_dice", $player_id), "avg_dice_value", $player_id);
-        $transition_to = $this->getNextTransitionBasedOnPendingActions($player_id);
+        $transition_to = $this->getNextTransitionBasedOnPendingAction($player_id);
         $this->gamestate->nextState($transition_to);
     }
 
@@ -2053,7 +2053,7 @@ class MarcoPoloExpansions extends Table
         $this->checkAndTriggerFulfillContract($pending_action, $player_id);
         $this->checkPersonalCityCard27($player_id);
         $this->updatePendingActionRemainingCount($drop_by, $pending_action);
-        $this->gamestate->nextState($this->getNextTransitionBasedOnPendingActions($player_id));
+        $this->gamestate->nextState($this->getNextTransitionBasedOnPendingAction($player_id));
     }
 
     function checkPersonalCityCard27($player_id) {
@@ -2105,7 +2105,7 @@ class MarcoPoloExpansions extends Table
             $this->slideRemainingContracts("pickContract");
         }
         $this->updatePendingActionRemainingCount(-1, $pending_action);
-        $this->gamestate->nextState($this->getNextTransitionBasedOnPendingActions($player_id));
+        $this->gamestate->nextState($this->getNextTransitionBasedOnPendingAction($player_id));
     }
 
     function skipContract()
@@ -2142,7 +2142,7 @@ class MarcoPoloExpansions extends Table
             "player_name" => self::getActivePlayerName(), "contract_id" => $contract_id, "resources_awarded" => false, "contract_type" => $contract_data["type"]
         ));
         self::incStat(1, "contracts_fulfilled", $player_id);
-        $this->gamestate->nextState($this->getNextTransitionBasedOnPendingActions($player_id));
+        $this->gamestate->nextState($this->getNextTransitionBasedOnPendingAction($player_id));
     }
 
     function fulfillArghun($city_card_id)
@@ -2174,7 +2174,7 @@ class MarcoPoloExpansions extends Table
             );
         }
         self::setGameStateValue("used_personal_city_card", 1);
-        $this->gamestate->nextState($this->getNextTransitionBasedOnPendingActions($player_id));
+        $this->gamestate->nextState($this->getNextTransitionBasedOnPendingAction($player_id));
     }
 
     function fulfillGift($gift_id, $board_id)
@@ -2202,7 +2202,7 @@ class MarcoPoloExpansions extends Table
             $this->awardGift($gift_id, $gift_data, $player_id);
         }
         //TODO - inc stat here?
-        $this->gamestate->nextState($this->getNextTransitionBasedOnPendingActions($player_id));
+        $this->gamestate->nextState($this->getNextTransitionBasedOnPendingAction($player_id));
     }
 
     function travel($figure_id, $dst_id)
@@ -2240,7 +2240,7 @@ class MarcoPoloExpansions extends Table
             $this->checkAndTriggerFulfillPersonalCityCard($pending_action, $player_id);
         $this->updatePendingActionRemainingCount(-1, $pending_action);
         self::incStat(1, "travel_movements", $player_id);
-        $this->gamestate->nextState($this->getNextTransitionBasedOnPendingActions($player_id));
+        $this->gamestate->nextState($this->getNextTransitionBasedOnPendingAction($player_id));
     }
 
     function skipTravel()
@@ -2256,7 +2256,7 @@ class MarcoPoloExpansions extends Table
         $this->checkAndTriggerFulfillContract($pending_action, $player_id);
         $this->checkAndTriggerFulfillPersonalCityCard($pending_action, $player_id);
         $this->deletePendingAction($pending_action["pending_id"]);
-        $this->gamestate->nextState($this->getNextTransitionBasedOnPendingActions($player_id));
+        $this->gamestate->nextState($this->getNextTransitionBasedOnPendingAction($player_id));
     }
 
     function skipChooseCityAward()
@@ -2270,7 +2270,7 @@ class MarcoPoloExpansions extends Table
 
         $this->checkAndTriggerFulfillPersonalCityCard($pending_action, $player_id);
         $this->deletePendingAction($pending_action["pending_id"]);
-        $this->gamestate->nextState($this->getNextTransitionBasedOnPendingActions($player_id));
+        $this->gamestate->nextState($this->getNextTransitionBasedOnPendingAction($player_id));
     }
 
     function activateMultipleCityCardType30($payment_details, $city_card_info, $pending_action, $player_id)
@@ -2324,7 +2324,7 @@ class MarcoPoloExpansions extends Table
             $this->deletePendingAction($pending_action["pending_id"]);
         }
         $pending_action = $this->getNextPendingAction($player_id);
-        $transition_to = $this->getNextTransitionBasedOnPendingActions($player_id, $pending_action);
+        $transition_to = $this->getNextTransitionBasedOnPendingAction($player_id, $pending_action);
         if ($transition_to == 'travel')
             $this->checkAndTriggerFulfillPersonalCityCard($pending_action, $player_id);
         $this->gamestate->nextState($transition_to);
@@ -2364,7 +2364,7 @@ class MarcoPoloExpansions extends Table
             $this->addToPendingTable("choice_of_good", "", "", 1, 'city_card_' . $pending_action["type_arg"], $player_id);
         }
 
-        $this->gamestate->nextState($this->getNextTransitionBasedOnPendingActions($player_id));
+        $this->gamestate->nextState($this->getNextTransitionBasedOnPendingAction($player_id));
     }
 
     function triggerOtherCityBonus($city_bonus_type_arg)
@@ -2382,7 +2382,7 @@ class MarcoPoloExpansions extends Table
         $board_id = self::getUniqueValueFromDB("SELECT piece_location_arg FROM piece WHERE piece_type = 'city_bonus' AND piece_type_arg = {$city_bonus_type_arg} LIMIT 1");
         $this->awardBonus("city_bonus", $this->city_bonus_types[$city_bonus_type_arg], $board_id, false, $player_id);
         $this->updatePendingActionRemainingCount(-1, $pending_action);
-        $this->gamestate->nextState($this->getNextTransitionBasedOnPendingActions($player_id));
+        $this->gamestate->nextState($this->getNextTransitionBasedOnPendingAction($player_id));
     }
 
     function skipTriggerOtherCityBonus()
@@ -2395,7 +2395,7 @@ class MarcoPoloExpansions extends Table
             throw new BgaVisibleSystemException("invalid state no city card action pending");
 
         $this->deletePendingAction($pending_action["pending_id"]);
-        $this->gamestate->nextState($this->getNextTransitionBasedOnPendingActions($player_id));
+        $this->gamestate->nextState($this->getNextTransitionBasedOnPendingAction($player_id));
     }
 
     function moveTradingPost($trading_post_id)
@@ -2414,7 +2414,7 @@ class MarcoPoloExpansions extends Table
         self::DbQuery("UPDATE piece SET piece_location = 'player_mat' WHERE piece_id = {$trading_post_id}");  //temp move trading post back to player mat
         $this->placeTradingPostAndGiveAward($pending_action["type_arg"], $pending_action, $player_id);
         $this->updatePendingActionRemainingCount(-1, $pending_action);
-        $this->gamestate->nextState($this->getNextTransitionBasedOnPendingActions($player_id));
+        $this->gamestate->nextState($this->getNextTransitionBasedOnPendingAction($player_id));
     }
 
     function skipMoveTradingPost()
@@ -2427,7 +2427,7 @@ class MarcoPoloExpansions extends Table
             throw new BgaVisibleSystemException("invalid state cannot move trading post");
 
         $this->deletePendingAction($pending_action["pending_id"]);
-        $this->gamestate->nextState($this->getNextTransitionBasedOnPendingActions($player_id));
+        $this->gamestate->nextState($this->getNextTransitionBasedOnPendingAction($player_id));
     }
 
     function usePlayerPiece($piece_id)
@@ -2455,7 +2455,7 @@ class MarcoPoloExpansions extends Table
             self::notifyAllPlayers("boxPiece", '', array("player_id" => $player_id, "piece_type" => "1x_gift", "piece_id" => $piece_id, "location" => "box"));
         }
 
-        $this->gamestate->nextState($this->getNextTransitionBasedOnPendingActions($player_id));
+        $this->gamestate->nextState($this->getNextTransitionBasedOnPendingAction($player_id));
     }
 
     function pass()
