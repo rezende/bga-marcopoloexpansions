@@ -2058,8 +2058,11 @@ class MarcoPoloExpansions extends Table
     function checkPersonalCityCard27($player_id)
     {
         $pending_actions = $this->getNextPendingActions($player_id, 'ASC');
-        if (str_replace("city_card_", "", $pending_actions[0]["location"]) == 27 && $pending_actions[0]["remaining_count"] == 0)
-            $this->checkAndTriggerFulfillPersonalCityCard(array_slice($pending_actions, -1)[0], $player_id);
+        if (count($pending_actions) > 1)
+            return;
+        $pending_action = $pending_actions[0];
+        if (str_replace("city_card_", "", $pending_action["location"]) == '27' && $pending_action["type"] == 'choice_of_good')
+            $this->checkAndTriggerFulfillPersonalCityCard($pending_action, $player_id);
     }
 
     function pickContract($contract_id, $replaced_contract_id)
