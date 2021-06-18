@@ -2310,6 +2310,7 @@ function (dojo, declare) {
 
         repositionPlayerMatWithCallback : function(itemContainer, addedItems, onAnimateEndCallback, playerId)      //updates player mat with new/removed items
         {
+            debugger
             var items = this.getPlayerItemsForPlayerMatContainer(itemContainer, playerId);
             var anims = [];
             var container = itemContainer == "small" ? $("small-container-" + playerId) : $("large-container-" + playerId);
