@@ -802,12 +802,14 @@ class MarcoPoloExpansions extends Table
     {
         self::dump('ARGHUN_PENDING_ACTION', $pending_action);
         if (strpos($pending_action["location"], "city_card_") === 0) {
-            $city_card_id = str_replace("city_card_", "", $pending_action["location"]);
-            self::dump('ARGHUN_CITY_CARD_ID', $city_card_id);
+            $city_card_type = str_replace("city_card_", "", $pending_action["location"]);
+            self::dump('ARGHUN_CITY_CARD_TYPE', $city_card_type);
             $city_card_piece_db = self::getObjectFromDB(
-                "SELECT piece_id id, piece_location location FROM piece WHERE piece_id = {$city_card_id}"
+                "SELECT piece_id id, piece_location location
+                FROM piece WHERE piece_type = 'city_card' AND piece_type_arg = '{$city_card_type}'"
             );
             self::dump('ARGHUN_CITY_CARD_DB', $city_card_piece_db);
+            $city_card_id = $city_card_piece_db['id'];
             if ($city_card_piece_db['location'] == 'player_mat') {
                 self::DbQuery("UPDATE piece SET piece_location = 'box' WHERE piece_id = '{$city_card_id}'");
                 self::notifyAllPlayers(
@@ -817,7 +819,7 @@ class MarcoPoloExpansions extends Table
                         "player_id" => $player_id,
                         "player_name" => self::getActivePlayerName(),
                         "resources_awarded" => false,
-                        "city_card_id" => $city_card_id,
+                        "city_card_id" => $city_card_type,
                     )
                 );
             }
