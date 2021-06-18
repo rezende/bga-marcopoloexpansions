@@ -814,7 +814,7 @@ class MarcoPoloExpansions extends Table
                 self::DbQuery("UPDATE piece SET piece_location = 'box' WHERE piece_id = '{$city_card_id}'");
                 self::notifyAllPlayers(
                     "fulfillArghun",
-                    clienttranslate('${player_name} uses city card ${city_card_id} with a 6 as a bonus action'),
+                    clienttranslate('${player_name} uses personal city card ${city_card_id} as a bonus action'),
                     array(
                         "player_id" => $player_id,
                         "player_name" => self::getActivePlayerName(),
