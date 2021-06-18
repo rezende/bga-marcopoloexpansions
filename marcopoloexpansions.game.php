@@ -2111,6 +2111,9 @@ class MarcoPoloExpansions extends Table
         $gift = $this->deck->getCard($gift_id);
         $gift_data = $this->gift_types[$gift["type_arg"]];
 
+        if ($gift["type_arg"] == 10)
+            self::setGameStateValue("can_undo", 1);
+
         $this->validateGiftAgainstAllowable($gift_id, '', $player_id);
         $this->useGift($gift_id, true, $player_id);
         if ($gift["type_arg"] == 10 && $this->getGameStateName() == "playerTravel") {

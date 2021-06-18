@@ -765,7 +765,7 @@ function (dojo, declare) {
                 else if (boardIds.length > 1)
                     this.switchToClientGiftPickTradingPost(uiItem.data.id, boardIds);
             }
-            else if (uiItem.uiType == "gift" && uiItem.data.type_arg != 7)
+            else if (uiItem.uiType == "gift" && uiItem.data.type_arg != 7) // do not call for free gift
             {
                 this.sendFulfillGift(uiItem, null);
             }
