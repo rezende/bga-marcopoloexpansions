@@ -1,4 +1,5 @@
 <?php
+
 /**
  *------
  * BGA framework: © Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
@@ -56,28 +57,28 @@ $machinestates = array(
         "description" => "",
         "type" => "manager",
         "action" => "stGameSetup",
-        "transitions" => array( "" => 20 )
+        "transitions" => array("" => 20)
     ),
 
     4 => array(
         "name" => "newRound",
         "type" => "game",
         "action" => "stGameNewRound",
-        "transitions" => array( "rollDice" => 5, "collectBonus" => 7 )
+        "transitions" => array("rollDice" => 5, "collectBonus" => 7)
     ),
 
     5 => array(
         "name" => "rollAllDice",
         "type" => "game",
         "action" => "stGameRollAllDice",
-        "transitions" => array( "collectCompensation" => 8, "next" => 6 )
+        "transitions" => array("collectCompensation" => 8, "next" => 6)
     ),
 
     6 => array(
         "name" => "next",
         "type" => "game",
         "action" => "stGameNext",
-        "transitions" => array( "nextPlayer" => 10, "nextRound" => 4, "gameover" => 98 )
+        "transitions" => array("nextPlayer" => 10, "nextRound" => 4, "gameover" => 98)
     ),
 
     7 => array(
@@ -87,8 +88,8 @@ $machinestates = array(
         "type" => "multipleactiveplayer",
         "args" => "argPlayerBonus",
         "action" => "stPlayerBonus",
-        "possibleactions" => array( "triggerBonus", "chooseResource", "triggerOtherCityBonus", "usePlayerPiece" ),
-        "transitions" => array( "done" => 5, "continue" => 7 )
+        "possibleactions" => array("triggerBonus", "chooseResource", "triggerOtherCityBonus", "usePlayerPiece"),
+        "transitions" => array("done" => 5, "continue" => 7)
     ),
 
     8 => array(
@@ -97,13 +98,13 @@ $machinestates = array(
         "descriptionmyturn" => clienttranslate('${you} must pick dice compensation'),
         "type" => "multipleactiveplayer",
         "args" => "argPlayerDieCompensation",
-        "possibleactions" => array( "pickCompensation" ),
-        "transitions" => array( "done" => 6 ),
+        "possibleactions" => array("pickCompensation"),
+        "transitions" => array("done" => 6),
     ),
 
     10 => array(
         "name" => "playerTurn",
-        "description" => clienttranslate( '${actplayer} must perform an action or bonus action'),
+        "description" => clienttranslate('${actplayer} must perform an action or bonus action'),
         "descriptionmyturn" => clienttranslate('${you} must perform an action or bonus action'),
         "descriptionmyturn_bonus" => clienttranslate('${you} must perform a bonus action or pass'),
         "description_bonus" => clienttranslate('${actplayer} must perform a bonus action or pass'),
@@ -111,10 +112,12 @@ $machinestates = array(
         "args" => "argPlayerTurn",
         "updateGameProgression" => true,
         "possibleactions" => array(
-            "placeDie", "rerollDie", "bumpDie", "buyBlackDie", "changeDice", "fulfillContract", "fulfillGift", "fulfillArghun" , "pass", "undo"
+            "placeDie", "rerollDie", "bumpDie", "buyBlackDie", "changeDice", "fulfillContract", "fulfillGift", "fulfillArghun", "pass", "undo"
         ),
-        "transitions" => array( "travel" => 11, "chooseResource" => 12, "chooseCityCardAward" => 13, "pickContract" => 14,
-            "triggerOtherCityBonus" => 16, "pass" => 6, "continue" => 10 )
+        "transitions" => array(
+            "travel" => 11, "chooseResource" => 12, "chooseCityCardAward" => 13, "pickContract" => 14,
+            "triggerOtherCityBonus" => 16, "pass" => 6, "continue" => 10
+        )
     ),
 
     11 => array(
@@ -123,8 +126,8 @@ $machinestates = array(
         "descriptionmyturn" => clienttranslate('${you} may travel (${num_remaining} steps remaining)'),
         "type" => "activeplayer",
         "args" => "argPlayerTravel",
-        "possibleactions" => array( "travel", "skipTravel", "fulfillGift", "undo" ),
-        "transitions" => array( "continue" => 10, "travel" => 11, "chooseResource" => 12, "moveTradingPost" => 15, "triggerOtherCityBonus" => 16 )
+        "possibleactions" => array("travel", "skipTravel", "fulfillGift", "undo"),
+        "transitions" => array("continue" => 10, "travel" => 11, "chooseResource" => 12, "moveTradingPost" => 15, "triggerOtherCityBonus" => 16)
     ),
 
     12 => array(
@@ -133,18 +136,18 @@ $machinestates = array(
         "descriptionmyturn" => clienttranslate('${you} must choose resources'),
         "type" => "activeplayer",
         "args" => "argPlayerChooseResource",
-        "possibleactions" => array( "chooseResource", "undo" ),
-        "transitions" => array( "continue" => 10, "gunj_bonus" => 30, "travel" => 11, "chooseResource" => 12, "chooseCityCardAward" => 13, "pickContract" => 14, "moveTradingPost" => 15, "triggerOtherCityBonus" => 16 ),
+        "possibleactions" => array("chooseResource", "undo"),
+        "transitions" => array("continue" => 10, "gunj_bonus" => 30, "travel" => 11, "chooseResource" => 12, "chooseCityCardAward" => 13, "pickContract" => 14, "moveTradingPost" => 15, "triggerOtherCityBonus" => 16),
     ),
 
     13 => array(
         "name" => "playerChooseCityCardAward",
-        "description" => clienttranslate('${actplayer} may activate city card up to ${num_remaining} times' ),
-        "descriptionmyturn" => clienttranslate('${you} may activate city card up to ${num_remaining} times' ),
+        "description" => clienttranslate('${actplayer} may activate city card up to ${num_remaining} times'),
+        "descriptionmyturn" => clienttranslate('${you} may activate city card up to ${num_remaining} times'),
         "type" => "activeplayer",
         "args" => "argPlayerChooseCityCardAward",
-        "possibleactions" => array( "activateExchangeCityCard", "activateMultipleCityCard", "skipChooseCityAward", "undo" ),
-        "transitions" => array( "continue" => 10, "travel" => 11, "chooseResource" => 12, "chooseCityCardAward" => 13, "triggerOtherCityBonus" => 16 ),
+        "possibleactions" => array("activateExchangeCityCard", "activateMultipleCityCard", "skipChooseCityAward", "undo"),
+        "transitions" => array("continue" => 10, "travel" => 11, "chooseResource" => 12, "chooseCityCardAward" => 13, "triggerOtherCityBonus" => 16),
     ),
 
     14 => array(
@@ -153,8 +156,8 @@ $machinestates = array(
         "descriptionmyturn" => clienttranslate('${you} may pick a contract (${num_remaining} remaining)'),
         "type" => "activeplayer",
         "args" => "argPlayerPickContract",
-        "possibleactions" => array( "pickContract", "skipContract", "undo" ),
-        "transitions" => array( "chooseResource" => 12, "pickContract" => 14, "continue" => 10 ),
+        "possibleactions" => array("pickContract", "skipContract", "undo"),
+        "transitions" => array("chooseResource" => 12, "pickContract" => 14, "continue" => 10),
     ),
 
     15 => array(
@@ -163,8 +166,8 @@ $machinestates = array(
         "descriptionmyturn" => clienttranslate('Out of trading posts, ${you} may move a trading post'),
         "type" => "activeplayer",
         "args" => "argPlayerMoveTradingPost",
-        "possibleactions" => array( "moveTradingPost", "skipMoveTradingPost", "undo" ),
-        "transitions" => array( "continue" => 10, "chooseResource" => 12, "travel" => 11, "moveTradingPost" => 15, "triggerOtherCityBonus" => 16 ),
+        "possibleactions" => array("moveTradingPost", "skipMoveTradingPost", "undo"),
+        "transitions" => array("continue" => 10, "chooseResource" => 12, "travel" => 11, "moveTradingPost" => 15, "triggerOtherCityBonus" => 16),
     ),
 
     16 => array(
@@ -173,15 +176,15 @@ $machinestates = array(
         "descriptionmyturn" => clienttranslate('${you} must select another city bonus to activate'),
         "type" => "activeplayer",
         "args" => "argPlayerTriggerOtherCityBonus",
-        "possibleactions" => array( "triggerOtherCityBonus", "skipTriggerOtherCityBonus", "undo" ),
-        "transitions" => array( "continue" => 10, "travel" => 11, "chooseResource" => 12, "moveTradingPost" => 15, "triggerOtherCityBonus" => 16 ),
+        "possibleactions" => array("triggerOtherCityBonus", "skipTriggerOtherCityBonus", "undo"),
+        "transitions" => array("continue" => 10, "travel" => 11, "chooseResource" => 12, "moveTradingPost" => 15, "triggerOtherCityBonus" => 16),
     ),
 
     20 => array(
         "name" => "gamePickCharacter",
         "type" => "game",
         "action" => "stGamePickCharacter",
-        "transitions" => array( "pickCharacter" => 21, "setupGoals" => 22 ),
+        "transitions" => array("pickCharacter" => 21, "setupGoals" => 22),
     ),
 
     21 => array(
@@ -190,15 +193,15 @@ $machinestates = array(
         "descriptionmyturn" => clienttranslate('${you} must pick a character'),
         "type" => "activeplayer",
         "args" => "argPickCharacter",
-        "possibleactions" => array( "pickCharacter" ),
-        "transitions" => array( "" => 20 )
+        "possibleactions" => array("pickCharacter"),
+        "transitions" => array("" => 20)
     ),
 
     22 => array(
         "name" => "gamePickGoals",
         "type" => "game",
         "action" => "stGamePickGoals",
-        "transitions" => array( "pickGoals" => 23, "start" => 4 ),
+        "transitions" => array("pickGoals" => 23, "start" => 4),
     ),
 
     23 => array(
@@ -206,15 +209,15 @@ $machinestates = array(
         "description" => clienttranslate('All players must pick their goal cards'),
         "descriptionmyturn" => clienttranslate('${you} must pick your goal cards'),
         "type" => "multipleactiveplayer",
-        "possibleactions" => array( "pickGoalCards" ),
-        "transitions" => array( "done" => 4 )
+        "possibleactions" => array("pickGoalCards"),
+        "transitions" => array("done" => 4)
     ),
 
     30 => array(
         "name" => "gamePlayerGunjBonusStart",
         "type" => "game",
         "action" => "stGamePlayerGunjBonusStart",
-        "transitions" => array( "" => 31 ),
+        "transitions" => array("" => 31),
     ),
 
     31 => array(
@@ -224,22 +227,22 @@ $machinestates = array(
         "type" => "multipleactiveplayer",
         "args" => "argPlayerGunjBonus",
         "action" => "stPlayerGunjBonus",
-        "possibleactions" => array( "chooseResource" ),
-        "transitions" => array( "continue" => 31, "done" => 32 ),
+        "possibleactions" => array("chooseResource"),
+        "transitions" => array("continue" => 31, "done" => 32),
     ),
 
     32 => array(
         "name" => "gamePlayerGunjBonusFinish",
         "type" => "game",
         "action" => "stGamePlayerGunjBonusFinish",
-        "transitions" => array( "" => 10 ),
+        "transitions" => array("" => 10),
     ),
 
     98 => array(
         "name" => "gameover",
         "type" => "game",
         "action" => "stGameover",
-        "transitions" => array( "" => 99 ),
+        "transitions" => array("" => 99),
     ),
 
     // Final state.
