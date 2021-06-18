@@ -798,7 +798,7 @@ class MarcoPoloExpansions extends Table
         }
     }
 
-    function checkAndTriggerFulfillArghun($pending_action, $player_id)
+    function checkAndTriggerFulfillPersonalCityCard($pending_action, $player_id)
     {
         // self::dump('ARGHUN_PENDING_ACTION', $pending_action);
         if (strpos($pending_action["location"], "city_card_") === 0) {
@@ -1143,7 +1143,7 @@ class MarcoPoloExpansions extends Table
         return $success;
     }
 
-    function processMarcoPoloExpansionsExtraTradePost($current_board_id, $player_id)
+    function processMarcoPoloExtraTradePost($current_board_id, $player_id)
     {
         if ($this->getPlayerIdByCharacterType(5) != $player_id)     //look at both figures in case it ends in city
             return;
@@ -1162,19 +1162,19 @@ class MarcoPoloExpansions extends Table
 
     function placeTradingPostAndGiveAward($board_id, $pending_action, $player_id)
     {
-        if ($pending_action["remaining_count"] != 1 && $this->getPlayerIdByCharacterType(4) != $player_id)        //let Withelm character place trading posts
+        if ($pending_action["remaining_count"] != 1 && $this->getPlayerIdByCharacterType(4) != $player_id)        //let Wilhelm character place trading posts
             return;
 
         $success = $this->placeTradingPost($board_id, $pending_action["type"] == "move_trading_post", $player_id);        //try to place trading post
         if ($success) {
-            $this->updateTravelPendingActionMarkTradePost($pending_action, $board_id, $player_id);        //needed to trigger awards after travel complete (for Withelm)
+            $this->updateTravelPendingActionMarkTradePost($pending_action, $board_id, $player_id);        //needed to trigger awards after travel complete (for Wilhelm)
         }
 
         if ($pending_action["type"] == "travel" && $pending_action["remaining_count"] == 1 || $this->hasTravelActionsPending($player_id) == false)     //last trading post placed give award
         {
             $this->giveTradingPostBonuses(explode("_", $pending_action["type_arg1"]), $player_id);
             if ($pending_action["type"] == "travel") {
-                $this->processMarcoPoloExpansionsExtraTradePost($board_id, $player_id);         //check if another trading post should be placed for marco polo character
+                $this->processMarcoPoloExtraTradePost($board_id, $player_id);         //check if another trading post should be placed for marco polo character
             }
         }
     }
@@ -1620,9 +1620,7 @@ class MarcoPoloExpansions extends Table
             }
         }
         return $actions;
-    }
-
-    function updateNextPendingAction($delta, $pending_action)
+    }($delta, $pending_action)
     {
         $pending_id = $pending_action["pending_id"];
         if ($pending_action["remaining_count"] + $delta < 1) {
@@ -2031,8 +2029,7 @@ class MarcoPoloExpansions extends Table
 
         $this->checkAndTriggerDiscardGift($pending_action, $player_id);
         $this->checkAndTriggerFulfillContract($pending_action, $player_id);
-        $this->checkAndTriggerFulfillArghun($pending_action, $player_id);
-        $this->updateNextPendingAction($drop_by, $pending_action);
+        $this->checkAndTriggerFulfillPersonalCityCard($pending_action, $player_id($drop_by, $pending_action);
         $this->gamestate->nextState($this->getNextTransitionBasedOnPendingActions($player_id));
     }
 
@@ -2077,8 +2074,7 @@ class MarcoPoloExpansions extends Table
         );
         if ($pending_action["remaining_count"] == 1) {
             $this->slideRemainingContracts("pickContract");
-        }
-        $this->updateNextPendingAction(-1, $pending_action);
+    (-1, $pending_action);
         $this->gamestate->nextState($this->getNextTransitionBasedOnPendingActions($player_id));
     }
 
@@ -2086,8 +2082,7 @@ class MarcoPoloExpansions extends Table
     {
         self::checkAction("skipContract");
         $player_id = self::getActivePlayerId();
-        $pending_action = $this->getNextPendingAction($player_id);
-        $this->updateNextPendingAction(-10, $pending_action);
+        $pending_action = $this->getNextPendingAction($player_id(-10, $pending_action);
         $this->slideRemainingContracts("skipContract");
         $this->gamestate->nextState("continue");
     }
@@ -2210,8 +2205,9 @@ class MarcoPoloExpansions extends Table
 
         $this->placeTradingPostAndGiveAward($dst_id, $pending_action, $player_id);
         $this->checkAndTriggerFulfillContract($pending_action, $player_id);
-        $this->checkAndTriggerFulfillArghun($pending_action, $player_id);
-        $this->updateNextPendingAction(-1, $pending_action);
+        if ($pending_action['remaining_count'] == 1)
+            $this->checkAndTriggerFulfillPersonalCityCard($pending_action, $player_id);
+        $this->updateRemainingCount(-1, $pending_action);
         self::incStat(1, "travel_movements", $player_id);
         $this->gamestate->nextState($this->getNextTransitionBasedOnPendingActions($player_id));
     }
@@ -2227,7 +2223,7 @@ class MarcoPoloExpansions extends Table
             $this->placeTradingPostAndGiveAward($figure["piece_location_arg"], $pending_action, $player_id);
         }
         $this->checkAndTriggerFulfillContract($pending_action, $player_id);
-        $this->checkAndTriggerFulfillArghun($pending_action, $player_id);
+        $this->checkAndTriggerFulfillPersonalCityCard($pending_action, $player_id);
         $this->deletePendingAction($pending_action["pending_id"]);
         $this->gamestate->nextState($this->getNextTransitionBasedOnPendingActions($player_id));
     }
@@ -2241,7 +2237,7 @@ class MarcoPoloExpansions extends Table
         if ($pending_action == null || $pending_action["type"] != "city_card")
             throw new BgaVisibleSystemException("no city card action pending");
 
-        $this->checkAndTriggerFulfillArghun($pending_action, $player_id);
+        $this->checkAndTriggerFulfillPersonalCityCard($pending_action, $player_id);
         $this->deletePendingAction($pending_action["pending_id"]);
         $this->gamestate->nextState($this->getNextTransitionBasedOnPendingActions($player_id));
     }
@@ -2254,10 +2250,8 @@ class MarcoPoloExpansions extends Table
 
         $this->changePlayerResources($payment_details, true, "city_card_" . $pending_action["type_arg"], $player_id);
         self::DbQuery("UPDATE pending_action SET pending_remaining_count = pending_remaining_count + 1 WHERE pending_type = 'travel' AND pending_player_id = '{$player_id}'");
-        if ($this->getNumberOfTimesCostSatisfied($city_card_info["cost"], $player_id) > 0) {
-            $this->updateNextPendingAction(-1, $pending_action);
+        if ($this->getNumberOfTimesCostSatisfied($city_card_info["cost"], $player_id) > 0) (-1, $pending_action);
         } else {
-            $this->checkAndTriggerFulfillArghun($pending_action, $player_id);
             $this->deletePendingAction($pending_action["pending_id"]);
         }
     }
@@ -2294,7 +2288,7 @@ class MarcoPoloExpansions extends Table
 
             $this->changePlayerResources($modified_costs, true, $location, $player_id);
             $this->giveAward($location, $modified_award, $player_id);
-            $this->checkAndTriggerFulfillArghun($pending_action, $player_id);
+            $this->checkAndTriggerFulfillPersonalCityCard($pending_action, $player_id);
             $this->deletePendingAction($pending_action["pending_id"]);
         }
 
@@ -2316,9 +2310,7 @@ class MarcoPoloExpansions extends Table
         }
 
         if ($this->validateCost($cost, $player_id) == false)
-            throw new BgaUserException(self::_("You don't have the resources of this exchange"));
-
-        $this->updateNextPendingAction(-1, $pending_action);
+            throw new BgaUserException(self::_("You don't have the resources of this exchange"))(-1, $pending_action);
         $this->changePlayerResources($cost, true, 'city_card_' . $pending_action["type_arg"], $player_id);
         $this->changePlayerResources($reward, false, 'city_card_' . $pending_action["type_arg"], $player_id);
 
@@ -2351,8 +2343,7 @@ class MarcoPoloExpansions extends Table
 
         self::DbQuery("UPDATE pending_action SET pending_type_arg = CONCAT(pending_type_arg, ',', $city_bonus_type_arg) WHERE pending_id = {$pending_action_id}");
         $board_id = self::getUniqueValueFromDB("SELECT piece_location_arg FROM piece WHERE piece_type = 'city_bonus' AND piece_type_arg = {$city_bonus_type_arg} LIMIT 1");
-        $this->awardBonus("city_bonus", $this->city_bonus_types[$city_bonus_type_arg], $board_id, false, $player_id);
-        $this->updateNextPendingAction(-1, $pending_action);
+        $this->awardBonus("city_bonus", $this->city_bonus_types[$city_bonus_type_arg], $board_id, false, $player_id(-1, $pending_action);
         $this->gamestate->nextState($this->getNextTransitionBasedOnPendingActions($player_id));
     }
 
@@ -2383,8 +2374,7 @@ class MarcoPoloExpansions extends Table
             throw new BgaVisibleSystemException("invalid state cannot move selected trading post");
 
         self::DbQuery("UPDATE piece SET piece_location = 'player_mat' WHERE piece_id = {$trading_post_id}");  //temp move trading post back to player mat
-        $this->placeTradingPostAndGiveAward($pending_action["type_arg"], $pending_action, $player_id);
-        $this->updateNextPendingAction(-1, $pending_action);
+        $this->placeTradingPostAndGiveAward($pending_action["type_arg"], $pending_action, $player_id(-1, $pending_action);
         $this->gamestate->nextState($this->getNextTransitionBasedOnPendingActions($player_id));
     }
 
@@ -2416,9 +2406,7 @@ class MarcoPoloExpansions extends Table
         if ($piece["piece_type"] == "1x_gift") {
             $pending_action = $this->getNextPendingAction($player_id);
             if ($pending_action["type"] != "discard_gift")
-                throw new BgaVisibleSystemException("invalid state: can only use when discarding gift");
-
-            $this->updateNextPendingAction(-1, $pending_action);
+                throw new BgaVisibleSystemException("invalid state: can only use when discarding gift");(-1, $pending_action);
             if ($pending_action["remaining_count"] == 1) {
                 $this->triggerImmediateGifts($player_id);
             }
