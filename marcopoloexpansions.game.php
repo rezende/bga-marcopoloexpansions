@@ -2297,8 +2297,10 @@ class MarcoPoloExpansions extends Table
             $this->checkAndTriggerFulfillPersonalCityCard($pending_action, $player_id);
             $this->deletePendingAction($pending_action["pending_id"]);
         }
-
-        $this->gamestate->nextState($this->getNextTransitionBasedOnPendingActions($player_id));
+        $transition_to = $this->getNextTransitionBasedOnPendingActions($player_id);
+        if ($transition_to == 'travel')
+            $this->checkAndTriggerFulfillPersonalCityCard($this->getNextPendingAction($player_id), $player_id);
+        $this->gamestate->nextState($transition_to);
     }
 
     function activateExchangeCityCard($exchange_type)
