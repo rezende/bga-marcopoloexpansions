@@ -126,10 +126,12 @@ $stats_type = array(
             "name" => totranslate("Number of points from city bonuses"),
             "type" => "int" ),
 
-        //TODO - NUmber of points from gifts
-
-        "trading_post_points" => array("id" => 32, 
+        "trading_post_points" => array("id" => 32,
             "name" => totranslate("Number of points from placing trading posts"),
+            "type" => "int" ),
+
+        "gift_points" => array("id" => 33,
+            "name" => totranslate("Number of points from gifts"),
             "type" => "int" ),
 
         "beijing_points" => array("id"=> 23,
@@ -167,6 +169,10 @@ $stats_type = array(
             5 => clienttranslate( "Niccolo & Marco Polo" ),
             6 => clienttranslate( "Berke Khan" ),
             7 => clienttranslate( "Matteo Polo" ),
+            8 => clienttranslate( "Fratre Nicolao" ),
+            9 => clienttranslate( "Khan Arghun" ),
+            10 => clienttranslate( "Altan Ord" ),
+            11 => clienttranslate( "Gunj Kököchin" ),
             98 => clienttranslate( "Not set" ),
             99 => clienttranslate( "Tied" ),
         )

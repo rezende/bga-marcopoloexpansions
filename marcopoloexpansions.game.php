@@ -128,6 +128,7 @@ class MarcoPoloExpansions extends Table
         self::initStat('player', 'city_card_points', 0);
         self::initStat('player', 'city_bonus_points', 0);
         self::initStat('player', 'trading_post_points', 0);
+        self::initStat('player', 'gift_points', 0);
         self::initStat('player', 'compensation_receive_coin', 0);
         self::initStat('player', 'compensation_receive_camel', 0);
 
@@ -973,10 +974,10 @@ class MarcoPoloExpansions extends Table
         } else if (strpos($location, "contract_") === 0 && array_key_exists("vp", $awards)) {
             self::incStat($awards["vp"], "contract_points", $player_id);
         }
-        // else if ( strpos( $location, "gift_") === 0 && array_key_exists( "vp", $awards ) )           //TODO - GIFT stats
-        // {
-        //     self::incStat( $awards["vp"], "gift_points", $player_id );
-        // }
+        else if (strpos( $location, "gift_") === 0 && array_key_exists( "vp", $awards))
+        {
+            self::incStat( $awards["vp"], "gift_points", $player_id );
+        }
 
         $this->changePlayerResources($awards, false, $location, $player_id);
     }
