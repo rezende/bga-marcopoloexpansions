@@ -2051,10 +2051,15 @@ class MarcoPoloExpansions extends Table
 
         $this->checkAndTriggerDiscardGift($pending_action, $player_id);
         $this->checkAndTriggerFulfillContract($pending_action, $player_id);
-        if ($pending_action['remaining_count'] == 1)
-            $this->checkAndTriggerFulfillPersonalCityCard($pending_action, $player_id);
+        $this->checkPersonalCityCard27($player_id);
         $this->updatePendingActionRemainingCount($drop_by, $pending_action);
         $this->gamestate->nextState($this->getNextTransitionBasedOnPendingActions($player_id));
+    }
+
+    function checkPersonalCityCard27($player_id) {
+        $pending_actions = $this->getNextPendingActions($player_id, 'ASC');
+        if (str_replace("city_card_", "", $pending_actions[0]["location"]) == 27 && $pending_action[0]["remaining_count"] == 1)
+            $this->checkAndTriggerFulfillPersonalCityCard(array_slice($pending_actions, -1)[0], $player_id);
     }
 
     function pickContract($contract_id, $replaced_contract_id)
