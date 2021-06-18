@@ -126,7 +126,7 @@ $stats_type = array(
             "name" => totranslate("Number of points from city bonuses"),
             "type" => "int" ),
 
-        "trading_post_points" => array("id" => 32,
+        "trading_post_points" => array("id" => 35,
             "name" => totranslate("Number of points from placing trading posts"),
             "type" => "int" ),
 
