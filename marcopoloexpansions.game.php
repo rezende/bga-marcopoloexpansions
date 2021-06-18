@@ -800,14 +800,14 @@ class MarcoPoloExpansions extends Table
 
     function checkAndTriggerFulfillPersonalCityCard($pending_action, $player_id)
     {
-        // self::dump('ARGHUN_PENDING_ACTION', $pending_action);
+        self::dump('ARGHUN_PENDING_ACTION', $pending_action);
         if (strpos($pending_action["location"], "city_card_") === 0) {
             $city_card_id = str_replace("city_card_", "", $pending_action["location"]);
-            // self::dump('ARGHUN_CITY_CARD_ID', $city_card_id);
+            self::dump('ARGHUN_CITY_CARD_ID', $city_card_id);
             $city_card_piece_db = self::getObjectFromDB(
                 "SELECT piece_id id, piece_location location FROM piece WHERE piece_id = {$city_card_id}"
             );
-            // self::dump('ARGHUN_CITY_CARD_DB', $city_card_piece_db);
+            self::dump('ARGHUN_CITY_CARD_DB', $city_card_piece_db);
             if ($city_card_piece_db['location'] == 'player_mat') {
                 self::DbQuery("UPDATE piece SET piece_location = 'box' WHERE piece_id = '{$city_card_id}'");
                 self::notifyAllPlayers(
@@ -2298,8 +2298,10 @@ class MarcoPoloExpansions extends Table
             $this->deletePendingAction($pending_action["pending_id"]);
         }
         $transition_to = $this->getNextTransitionBasedOnPendingActions($player_id);
-        if ($transition_to == 'travel')
+        self::dump('TRANSITION30', $transition_to);
+        if ($transition_to == 'travel') {
             $this->checkAndTriggerFulfillPersonalCityCard($this->getNextPendingAction($player_id), $player_id);
+        }
         $this->gamestate->nextState($transition_to);
     }
 
