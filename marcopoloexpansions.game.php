@@ -1656,7 +1656,7 @@ class MarcoPoloExpansions extends Table
         self::DbQuery("DELETE FROM pending_action WHERE pending_id = {$pending_action_id}");
     }
 
-    function getNextTransitionBasedOnPendingActions($player_id)
+    function getNextTransitionBasedOnPendingActions($player_id, $pending_action = null)
     {
         $transition_map = [
             "pick_contract" => "pickContract",
@@ -1672,7 +1672,8 @@ class MarcoPoloExpansions extends Table
         ];
 
         $transition_to = "continue";
-        $pending_action = $this->getNextPendingAction($player_id);
+        if (is_null($pending_action))
+            $pending_action = $this->getNextPendingAction($player_id);
         if ($this->getGameStateName() == "playerBonus" || $this->getGameStateName() == "playerGunjBonus")       //always continue in player bonus
         {
             $transition_to = "continue";
