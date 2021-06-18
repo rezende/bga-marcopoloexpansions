@@ -401,7 +401,7 @@ function (dojo, declare) {
                     }
                     else if (cityCardData.kind == "multiple")
                     {
-                        description = dojo.string.substitute(_("Trade in sets of ${cost} for ${award} upto die value placed"), { cost: this.extractDescriptionFromResourceArray(cityCardData.cost), award: this.extractDescriptionFromResourceArray(cityCardData.award) });
+                        description = dojo.string.substitute(_("Trade in sets of ${cost} for ${award} up to die value placed"), { cost: this.extractDescriptionFromResourceArray(cityCardData.cost), award: this.extractDescriptionFromResourceArray(cityCardData.award) });
                     }
                     description = dojo.string.substitute("${fullDescription}", { cardNumber : uiItem.data.type_arg, fullDescription : description });
                 }

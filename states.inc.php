@@ -82,7 +82,7 @@ $machinestates = array(
 
     7 => array(
         "name" => "playerBonus",
-        "description" => clienttranslate('All players must collect their bonuses'), 
+        "description" => clienttranslate('All players must collect their bonuses'),
         "descriptionmyturn" => clienttranslate('${you} must collect your bonuses'),
         "type" => "multipleactiveplayer",
         "args" => "argPlayerBonus",
@@ -100,7 +100,7 @@ $machinestates = array(
         "possibleactions" => array( "pickCompensation" ),
         "transitions" => array( "done" => 6 ),
     ),
-        
+
     10 => array(
         "name" => "playerTurn",
         "description" => clienttranslate( '${actplayer} must perform an action or bonus action'),
@@ -113,7 +113,7 @@ $machinestates = array(
         "possibleactions" => array(
             "placeDie", "rerollDie", "bumpDie", "buyBlackDie", "changeDice", "fulfillContract", "fulfillGift", "fulfillArghun" , "pass", "undo"
         ),
-        "transitions" => array( "travel" => 11, "chooseResource" => 12, "chooseCityCardAward" => 13, "pickContract" => 14, 
+        "transitions" => array( "travel" => 11, "chooseResource" => 12, "chooseCityCardAward" => 13, "pickContract" => 14,
             "triggerOtherCityBonus" => 16, "pass" => 6, "continue" => 10 )
     ),
 
@@ -138,9 +138,9 @@ $machinestates = array(
     ),
 
     13 => array(
-        "name" => "playerChooseCityCardAward", 
-        "description" => clienttranslate('${actplayer} may activate city card upto ${num_remaining} times' ),
-        "descriptionmyturn" => clienttranslate('${you} may activate city card upto ${num_remaining} times' ),
+        "name" => "playerChooseCityCardAward",
+        "description" => clienttranslate('${actplayer} may activate city card up to ${num_remaining} times' ),
+        "descriptionmyturn" => clienttranslate('${you} may activate city card up to ${num_remaining} times' ),
         "type" => "activeplayer",
         "args" => "argPlayerChooseCityCardAward",
         "possibleactions" => array( "activateExchangeCityCard", "activateMultipleCityCard", "skipChooseCityAward", "undo" ),
@@ -158,7 +158,7 @@ $machinestates = array(
     ),
 
     15 => array(
-        "name" => "playerMoveTradingPost", 
+        "name" => "playerMoveTradingPost",
         "description" => clienttranslate('Out of trading posts, ${actplayer} may move a trading post'),
         "descriptionmyturn" => clienttranslate('Out of trading posts, ${you} may move a trading post'),
         "type" => "activeplayer",
@@ -205,19 +205,19 @@ $machinestates = array(
         "name" => "pickGoals",
         "description" => clienttranslate('All players must pick their goal cards'),
         "descriptionmyturn" => clienttranslate('${you} must pick your goal cards'),
-        "type" => "multipleactiveplayer",        
+        "type" => "multipleactiveplayer",
         "possibleactions" => array( "pickGoalCards" ),
         "transitions" => array( "done" => 4 )
     ),
 
-    30 => array( 
+    30 => array(
         "name" => "gamePlayerGunjBonusStart",
         "type" => "game",
         "action" => "stGamePlayerGunjBonusStart",
         "transitions" => array( "" => 31 ),
     ),
 
-    31 => array( 
+    31 => array(
         "name" => "playerGunjBonus",
         "description" => clienttranslate('All players must choose a good'),
         "descriptionmyturn" => clienttranslate('${you} must pick a good'),
@@ -228,7 +228,7 @@ $machinestates = array(
         "transitions" => array( "continue" => 31, "done" => 32 ),
     ),
 
-    32 => array( 
+    32 => array(
         "name" => "gamePlayerGunjBonusFinish",
         "type" => "game",
         "action" => "stGamePlayerGunjBonusFinish",
@@ -241,7 +241,7 @@ $machinestates = array(
         "action" => "stGameover",
         "transitions" => array( "" => 99 ),
     ),
-       
+
     // Final state.
     // Please do not modify (and do not overload action/args methods).
     99 => array(
@@ -251,4 +251,4 @@ $machinestates = array(
         "action" => "stGameEnd",
         "args" => "argGameEnd"
     )
-); 
+);
