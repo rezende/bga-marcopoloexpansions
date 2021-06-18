@@ -1627,8 +1627,7 @@ class MarcoPoloExpansions extends Table
                 if ($player_action != null)
                     array_push($actions, $player_action);
             }
-        }
-        else {
+        } else {
             $query = "SELECT pending_id, pending_type type, pending_type_arg type_arg,
             pending_type_arg1 type_arg1, pending_remaining_count remaining_count,
             pending_location location, pending_player_id
@@ -2056,7 +2055,8 @@ class MarcoPoloExpansions extends Table
         $this->gamestate->nextState($this->getNextTransitionBasedOnPendingAction($player_id));
     }
 
-    function checkPersonalCityCard27($player_id) {
+    function checkPersonalCityCard27($player_id)
+    {
         $pending_actions = $this->getNextPendingActions($player_id, 'ASC');
         if (str_replace("city_card_", "", $pending_actions[0]["location"]) == 27 && $pending_action[0]["remaining_count"] == 1)
             $this->checkAndTriggerFulfillPersonalCityCard(array_slice($pending_actions, -1)[0], $player_id);
