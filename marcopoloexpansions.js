@@ -2328,8 +2328,8 @@ function (dojo, declare) {
                 var uiItemHeight = this.uiItems.itemConfig[item.uiType].height ? this.uiItems.itemConfig[item.uiType].height : 0;
                 var modifiedLeft = totalWidth;
 
-                //adjust space for contracts
-                if (item.uiType == "city_card" || item.uiType == "1x_gift" && modifiedTop == 0)
+                // Personal city cards and 1x_gift always stay to the right of contract space
+                if (item.uiType == "city_card" || item.uiType == "1x_gift")
                 {
                     totalWidth = Math.max(420, modifiedLeft); //420 = width of 2 goal cards & 2 contracts
                     modifiedLeft = Math.max(420, modifiedLeft);
