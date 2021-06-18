@@ -1635,7 +1635,7 @@ class MarcoPoloExpansions extends Table
             WHERE pending_type <> 'bonus' AND pending_player_id = {$player_id}
             ORDER BY pending_id {$order_by}
             LIMIT 1";
-            $actions = self::getObjectFromDB($query);
+            $actions = self::getObjectListFromDB($query);
         }
         return $actions;
     }
