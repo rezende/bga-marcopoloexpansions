@@ -2329,7 +2329,7 @@ function (dojo, declare) {
                 var modifiedLeft = totalWidth;
 
                 // Personal city cards and 1x_gift always stay to the right of contract space
-                if (item.uiType == "city_card" || item.uiType == "1x_gift")
+                if ((item.uiType == "city_card" || item.uiType == "1x_gift") && modifiedTop == 0)
                 {
                     totalWidth = Math.max(420, modifiedLeft); //420 = width of 2 goal cards & 2 contracts
                     modifiedLeft = Math.max(420, modifiedLeft);
