@@ -1,4 +1,5 @@
 <?php
+
 /**
  *------
  * BGA framework: © Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
@@ -205,9 +206,9 @@ class MarcoPoloExpansions extends Table
 
         return max(0, self::getGameStateValue("current_round") - 1) * 20 + ((($total_dice - $unplayed_dice) / $total_dice) * 20);
     }
-//////////////////////////////////////////////////////////////////////////////
-//////////// Utility functions
-////////////
+    //////////////////////////////////////////////////////////////////////////////
+    //////////// Utility functions
+    ////////////
 
     /*
         In this space, you can put any utility methods useful for your game logic
@@ -266,8 +267,7 @@ class MarcoPoloExpansions extends Table
         $last_player_id = null;
         $next_player_id = $player_order[0];
         do {
-            $last_player_id = $next_player_id;
-            {
+            $last_player_id = $next_player_id; {
                 $next_player_id = $player_order[$next_player_id];
             }
         } while ($next_player_id != $player_order[0]);
@@ -422,8 +422,7 @@ class MarcoPoloExpansions extends Table
                         $bonus_type = $bonus_piece["type"];
                         $piece_values[] = "('{$piece_type}', '{$bonus_type}', 'board', '{$map_node_id}', '{$i}')";
                     }
-                }
-                else {
+                } else {
                     $bonus_piece = array_pop($bonus_type_materials);
                     $bonus_type = $bonus_piece["type"];
                     $piece_values[] = "('{$piece_type}', '{$bonus_type}', 'board', '{$map_node_id}', '0')";
@@ -439,8 +438,12 @@ class MarcoPoloExpansions extends Table
         $valid_city_bonus_types = array_filter($this->city_bonus_types, array("MarcoPoloExpansions", "filterExpansionFromMaterialTypes"));
         if (self::getGameStateValue("expert_variant") == 1) //use random
         {
-            $required_city_bonus = array_values(array_filter($valid_city_bonus_types, function($b) { return $b['type'] == 3;}));
-            $other_city_bonus = array_values(array_filter($valid_city_bonus_types, function($b) { return $b['type'] != 3;}));
+            $required_city_bonus = array_values(array_filter($valid_city_bonus_types, function ($b) {
+                return $b['type'] == 3;
+            }));
+            $other_city_bonus = array_values(array_filter($valid_city_bonus_types, function ($b) {
+                return $b['type'] != 3;
+            }));
             shuffle($other_city_bonus);
             $picked_city_bonuses = array_slice($other_city_bonus, 0, 5); // 5 considering only main map
             $picked_city_bonuses = array_merge($required_city_bonus, $other_city_bonus);
@@ -495,8 +498,7 @@ class MarcoPoloExpansions extends Table
     function setupCharacter($character_type, $player_id)
     {
         self::DbQuery("UPDATE player SET character_type = {$character_type} WHERE player_id = {$player_id}");
-        if ($character_type == self::KUBILAI_CHARACTER)
-        {
+        if ($character_type == self::KUBILAI_CHARACTER) {
             $piece_id = self::getUniqueValueFromDB("SELECT piece_id FROM piece WHERE piece_type = 'figure' AND piece_player_id = {$player_id}");
             self::DbQuery("UPDATE piece SET piece_location_arg = '8' WHERE piece_id = {$piece_id}");
             $this->addToPendingTable("travel", "kubilai_khan", "", 1, "", $player_id);        //create "fake" pending action
@@ -504,8 +506,7 @@ class MarcoPoloExpansions extends Table
             $this->placeTradingPostAndGiveAward(8, $pending_action, $player_id);
             $this->deletePendingAction($pending_action["pending_id"]);
             self::notifyAllPlayers("travel", "", array("figure_id" => $piece_id, "dst_id" => 8));
-        } else if ($character_type == self::WILHELM_CHARACTER)
-        {
+        } else if ($character_type == self::WILHELM_CHARACTER) {
             self::DbQuery("INSERT INTO piece (piece_type, piece_type_arg, piece_player_id, piece_location, piece_location_arg) VALUES ('trading_post', '1', '{$player_id}', 'player_mat', '9')");
             self::DbQuery("INSERT INTO piece (piece_type, piece_type_arg, piece_player_id, piece_location, piece_location_arg) VALUES ('trading_post', '1', '{$player_id}', 'player_mat', '10')");
             $pieces = self::getObjectListFromDB("SELECT piece_id id, piece_type type, piece_type_arg type_arg, piece_player_id player_id, piece_location location, piece_location_arg location_arg
@@ -587,8 +588,10 @@ class MarcoPoloExpansions extends Table
             $absolute_resources = self::getObjectFromDB("SELECT " . implode(",", $valid_resources) . " FROM player WHERE player_id = {$player_id}");
             $resource_break_down = ["log" => '${' . join('}, ${', $resources_string) . '}', "args" => $resources_args];
             $message = $negate ? clienttranslate('${player_name} pays ${resources}') : clienttranslate('${player_name} receives ${resources}');
-            self::notifyAllPlayers("resourceChange", $message, array("player_id" => $player_id, "player_name" => $this->getPlayerName($player_id), "negate" => $negate,
-                "location" => $ui_location, "resource_changes" => $valid_resource_changes, "resources" => $resource_break_down, "absolute_resources" => $absolute_resources));
+            self::notifyAllPlayers("resourceChange", $message, array(
+                "player_id" => $player_id, "player_name" => $this->getPlayerName($player_id), "negate" => $negate,
+                "location" => $ui_location, "resource_changes" => $valid_resource_changes, "resources" => $resource_break_down, "absolute_resources" => $absolute_resources
+            ));
         }
     }
 
@@ -658,11 +661,11 @@ class MarcoPoloExpansions extends Table
     function givePlayerBlackDie($die_id, $via_buy, $player_id)
     {
         /**
-        * Function that process the transaction of acquiring a black die and binding to the player
-        * @param int $die_id - id of the black die being acquired
-        * @param boolean $via_buy - represents if the die was acquired via turning 3 camels in as a bonus action
-        * @param int $player_id - id of player acquiring the die
-        */
+         * Function that process the transaction of acquiring a black die and binding to the player
+         * @param int $die_id - id of the black die being acquired
+         * @param boolean $via_buy - represents if the die was acquired via turning 3 camels in as a bonus action
+         * @param int $player_id - id of player acquiring the die
+         */
         $die_value = $this->rollDie($die_id, $player_id);
         self::DbQuery("UPDATE die SET die_location = 'player_mat', die_player_id = '{$player_id}' WHERE die_id = {$die_id}");
         $dice = $this->getDiceByIds([$die_id]);
@@ -798,16 +801,14 @@ class MarcoPoloExpansions extends Table
     function checkAndTriggerFulfillArghun($pending_action, $player_id)
     {
         // self::dump('ARGHUN_PENDING_ACTION', $pending_action);
-        if (strpos($pending_action["location"], "city_card_") === 0)
-        {
+        if (strpos($pending_action["location"], "city_card_") === 0) {
             $city_card_id = str_replace("city_card_", "", $pending_action["location"]);
             // self::dump('ARGHUN_CITY_CARD_ID', $city_card_id);
             $city_card_piece_db = self::getObjectFromDB(
                 "SELECT piece_id id, piece_location location FROM piece WHERE piece_id = {$city_card_id}"
             );
             // self::dump('ARGHUN_CITY_CARD_DB', $city_card_piece_db);
-            if ($city_card_piece_db['location'] == 'player_mat')
-            {
+            if ($city_card_piece_db['location'] == 'player_mat') {
                 self::DbQuery("UPDATE piece SET piece_location = 'box' WHERE piece_id = '{$city_card_id}'");
                 self::notifyAllPlayers(
                     "fulfillArghun",
@@ -876,8 +877,13 @@ class MarcoPoloExpansions extends Table
         }
 
         foreach ($contracts as $contract) {
-            self::notifyAllPlayers("contract", clienttranslate('${player_name} draws a contract'), array("player_id" => $player_id,
-                    "player_name" => $this->getPlayerName($player_id), "is_new" => true, "contract_id" => $contract["id"], "contract_data" => $contract)
+            self::notifyAllPlayers(
+                "contract",
+                clienttranslate('${player_name} draws a contract'),
+                array(
+                    "player_id" => $player_id,
+                    "player_name" => $this->getPlayerName($player_id), "is_new" => true, "contract_id" => $contract["id"], "contract_data" => $contract
+                )
             );
         }
         $this->setNewUndoPoint();
@@ -909,8 +915,13 @@ class MarcoPoloExpansions extends Table
         if (sizeof($final_gifts) > 1) {
             $message = clienttranslate('${player_name} draws ${amount} gifts');
         }
-        self::notifyAllPlayers("gift", $message, array("player_id" => $player_id, "player_name" => $this->getPlayerName($player_id),
-                "amount" => $amount, "gifts_data" => $final_gifts)
+        self::notifyAllPlayers(
+            "gift",
+            $message,
+            array(
+                "player_id" => $player_id, "player_name" => $this->getPlayerName($player_id),
+                "amount" => $amount, "gifts_data" => $final_gifts
+            )
         );
 
         $this->setNewUndoPoint();
@@ -973,10 +984,8 @@ class MarcoPoloExpansions extends Table
             self::incStat($awards["vp"], "city_card_points", $player_id);
         } else if (strpos($location, "contract_") === 0 && array_key_exists("vp", $awards)) {
             self::incStat($awards["vp"], "contract_points", $player_id);
-        }
-        else if (strpos( $location, "gift_") === 0 && array_key_exists( "vp", $awards))
-        {
-            self::incStat( $awards["vp"], "gift_points", $player_id );
+        } else if (strpos($location, "gift_") === 0 && array_key_exists("vp", $awards)) {
+            self::incStat($awards["vp"], "gift_points", $player_id);
         }
 
         $this->changePlayerResources($awards, false, $location, $player_id);
@@ -1053,7 +1062,7 @@ class MarcoPoloExpansions extends Table
         if ($num_trading_posts > 7 || $num_trading_posts < 1) {
             return;
         }
-        if($num_trading_posts < 7)  {
+        if ($num_trading_posts < 7) {
             $resources = $this->getAltanOrdResourcesForTradingPost($num_trading_posts);
             $this->changePlayerResources($resources, false, "map_node_" . $board_id, $player_id);
         }
@@ -1112,9 +1121,14 @@ class MarcoPoloExpansions extends Table
             $piece_id = $next_trading_post["id"];
 
             self::DbQuery("UPDATE piece SET piece_location = 'board', piece_location_arg = '{$board_id}', piece_location_position = '{$next_position}' WHERE piece_id = '{$piece_id}'");
-            self::notifyAllPlayers("placeTradingPost", clienttranslate('${player_name} places a trading post in ${city_name}'), array("player_id" => $player_id,
+            self::notifyAllPlayers(
+                "placeTradingPost",
+                clienttranslate('${player_name} places a trading post in ${city_name}'),
+                array(
+                    "player_id" => $player_id,
                     "player_name" => $this->getPlayerName($player_id), "trading_post_id" => $piece_id, "location" => "board", "location_arg" => $board_id,
-                    "location_position" => $next_position, "city_name" => $this->board_map[$board_id]["name"])
+                    "location_position" => $next_position, "city_name" => $this->board_map[$board_id]["name"]
+                )
             );
         }
 
@@ -1192,7 +1206,8 @@ class MarcoPoloExpansions extends Table
                 $from_bonus_name = clienttranslate("character");
             }
 
-            self::notifyAllPlayers("message", clienttranslate('${player_name} collects ${from_bonus_name} bonus'), array('i18n' => array('from_bonus_name'),
+            self::notifyAllPlayers("message", clienttranslate('${player_name} collects ${from_bonus_name} bonus'), array(
+                'i18n' => array('from_bonus_name'),
                 'player_id' => $player_id, 'player_name' => $this->getPlayerName($player_id), 'from_bonus_name' => $from_bonus_name
             ));
             $this->giveAward($ui_location, $bonus_data["award"], $player_id);
@@ -1298,8 +1313,10 @@ class MarcoPoloExpansions extends Table
             if ($this->validateCost($place_info["cost"], $player_id) == false)
                 throw new BgaUserException(self::_("Insufficient coins to place die here"));
 
-            self::notifyAllPlayers("message", clienttranslate('${player_name} chooses to travel up to ${steps} steps'), array("player_id" => $player_id,
-                "player_name" => self::getActivePlayerName(), "steps" => $place_info["index"] + 1));
+            self::notifyAllPlayers("message", clienttranslate('${player_name} chooses to travel up to ${steps} steps'), array(
+                "player_id" => $player_id,
+                "player_name" => self::getActivePlayerName(), "steps" => $place_info["index"] + 1
+            ));
             $this->changePlayerResources($place_info["cost"], true, $place_info["ui_location"], $player_id);
         }
     }
@@ -1495,8 +1512,10 @@ class MarcoPoloExpansions extends Table
             $location = "box";
 
         $this->deck->moveCard($contract_id, $location);
-        self::notifyAllPlayers("contract", clienttranslate('${player_name} discards a contract'), array("player_id" => $player_id,
-            "player_name" => $this->getPlayerName($player_id), "discard_contract_id" => $contract_id));
+        self::notifyAllPlayers("contract", clienttranslate('${player_name} discards a contract'), array(
+            "player_id" => $player_id,
+            "player_name" => $this->getPlayerName($player_id), "discard_contract_id" => $contract_id
+        ));
     }
 
     function useGift($gift_id, $useAndDiscard, $player_id)
@@ -1506,7 +1525,8 @@ class MarcoPoloExpansions extends Table
             $this->deck->moveCard($gift_id, "gift_discard");
         }
         $notifType = $useAndDiscard ? "boxPiece" : "message";
-        self::notifyAllPlayers($notifType, clienttranslate('${player_name} uses gift ${gift_type}'), array("player_id" => $player_id, "piece_type" => "gift", "piece_id" => $gift_id,
+        self::notifyAllPlayers($notifType, clienttranslate('${player_name} uses gift ${gift_type}'), array(
+            "player_id" => $player_id, "piece_type" => "gift", "piece_id" => $gift_id,
             "player_name" => $this->getPlayerName($player_id), "gift_type" => $gift["type_arg"],
         ));
     }
@@ -1516,7 +1536,8 @@ class MarcoPoloExpansions extends Table
     {
         $this->deck->moveCard($gift_id, "gift_discard");
         $message = $bypassMessage ? "" : clienttranslate('${player_name} discards a gift');
-        self::notifyAllPlayers("boxPiece", $message, array("player_id" => $player_id,
+        self::notifyAllPlayers("boxPiece", $message, array(
+            "player_id" => $player_id,
             "player_name" => $this->getPlayerName($player_id), "piece_type" => "gift", "piece_id" => $gift_id
         ));
     }
@@ -1669,9 +1690,9 @@ class MarcoPoloExpansions extends Table
     {
         self::DbQuery("DELETE from pending_action WHERE pending_id = {$bonus_id}");
     }
-//////////////////////////////////////////////////////////////////////////////
-//////////// Player actions
-////////////
+    //////////////////////////////////////////////////////////////////////////////
+    //////////// Player actions
+    ////////////
     /*
         Each time a player is doing some game action, one of the methods below is called.
         (note: each method below must match an input method in marcopoloexpansions.action.php)
@@ -1692,8 +1713,13 @@ class MarcoPoloExpansions extends Table
         if ($pending_id == null)
             throw new BgaUserException(self::_("Oops something went wrong, this character is not available"));
 
-        self::notifyAllPlayers("pickCharacter", clienttranslate('${player_name} picks character ${character_name}'), array('i18n' => array('character_name'), 'player_id' => $player_id,
-                'player_name' => self::getActivePlayerName(), 'character_type' => $character_type, 'character_name' => $this->character_types[$character_type]["name"])
+        self::notifyAllPlayers(
+            "pickCharacter",
+            clienttranslate('${player_name} picks character ${character_name}'),
+            array(
+                'i18n' => array('character_name'), 'player_id' => $player_id,
+                'player_name' => self::getActivePlayerName(), 'character_type' => $character_type, 'character_name' => $this->character_types[$character_type]["name"]
+            )
         );
         $this->setupCharacter($character_type, $player_id);
         self::DbQuery("DELETE FROM pending_action WHERE pending_id = {$pending_id}");
@@ -1721,8 +1747,10 @@ class MarcoPoloExpansions extends Table
         if ($success_count != 2)
             throw new BgaVisibleSystemException("Invalid goal cards selected");
 
-        self::notifyAllPlayers("pickedGoalCards", clienttranslate('${player_name} has picked their goal cards'), array('player_id' => $player_id,
-            'player_name' => $this->getPlayerName($player_id)));
+        self::notifyAllPlayers("pickedGoalCards", clienttranslate('${player_name} has picked their goal cards'), array(
+            'player_id' => $player_id,
+            'player_name' => $this->getPlayerName($player_id)
+        ));
 
         $this->gamestate->setPlayerNonMultiactive($player_id, "done");
     }
@@ -1744,8 +1772,10 @@ class MarcoPoloExpansions extends Table
 
         $die_value = $this->rollDie($die_id, $player_id);
         $dice = $this->getDiceByIds([$die_id]);
-        self::notifyAllPlayers("updateDice", clienttranslate('${player_name} re-rolls a die and rolls a ${die_value}'), array("player_id" => $player_id,
-            "player_name" => self::getActivePlayerName(), "dice" => $dice, "die_value" => $die_value, "shake" => true));
+        self::notifyAllPlayers("updateDice", clienttranslate('${player_name} re-rolls a die and rolls a ${die_value}'), array(
+            "player_id" => $player_id,
+            "player_name" => self::getActivePlayerName(), "dice" => $dice, "die_value" => $die_value, "shake" => true
+        ));
 
         $this->changePlayerResources(["camel" => 1], true, "board", $player_id);
 
@@ -1815,8 +1845,10 @@ class MarcoPoloExpansions extends Table
 
         self::DbQuery("UPDATE die SET die_value = {$die_value} WHERE die_id = {$die_id}");
         $dice = $this->getDiceByIds([$die_id]);
-        self::notifyAllPlayers("updateDice", clienttranslate('${player_name} adjusts a die from ${prev_die_value} to ${die_value}'), array("player_id" => $player_id,
-            "player_name" => self::getActivePlayerName(), "dice" => $dice, "die_value" => $die_value, "prev_die_value" => $prev_die_value, "shake" => false));
+        self::notifyAllPlayers("updateDice", clienttranslate('${player_name} adjusts a die from ${prev_die_value} to ${die_value}'), array(
+            "player_id" => $player_id,
+            "player_name" => self::getActivePlayerName(), "dice" => $dice, "die_value" => $die_value, "prev_die_value" => $prev_die_value, "shake" => false
+        ));
 
         $this->changePlayerResources(["camel" => 2], true, "board", $player_id);
         self::incStat(1, "die_bump", $player_id);
@@ -1879,8 +1911,13 @@ class MarcoPoloExpansions extends Table
         $this->validateDicePlacement($place_info, $dice, $playersOnDieSpot, $diceOnSpot, $free_dice_placement_gift_id, $player_id);
         $dice_info = $this->moveDice($dice_ids, $place, $index, $this->getNextDiceHeight($place, $index), $player_id);
         $place_name = $place_info["name"];
-        self::notifyAllPlayers("updateDice", clienttranslate('${player_name} places dice and activates ${place_name}'), array("player_id" => $player_id,
-                "player_name" => self::getActivePlayerName(), "place_name" => $place_name, "num_coins" => $num_coins, "dice" => $dice_info, "shake" => false)
+        self::notifyAllPlayers(
+            "updateDice",
+            clienttranslate('${player_name} places dice and activates ${place_name}'),
+            array(
+                "player_id" => $player_id,
+                "player_name" => self::getActivePlayerName(), "place_name" => $place_name, "num_coins" => $num_coins, "dice" => $dice_info, "shake" => false
+            )
         );
 
         if ($free_dice_placement_gift_id != null) {
@@ -1950,7 +1987,7 @@ class MarcoPoloExpansions extends Table
         $drop_by = -1;
         $negate = false;
 
-         if ($pending_action == null)
+        if ($pending_action == null)
             throw new BgaVisibleSystemException("choose resource : invalid state");
 
         if ($pending_action["type"] == "choice_of_good" && in_array($choice, ["pepper", "silk", "gold"]) == false)
@@ -2030,8 +2067,13 @@ class MarcoPoloExpansions extends Table
         if ($this->deck->countCardInLocation("hand", $player_id) > 2)
             throw new BgaVisibleSystemException("pick contract: no space for another contract");
 
-        self::notifyAllPlayers("contract", clienttranslate('${player_name} picks a contract'), array("player_id" => $player_id,
-                "player_name" => $this->getPlayerName($player_id), "is_new" => false, "contract_id" => $contract_id)
+        self::notifyAllPlayers(
+            "contract",
+            clienttranslate('${player_name} picks a contract'),
+            array(
+                "player_id" => $player_id,
+                "player_name" => $this->getPlayerName($player_id), "is_new" => false, "contract_id" => $contract_id
+            )
         );
         if ($pending_action["remaining_count"] == 1) {
             $this->slideRemainingContracts("pickContract");
@@ -2064,18 +2106,21 @@ class MarcoPoloExpansions extends Table
         $fulfill_notif_type = $this->isAutoCostAward($contract_data["award"]) ? "fulfillContract" : "message";
 
         if ($this->validateCost($contract_data["cost"], $player_id) == false)
-            throw new BgaUserException (self::_("You don't have the resources to fulfill this contract"));
+            throw new BgaUserException(self::_("You don't have the resources to fulfill this contract"));
 
         $this->deck->moveCard($contract_id, "complete", $player_id);
         $this->changePlayerResources($contract_data["cost"], true, "contract_" . $contract_id, $player_id);
         $this->giveAward("contract_" . $contract_id, $contract_data["award"], $player_id);
-        self::notifyAllPlayers($fulfill_notif_type, clienttranslate('${player_name} fulfills contract ${contract_type}'), array("player_id" => $player_id,
-            "player_name" => self::getActivePlayerName(), "contract_id" => $contract_id, "resources_awarded" => false, "contract_type" => $contract_data["type"]));
+        self::notifyAllPlayers($fulfill_notif_type, clienttranslate('${player_name} fulfills contract ${contract_type}'), array(
+            "player_id" => $player_id,
+            "player_name" => self::getActivePlayerName(), "contract_id" => $contract_id, "resources_awarded" => false, "contract_type" => $contract_data["type"]
+        ));
         self::incStat(1, "contracts_fulfilled", $player_id);
         $this->gamestate->nextState($this->getNextTransitionBasedOnPendingActions($player_id));
     }
 
-    function fulfillArghun($city_card_id) {
+    function fulfillArghun($city_card_id)
+    {
         self::checkAction("fulfillArghun");
         $player_id = self::getActivePlayerId();
         $city_card_piece_db = self::getObjectFromDB("SELECT piece_id id, piece_type type, piece_type_arg type_arg, piece_player_id player_id, piece_location location, piece_location_arg location_arg
@@ -2155,8 +2200,10 @@ class MarcoPoloExpansions extends Table
         if ($this->validateCost($matching_edge["cost"], $player_id) == false)
             throw new BgaUserException(self::_("You don't have the resources to travel across this path"));
 
-        self::notifyAllPlayers("travel", clienttranslate('${player_name} travels to ${map_name}'), array("player_id" => $player_id,
-            "player_name" => self::getActivePlayerName(), "figure_id" => $figure_id, "map_name" => $this->board_map[$dst_id]["name"], "dst_id" => $dst_id));
+        self::notifyAllPlayers("travel", clienttranslate('${player_name} travels to ${map_name}'), array(
+            "player_id" => $player_id,
+            "player_name" => self::getActivePlayerName(), "figure_id" => $figure_id, "map_name" => $this->board_map[$dst_id]["name"], "dst_id" => $dst_id
+        ));
 
         $this->changePlayerResources($matching_edge["cost"], true, "map_node_" . $dst_id, $player_id);
         self::DbQuery("UPDATE piece SET piece_location_arg = {$dst_id} WHERE piece_id = {$figure_id}");
@@ -2388,9 +2435,9 @@ class MarcoPoloExpansions extends Table
         self::notifyAllPlayers("message", clienttranslate('${player_name} passes'), array("player_name" => self::getActivePlayerName()));
         $this->gamestate->nextState("pass");
     }
-//////////////////////////////////////////////////////////////////////////////
-//////////// Game state arguments
-////////////
+    //////////////////////////////////////////////////////////////////////////////
+    //////////// Game state arguments
+    ////////////
     /*
         Here, you can create methods defined as "game state arguments" (see "args" property in states.inc.php).
         These methods function is to return some additional information that is specific to the current
@@ -2523,9 +2570,9 @@ class MarcoPoloExpansions extends Table
             'map_node_id' => $next_action["type_arg"],
         );
     }
-//////////////////////////////////////////////////////////////////////////////
-//////////// Game state actions
-////////////
+    //////////////////////////////////////////////////////////////////////////////
+    //////////// Game state actions
+    ////////////
 
     /*
         Here, you can create methods defined as "game state actions" (see "action" property in states.inc.php).
@@ -2781,7 +2828,8 @@ class MarcoPoloExpansions extends Table
 
             $goal_cards = $this->deck->getCardsInLocation("goal_hand", $player_id);
             self::DbQuery("UPDATE player SET player_score = {$total_points}, player_score_aux = camel WHERE player_id = {$player_id}");
-            self::notifyAllPlayers("revealGoalCard", clienttranslate('${player_name} scores ${extra_points} end game points'), array("player_id" => $player_id,
+            self::notifyAllPlayers("revealGoalCard", clienttranslate('${player_name} scores ${extra_points} end game points'), array(
+                "player_id" => $player_id,
                 "player_name" => $this->getPlayerName($player_id), "extra_points" => $extra_points, "cards" => $goal_cards
             ));
 
@@ -2826,9 +2874,9 @@ class MarcoPoloExpansions extends Table
         }
         $this->gamestate->nextState("");
     }
-//////////////////////////////////////////////////////////////////////////////
-//////////// Zombie
-////////////
+    //////////////////////////////////////////////////////////////////////////////
+    //////////// Zombie
+    ////////////
 
     /*
         zombieTurn:
@@ -2890,9 +2938,9 @@ class MarcoPoloExpansions extends Table
         throw new feException("Zombie mode not supported at this game state: " . $statename);
     }
 
-///////////////////////////////////////////////////////////////////////////////////:
-////////// DB upgrade
-//////////
+    ///////////////////////////////////////////////////////////////////////////////////:
+    ////////// DB upgrade
+    //////////
 
     /*
         upgradeTableDb:
@@ -2912,22 +2960,22 @@ class MarcoPoloExpansions extends Table
         // $from_version is equal to 1404301345
 
         // Example:
-//        if( $from_version <= 1404301345 )
-//        {
-//            // ! important ! Use DBPREFIX_<table_name> for all tables
-//
-//            $sql = "ALTER TABLE DBPREFIX_xxxxxxx ....";
-//            self::applyDbUpgradeToAllDB( $sql );
-//        }
-//        if( $from_version <= 1405061421 )
-//        {
-//            // ! important ! Use DBPREFIX_<table_name> for all tables
-//
-//            $sql = "CREATE TABLE DBPREFIX_xxxxxxx ....";
-//            self::applyDbUpgradeToAllDB( $sql );
-//        }
-//        // Please add your future database scheme changes here
-//
-//
+        //        if( $from_version <= 1404301345 )
+        //        {
+        //            // ! important ! Use DBPREFIX_<table_name> for all tables
+        //
+        //            $sql = "ALTER TABLE DBPREFIX_xxxxxxx ....";
+        //            self::applyDbUpgradeToAllDB( $sql );
+        //        }
+        //        if( $from_version <= 1405061421 )
+        //        {
+        //            // ! important ! Use DBPREFIX_<table_name> for all tables
+        //
+        //            $sql = "CREATE TABLE DBPREFIX_xxxxxxx ....";
+        //            self::applyDbUpgradeToAllDB( $sql );
+        //        }
+        //        // Please add your future database scheme changes here
+        //
+        //
     }
 }
