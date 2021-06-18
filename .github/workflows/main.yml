@@ -2,6 +2,7 @@ on: push
 name: Publish Website over SFTP
 jobs:
   FTP-Deploy-Action:
+    if: contains('refs/heads/main', github.ref)
     name: FTP-Deploy-Action
     runs-on: ubuntu-latest
     steps:
