@@ -555,6 +555,11 @@ class MarcoPoloExpansions extends Table
         return self::getUniqueValueFromDB("SELECT player_id FROM player WHERE character_type = {$character_type}");
     }
 
+    function getCharacterType($player_id)
+    {
+        return self::getUniqueValueFromDB("SELECT character_type FROM player WHERE player_id = {$player_id}");
+    }
+
     // ui_location: serves to animate where resources come from / go to
     function changePlayerResources($resource_changes, $negate, $ui_location, $player_id)
     {
@@ -603,10 +608,13 @@ class MarcoPoloExpansions extends Table
         self::notifyAllPlayers("updateDice", "", array('dice' => $dice, "shake" => false));
     }
 
-    function rollDie($die_id, $player_id)
+    function rollDie($die_id, $player_id, $character_type = null)
     {
         $die_value = bga_rand(1, 6);
-        if ($this->getPlayerIdByCharacterType(2) == $player_id) {
+        if (is_null($character_type)) {
+            $character_type = $this->getCharacterType($player_id);
+        }
+        if ($character_type == self::CHARACTER_RASCHID) {
             $die_value = 1;
         }
         self::DbQuery("UPDATE die SET die_value = {$die_value} WHERE die_id = {$die_id}");
@@ -658,7 +666,7 @@ class MarcoPoloExpansions extends Table
         return [];
     }
 
-    function givePlayerBlackDie($die_id, $via_buy, $player_id)
+    function givePlayerBlackDie($die_id, bool $via_buy, $player_id)
     {
         /**
          * Function that process the transaction of acquiring a black die and binding to the player
@@ -666,16 +674,17 @@ class MarcoPoloExpansions extends Table
          * @param boolean $via_buy - represents if the die was acquired via turning 3 camels in as a bonus action
          * @param int $player_id - id of player acquiring the die
          */
-        $die_value = $this->rollDie($die_id, $player_id);
         self::DbQuery("UPDATE die SET die_location = 'player_mat', die_player_id = '{$player_id}' WHERE die_id = {$die_id}");
         $dice = $this->getDiceByIds([$die_id]);
-        $shake = ($player_id != $this->getPlayerIdByCharacterType(self::CHARACTER_RASCHID)) && ($this->getGameStateName() != "playerBonus");
+        $character_type = $this->getCharacterType($player_id);
+        $shake = ($character_type != self::CHARACTER_RASCHID) && ($this->getGameStateName() != "playerBonus");
+        $die_value = $this->rollDie($die_id, $player_id, $character_type);
         $message = clienttranslate('${player_name} gets a black die and rolls a ${die_value}');
-        if ($shake && $via_buy) {
+        if ($shake === true && $via_buy === true) {
             $message = clienttranslate('${player_name} buys a black die and rolls a ${die_value}');
-        } else if ($shake == false && $via_buy) {
+        } else if ($shake === false && $via_buy === true) {
             $message = clienttranslate('${player_name} buys a black die');
-        } else if ($shake == false) {
+        } else if ($shake === false) {
             $message = clienttranslate('${player_name} gets a black die');
         }
         self::notifyAllPlayers(
@@ -690,7 +699,7 @@ class MarcoPoloExpansions extends Table
             )
         );
         self::incStat(1, "black_dice_aquired", $player_id);
-        if ($shake) {
+        if ($shake === true) {
             $this->setNewUndoPoint();
         } else {
             self::setGameStateValue("can_undo", 1);
@@ -1779,6 +1788,7 @@ class MarcoPoloExpansions extends Table
         self::checkAction('rerollDie');
         $player_id = self::getActivePlayerId();
         $dice = $this->getDiceByIds([$die_id]);
+        $character_type = $this->getCharacterType(self::CHARACTER_RASCHID);
 
         if (sizeof($dice) == 0 || $dice[$die_id]["die_player_id"] != $player_id || $dice[$die_id]["die_location"] != "player_mat")
             throw new BgaVisibleSystemException("error on re-roll, bad die id");
@@ -1786,10 +1796,10 @@ class MarcoPoloExpansions extends Table
         if ($this->validateCost(["camel" => 1], $player_id) == false)
             throw new BgaUserException(self::_("You need 1 camel to re-roll a die"));
 
-        if ($this->getPlayerIdByCharacterType(2) == $player_id)
+        if ($character_type == self::CHARACTER_RASCHID)
             throw new BgaUserException(self::_("Your character can change die values, no need to re-roll"));
 
-        $die_value = $this->rollDie($die_id, $player_id);
+        $die_value = $this->rollDie($die_id, $player_id, $character_type);
         $dice = $this->getDiceByIds([$die_id]);
         self::notifyAllPlayers("updateDice", clienttranslate('${player_name} re-rolls a die and rolls a ${die_value}'), array(
             "player_id" => $player_id,
