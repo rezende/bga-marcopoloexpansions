@@ -108,6 +108,18 @@ $stats_type = array(
             "type" => "float"
         ),
 
+        "compensation_receive_camel" => array(
+            "id" => 33,
+            "name" => totranslate("Camels received as dice compensation"),
+            "type" => "int"
+        ),
+
+        "compensation_receive_coin" => array(
+            "id" => 34,
+            "name" => totranslate("Coins received as dice compensation"),
+            "type" => "int"
+        ),
+
         "contracts_fulfilled" => array(
             "id" => 18,
             "name" => totranslate("Number of contracts fulfilled"),
@@ -129,6 +141,36 @@ $stats_type = array(
         "travel_movements" => array(
             "id" => 22,
             "name" => totranslate("Number of travel movements"),
+            "type" => "int"
+        ),
+
+        "contract_points" => array(
+            "id" => 29,
+            "name" => totranslate("Number of points from contracts"),
+            "type" => "int"
+        ),
+
+        "city_card_points" => array(
+            "id" => 30,
+            "name" => totranslate("Number of points from city cards"),
+            "type" => "int"
+        ),
+
+        "city_bonus_points" => array(
+            "id" => 31,
+            "name" => totranslate("Number of points from city bonuses"),
+            "type" => "int"
+        ),
+
+        "trading_post_points" => array(
+            "id" => 32,
+            "name" => totranslate("Number of points from placing trading posts"),
+            "type" => "int"
+        ),
+
+        "gift_points" => array(
+            "id" => 35,
+            "name" => totranslate("Number of points from gifts"),
             "type" => "int"
         ),
 
@@ -161,52 +203,9 @@ $stats_type = array(
             "name" => totranslate("Number of points from coins"),
             "type" => "int"
         ),
-
         "total_points" => array(
             "id" => 28,
             "name" => totranslate("Total points"),
-            "type" => "int"
-        ),
-
-        "contract_points" => array(
-            "id" => 29,
-            "name" => totranslate("Number of points from contracts"),
-            "type" => "int"
-        ),
-
-        "city_card_points" => array(
-            "id" => 30,
-            "name" => totranslate("Number of points from city cards"),
-            "type" => "int"
-        ),
-
-        "city_bonus_points" => array(
-            "id" => 31,
-            "name" => totranslate("Number of points from city bonuses"),
-            "type" => "int"
-        ),
-
-        "trading_post_points" => array(
-            "id" => 32,
-            "name" => totranslate("Number of points from placing trading posts"),
-            "type" => "int"
-        ),
-
-        "compensation_receive_camel" => array(
-            "id" => 33,
-            "name" => totranslate("Camels received as dice compensation"),
-            "type" => "int"
-        ),
-
-        "compensation_receive_coin" => array(
-            "id" => 34,
-            "name" => totranslate("Coins received as dice compensation"),
-            "type" => "int"
-        ),
-
-        "gift_points" => array(
-            "id" => 35,
-            "name" => totranslate("Number of points from gifts"),
             "type" => "int"
         ),
     ),
