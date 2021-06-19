@@ -438,7 +438,7 @@ class MarcoPoloExpansions extends Table
     function filterCityBonuses($valid_city_bonus_types, $required_bonus)
     {
         if ($required_bonus === true) {
-            if (self::getGameStateValue("force_exp") === 1) {
+            if (self::getGameStateValue("force_exp") == 1) {
                 $filter = function ($b) {
                     return $b['type'] == 3 || $b['type'] == 6;
                 };
@@ -448,7 +448,7 @@ class MarcoPoloExpansions extends Table
                 };
             }
         } else {
-            if (self::getGameStateValue("force_exp") === 1) {
+            if (self::getGameStateValue("force_exp") == 1) {
                 $filter = function ($b) {
                     return $b['type'] != 3 && $b['type'] != 6;
                 };
@@ -2646,7 +2646,7 @@ class MarcoPoloExpansions extends Table
 
     function getPossibleCharacters($num_of_players): array
     {
-        if (self::getGameStateValue("force_exp") === 0)
+        if (self::getGameStateValue("force_exp") == 0)
             return array_filter($this->character_types, array("MarcoPoloExpansions", "filterExpansionFromMaterialTypes"));
         $exp_char = array_filter($this->character_types, array("MarcoPoloExpansions", "onlyGetExpCharacters"));
         if ($num_of_players > 3)
@@ -2657,7 +2657,7 @@ class MarcoPoloExpansions extends Table
     function stGamePickCharacter()
     {
         $players = self::loadPlayersBasicInfos();
-        if (self::getGameStateValue("expert_variant") === 0) {
+        if (self::getGameStateValue("expert_variant") == 0) {
             foreach ($players as $player_id => $player)
                 foreach ($this->character_types as $character)
                     if (array_key_exists("default_player", $character) && $character["default_player"] == $player["player_no"])
