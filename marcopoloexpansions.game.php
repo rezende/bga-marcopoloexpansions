@@ -21,9 +21,9 @@ require_once(APP_GAMEMODULE_PATH . 'module/table/table.game.php');
 class MarcoPoloExpansions extends Table
 {
     const EXPANSION_ID_NEW_CHARACTER = '0';
-    const KHAN_ARGHUN_CHARACTER = 9;
-    const KUBILAI_CHARACTER = 1;
-    const WILHELM_CHARACTER = 4;
+    const CHARACTER_KHAN_ARGHUN = 9;
+    const CHARACTER_KUBILAI_KHAN = 1;
+    const CHARACTER_WILHELM = 4;
     const CHARACTER_RASCHID = 2;
     const BASE_GAME_MAP_SMALL_CITY_SPOTS = 6;
 
@@ -473,7 +473,7 @@ class MarcoPoloExpansions extends Table
 
     function presetupCharacter($character_type)
     {
-        if ($character_type == self::KHAN_ARGHUN_CHARACTER)     //Khan Arghun
+        if ($character_type == self::CHARACTER_KHAN_ARGHUN)
         {
             $current_count = 0;
             $shuffled_card_index = 0;
@@ -498,7 +498,7 @@ class MarcoPoloExpansions extends Table
     function setupCharacter($character_type, $player_id)
     {
         self::DbQuery("UPDATE player SET character_type = {$character_type} WHERE player_id = {$player_id}");
-        if ($character_type == self::KUBILAI_CHARACTER) {
+        if ($character_type == self::CHARACTER_KUBILAI_KHAN) {
             $piece_id = self::getUniqueValueFromDB("SELECT piece_id FROM piece WHERE piece_type = 'figure' AND piece_player_id = {$player_id}");
             self::DbQuery("UPDATE piece SET piece_location_arg = '8' WHERE piece_id = {$piece_id}");
             $this->addToPendingTable("travel", "kubilai_khan", "", 1, "", $player_id);        //create "fake" pending action
@@ -506,7 +506,7 @@ class MarcoPoloExpansions extends Table
             $this->placeTradingPostAndGiveAward(8, $pending_action, $player_id);
             $this->deletePendingAction($pending_action["pending_id"]);
             self::notifyAllPlayers("travel", "", array("figure_id" => $piece_id, "dst_id" => 8));
-        } else if ($character_type == self::WILHELM_CHARACTER) {
+        } else if ($character_type == self::CHARACTER_WILHELM) {
             self::DbQuery("INSERT INTO piece (piece_type, piece_type_arg, piece_player_id, piece_location, piece_location_arg) VALUES ('trading_post', '1', '{$player_id}', 'player_mat', '9')");
             self::DbQuery("INSERT INTO piece (piece_type, piece_type_arg, piece_player_id, piece_location, piece_location_arg) VALUES ('trading_post', '1', '{$player_id}', 'player_mat', '10')");
             $pieces = self::getObjectListFromDB("SELECT piece_id id, piece_type type, piece_type_arg type_arg, piece_player_id player_id, piece_location location, piece_location_arg location_arg
@@ -529,7 +529,7 @@ class MarcoPoloExpansions extends Table
             $piece = self::getObjectFromDB("SELECT piece_id id, piece_type type, piece_type_arg type_arg, piece_player_id player_id, piece_location location, piece_location_arg location_arg
                 FROM piece WHERE piece_type = '1x_gift' AND piece_type_arg = '0' AND piece_player_id = {$player_id}");
             self::notifyAllPlayers("characterUpdate", "", array("new_type" => "1x_gift", "data" => [$piece], "player_id" => $player_id));
-        } else if ($character_type == self::KHAN_ARGHUN_CHARACTER)       //9 = Khan Arghun
+        } else if ($character_type == self::CHARACTER_KHAN_ARGHUN)
         {
             /* move cards from player select to the 'player_mat' of the player playing Arghun */
             self::DbQuery("UPDATE piece SET piece_player_id = '${player_id}', piece_location = 'player_mat' WHERE piece_type = 'city_card' AND piece_location = 'pick_character'");
