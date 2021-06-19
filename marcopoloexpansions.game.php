@@ -408,7 +408,7 @@ class MarcoPoloExpansions extends Table
         self::DbQuery($die_sql);
     }
 
-    function randomlyAssignBonusPieces($piece_type, $bonus_type_materials, $matching_map_type)
+    function randomlyAssignBonusPieces(string $piece_type, $bonus_type_materials, string $matching_map_type)
     {
         shuffle($bonus_type_materials);
         $piece_values = [];
@@ -501,7 +501,9 @@ class MarcoPoloExpansions extends Table
         {
             $current_count = 0;
             $shuffled_card_index = 0;
-            $current_city_cards = self::getObjectListFromDB("SELECT piece_type_arg FROM piece WHERE piece_location = 'board' AND piece_type = 'city_card'");
+            $current_city_cards = self::getObjectListFromDB(
+                "SELECT piece_type_arg FROM piece WHERE piece_location = 'board' AND piece_type = 'city_card'"
+            );
             $current_city_cards = array_map(function ($c) {
                 return $c["piece_type_arg"];
             }, $current_city_cards);
@@ -553,8 +555,7 @@ class MarcoPoloExpansions extends Table
             $piece = self::getObjectFromDB("SELECT piece_id id, piece_type type, piece_type_arg type_arg, piece_player_id player_id, piece_location location, piece_location_arg location_arg
                 FROM piece WHERE piece_type = '1x_gift' AND piece_type_arg = '0' AND piece_player_id = {$player_id}");
             self::notifyAllPlayers("characterUpdate", "", array("new_type" => "1x_gift", "data" => [$piece], "player_id" => $player_id));
-        } else if ($character_type == self::CHARACTER_KHAN_ARGHUN)
-        {
+        } else if ($character_type == self::CHARACTER_KHAN_ARGHUN) {
             /* move cards from player select to the 'player_mat' of the player playing Arghun */
             self::DbQuery("UPDATE piece SET piece_player_id = '${player_id}', piece_location = 'player_mat' WHERE piece_type = 'city_card' AND piece_location = 'pick_character'");
             $city_cards = self::getObjectListFromDB("SELECT piece_id id, piece_type type, piece_type_arg type_arg, piece_player_id player_id, piece_location location, piece_location_arg location_arg
@@ -695,7 +696,7 @@ class MarcoPoloExpansions extends Table
         /**
          * Function that process the transaction of acquiring a black die and binding to the player
          * @param int $die_id - id of the black die being acquired
-         * @param boolean $via_buy - represents if the die was acquired via turning 3 camels in as a bonus action
+         * @param bool $via_buy - represents if the die was acquired via turning 3 camels in as a bonus action
          * @param int $player_id - id of player acquiring the die
          */
         self::DbQuery("UPDATE die SET die_location = 'player_mat', die_player_id = '{$player_id}' WHERE die_id = {$die_id}");
