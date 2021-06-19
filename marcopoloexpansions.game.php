@@ -292,14 +292,9 @@ class MarcoPoloExpansions extends Table
         self::notifyAllPlayers("moveHourGlass", '', array("player_id" => $player_id));
     }
 
-    function onlyGetExpCharacters($material_type)
+    function onlyGetExpCharacters($character_type)
     {
-        $include = false;
-        $expansions = $this->getExpansionsEnabled();
-        if (array_key_exists("expansion", $material_type)) {
-            $include = in_array($material_type["expansion"], $expansions);
-        }
-        return $include;
+        return array_key_exists("expansion", $character_type);
     }
 
     function filterExpansionFromMaterialTypes($material_type)
@@ -312,6 +307,11 @@ class MarcoPoloExpansions extends Table
             $include = true;
         }
         return $include;
+    }
+
+    function getNumberOfPlayers(): int
+    {
+        return sizeof(self::loadPlayersBasicInfos());
     }
 
     function createGoalCards()
@@ -435,17 +435,39 @@ class MarcoPoloExpansions extends Table
         self::DbQuery($sql);
     }
 
+    function filterCityBonuses($valid_city_bonus_types, $required_bonus)
+    {
+        if ($required_bonus === true) {
+            if (self::getGameStateValue("force_exp") === 1) {
+                $filter = function ($b) {
+                    return $b['type'] == 3 || $b['type'] == 6;
+                };
+            } else {
+                $filter = function ($b) {
+                    return $b['type'] == 3;
+                };
+            }
+        } else {
+            if (self::getGameStateValue("force_exp") === 1) {
+                $filter = function ($b) {
+                    return $b['type'] != 3 && $b['type'] != 6;
+                };
+            } else {
+                $filter = function ($b) {
+                    return $b['type'] != 3;
+                };
+            }
+        }
+        return array_values(array_filter($valid_city_bonus_types, $filter));
+    }
+
     function assignCityBonuses()
     {
         $valid_city_bonus_types = array_filter($this->city_bonus_types, array("MarcoPoloExpansions", "filterExpansionFromMaterialTypes"));
         if (self::getGameStateValue("expert_variant") == 1) //use random
         {
-            $required_city_bonus = array_values(array_filter($valid_city_bonus_types, function ($b) {
-                return $b['type'] == 3;
-            }));
-            $other_city_bonus = array_values(array_filter($valid_city_bonus_types, function ($b) {
-                return $b['type'] != 3;
-            }));
+            $required_city_bonus = $this->filterCityBonuses($valid_city_bonus_types, true);
+            $other_city_bonus = $this->filterCityBonuses($valid_city_bonus_types, false);
             shuffle($other_city_bonus);
             $picked_city_bonuses = array_slice($other_city_bonus, 0, 5); // 5 considering only main map
             $picked_city_bonuses = array_merge($required_city_bonus, $other_city_bonus);
@@ -1008,7 +1030,7 @@ class MarcoPoloExpansions extends Table
         $mercator_player_id = $this->getPlayerIdByCharacterType(0);      //mercator
         if ($mercator_player_id != null && $player_id != $mercator_player_id) {
             $resources = [];
-            $player_num = sizeof(self::loadPlayersBasicInfos());
+            $player_num = $this->getNumberOfPlayers();
             if ($place_info["place"] == "bazaar") {
                 reset($place_info["award"]);
                 $resource_type = key($place_info["award"]);
@@ -2621,23 +2643,28 @@ class MarcoPoloExpansions extends Table
         Here, you can create methods defined as "game state actions" (see "action" property in states.inc.php).
         The action method of state X is called everytime the current game state is set to X.
     */
+
+    function getPossibleCharacters($num_of_players): array
+    {
+        if (self::getGameStateValue("force_exp") === 0)
+            return array_filter($this->character_types, array("MarcoPoloExpansions", "filterExpansionFromMaterialTypes"));
+        $exp_char = array_filter($this->character_types, array("MarcoPoloExpansions", "onlyGetExpCharacters"));
+        if ($num_of_players > 3)
+            array_push($exp_char, $this->character_types[rand(0, 7)]);
+        return $exp_char;
+    }
+
     function stGamePickCharacter()
     {
         $players = self::loadPlayersBasicInfos();
-        // go back to where we were before
-        $valid_character_types = array_filter($this->character_types, array("MarcoPoloExpansions", "onlyGetExpCharacters")); // rzdTODO: change it back
-        if (self::getGameStateValue("expert_variant") == 0)     //use default values
-        {
-            foreach ($players as $player_id => $player) {
-                foreach ($valid_character_types as $character_id => $character) {
-                    if (array_key_exists("default_player", $character) && $character["default_player"] == $player["player_no"]) {
-                        $this->presetupCharacter($character["type"]);
+        if (self::getGameStateValue("expert_variant") === 0) {
+            foreach ($players as $player_id => $player)
+                foreach ($this->character_types as $character)
+                    if (array_key_exists("default_player", $character) && $character["default_player"] == $player["player_no"])
                         $this->setupCharacter($character["type"], $player_id);
-                    }
-                }
-            }
             $this->gamestate->nextState("setupGoals");
         } else {
+            $valid_character_types = $this->getPossibleCharacters(sizeof($players));
             $characters_randomly_drawn_already = self::getUniqueValueFromDB("SELECT pending_id FROM pending_action LIMIT 1");
             $next_player_id = self::getPlayerBefore(self::getActivePlayerId());
             $last_player_id = $this->getLastPlayerId();
