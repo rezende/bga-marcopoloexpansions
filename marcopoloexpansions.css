@@ -297,6 +297,12 @@
     background-position: -238px -960px;
 }
 
+.small_piece.small_black_die
+{
+    width: 28px;
+    background-position-y: -960px;
+}
+
 .trading_post
 {
     position: absolute;
