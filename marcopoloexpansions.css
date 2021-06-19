@@ -15,29 +15,29 @@
 
 /*
     This is the CSS stylesheet of your game User Interface.
-    
+
     Styles defined on this file will be applied to the HTML elements you define in your
     HTML template (marcopoloexpansions_marcopoloexpansions.tpl), and to HTML elements you create dynamically
     (in marcopoloexpansions.js).
-    
+
     Usually, you are using CSS to:
-    
+
     1°) define the overall layout of your game
         (ex: place the board on the top left, place player's hand beside, place the deck on the right, ...).
 
     2°) create your CSS-sprites:
         All images of your games should be gathered into a small number of image files. Then, using
-        background-image and background-position CSS properties, you create HTML blocks that can 
+        background-image and background-position CSS properties, you create HTML blocks that can
         display these images correctly (see example below).
-    
+
     3°) ... anything else:
         It is really easy to add and remove CSS classes dynamically from your Javascript with
         dojo.addClass and dojo.removeClass. It is also easy to check if an element has a class
         (dojo.hasClass) or to get all elements with a specific class (dojo.query). This is why,
         very often, using CSS classes for the logic of your user interface allow you to do complex
         thing easily.
-        
-        
+
+
      Note: on the production platform, this file will be compressed and comments will be removed.
            Consequently, don't hesitate to put as many comments as necessary.
 */
@@ -142,7 +142,7 @@
     background-position-y: -960px;
 }
 
-.die 
+.die
 {
     width: 98px;
     height: 114px;
@@ -173,7 +173,7 @@
 {
     background-image: url('img/characters.jpg');
     background-repeat: no-repeat;
-    position: absolute;    
+    position: absolute;
     width: 199px;
     height: 301px;
     transform: scale(0.6);
@@ -250,7 +250,7 @@
 
 .vp
 {
-    background-position: -608px -106px;    
+    background-position: -608px -106px;
 }
 
 .small_piece
@@ -265,7 +265,7 @@
 }
 
 .small_piece.small_coin
-{    
+{
     background-position: -110px -960px;
 }
 
@@ -309,15 +309,15 @@
 
 .city_card
 {
-    background-image: url('img/city_cards.jpg');        
-    background-repeat: no-repeat;    
+    background-image: url('img/city_cards.jpg');
+    background-repeat: no-repeat;
     background-clip: content-box;
     width: 197px;
     height: 126px;
     position: absolute;
     transform: scale(0.5025);
     transform-origin: 0px 0px;
-    border: 6px solid transparent;    
+    border: 6px solid transparent;
     border-radius: 16px;
 }
 
@@ -326,7 +326,7 @@
     background-image: url('img/bonus_outposts.png');
     background-repeat: no-repeat;
     width: 162px;
-    height: 100px;    
+    height: 100px;
     position: absolute;
     transform: scale(0.5025);
     transform-origin: 0px 0px;
@@ -334,14 +334,14 @@
 
 .city_bonus
 {
-    background-image: url('img/city_bonus.jpg');    
+    background-image: url('img/city_bonus.jpg');
     background-position: 0px 0px;
     width: 136px;
     height: 68px;
     position: absolute;
     border-radius: 10px;
     transform: scale(0.5025);
-    transform-origin: 0px 0px;    
+    transform-origin: 0px 0px;
 }
 
 .goal_card
@@ -460,7 +460,7 @@
     height: 74px;
 }
 
-.selectable 
+.selectable
 {
     border: 3px solid cyan;
     animation: border_pulsate 2s infinite;
@@ -522,8 +522,8 @@
 }
 
 .panel_resource
-{    
-    display:inline-block;    
+{
+    display:inline-block;
     margin-left: 38px;
     line-height: 34px;
 }
@@ -537,7 +537,7 @@
 }
 
 .piece.panel_hourglass
-{    
+{
     right: 0px;
     bottom: 0px;
     width: 36px;
@@ -571,7 +571,7 @@
 }
 
 .goal_post_anchor
-{    
+{
     width : 40px;
     height: 40px;
     background-position: -220px -794px;
@@ -584,7 +584,7 @@
     animation-name: grow_shrink;
     animation-timing-function: linear;
     animation-duration: 600ms;
-    animation-iteration-count: 2; 
+    animation-iteration-count: 2;
 }
 
 .figure
@@ -599,7 +599,7 @@
 {
     background-image: url('img/gifts.png');
     position: absolute;
-    background-repeat: no-repeat;    
+    background-repeat: no-repeat;
     width: 107px;
     height: 96px;
     transform: scale(0.5);
@@ -613,7 +613,7 @@
     margin-bottom: -74px;
     margin-left: 5px;
     transform:scale(0.35);
-    transform-origin: 0px -10px;    
+    transform-origin: 0px -10px;
 }
 
 .gift.gift_back
@@ -643,7 +643,7 @@
 .mp_playeraid_title {
     position: absolute;
     left: 40px;
-    top: 37px;   
+    top: 37px;
 }
 .mp_playeraid_subtitle {
     position: absolute;
