@@ -2750,6 +2750,7 @@ define([
             },
 
             notif_updateDice: function (notif) {
+                debugger
                 var dice = notif.args.dice;
                 var diceArray = [];
                 var uiItemsToAnimate = [];
