@@ -675,7 +675,6 @@ class MarcoPoloExpansions extends Table
          * @param int $player_id - id of player acquiring the die
          */
         self::DbQuery("UPDATE die SET die_location = 'player_mat', die_player_id = '{$player_id}' WHERE die_id = {$die_id}");
-        $dice = $this->getDiceByIds([$die_id]);
         $character_type = $this->getCharacterType($player_id);
         $shake = ($character_type != self::CHARACTER_RASCHID) && ($this->getGameStateName() != "playerBonus");
         $die_value = $this->rollDie($die_id, $player_id, $character_type);
@@ -693,7 +692,7 @@ class MarcoPoloExpansions extends Table
             array(
                 "player_id" => $player_id,
                 "player_name" => $this->getPlayerName($player_id),
-                "dice" => $dice,
+                "dice" => $this->getDiceByIds([$die_id]),
                 "die_value" => $die_value,
                 "shake" => $shake
             )
