@@ -49,6 +49,8 @@ class MarcoPoloExpansions extends Table
             "used_personal_city_card" => 17,
             "expert_variant" => 100,
             "the_new_charaters_expansion" => 101,
+            "force_exp" => 102,
+            "arghun_card_set" => 103
         ));
 
         $this->deck = self::getNew("module.common.deck");
