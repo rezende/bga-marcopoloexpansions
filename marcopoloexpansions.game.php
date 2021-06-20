@@ -890,7 +890,7 @@ class MarcoPoloExpansions extends Table
         if ($from_function == 'chooseResource' )
             return $this->checkChooseResourceCards($city_card_type, $player_id);
         if ($from_function == 'activateExchangeCityCard')
-            return ($city_card_type != 19 || $pending_action['remaining_count'] > 1);
+            return ($city_card_type != 19 || $pending_action['remaining_count'] == 1);
         return true;
     }
 
