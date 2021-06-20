@@ -666,6 +666,10 @@ class MarcoPoloExpansions extends Table
         self::notifyAllPlayers("updateDice", "", array('dice' => $dice, "shake" => false));
     }
 
+    function setDieValue($die_id, $die_value) {
+        self::DbQuery("UPDATE die SET die_value = {$die_value} WHERE die_id = {$die_id}");
+    }
+
     function rollDie($die_id, $player_id, $character_type = null)
     {
         $die_value = bga_rand(1, 6);
@@ -675,7 +679,7 @@ class MarcoPoloExpansions extends Table
         if ($character_type == self::CHARACTER_RASCHID) {
             $die_value = 1;
         }
-        self::DbQuery("UPDATE die SET die_value = {$die_value} WHERE die_id = {$die_id}");
+        $this->setDieValue($die_id, $die_value);
         return $die_value;
     }
 
@@ -735,7 +739,12 @@ class MarcoPoloExpansions extends Table
         self::DbQuery("UPDATE die SET die_location = 'player_mat', die_player_id = '{$player_id}' WHERE die_id = {$die_id}");
         $character_type = $this->getCharacterType($player_id);
         $shake = ($character_type != self::CHARACTER_RASCHID) && ($this->getGameStateName() != "playerBonus");
-        $die_value = $this->rollDie($die_id, $player_id, $character_type);
+        if ($shake === true)
+            $die_value = $this->rollDie($die_id, $player_id, $character_type);
+        else {
+            $die_value = 1;
+            $this->setDieValue($die_id, 1);
+        }
         $message = clienttranslate('${player_name} gets a black die and rolls a ${die_value}');
         if ($shake === true && $via_buy === true) {
             $message = clienttranslate('${player_name} buys a black die and rolls a ${die_value}');
