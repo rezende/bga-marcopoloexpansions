@@ -2497,6 +2497,7 @@ class MarcoPoloExpansions extends Table
         if ($pending_action == null)
             throw new BgaVisibleSystemException("invalid state no city card action pending");
 
+        $this->checkAndTriggerFulfillPersonalCityCard($pending_action, $player_id);
         $this->deletePendingAction($pending_action["pending_id"]);
         $this->gamestate->nextState($this->getNextTransitionBasedOnPendingAction($player_id));
     }
