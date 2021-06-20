@@ -886,7 +886,6 @@ class MarcoPoloExpansions extends Table
         if (strpos($pending_action["location"], "city_card_") === 0) {
             $city_card_type = str_replace("city_card_", "", $pending_action["location"]);
             if ($from_function === 'activateMultipleCityCard' && $city_card_type == 12) {
-                // we can do this way or check on the parent function if the reward is a choice_of_good
                 return;
             }
             if ($from_function == 'chooseResource' && !$this->checkDiscardPersonalCityCard($city_card_type, $player_id)) {
@@ -2134,26 +2133,14 @@ class MarcoPoloExpansions extends Table
             }
         }
 
-        if ($resources != null) {
+        if ($resources != null)
             $this->changePlayerResources($resources, $negate, $pending_action["location"], $player_id);
-        }
 
         $this->checkAndTriggerDiscardGift($pending_action, $player_id);
         $this->checkAndTriggerFulfillContract($pending_action, $player_id);
-        // $this->checkPersonalCityCard27($player_id);
         $this->checkAndTriggerFulfillPersonalCityCard($pending_action, $player_id, __FUNCTION__);
         $this->updatePendingActionRemainingCount($drop_by, $pending_action);
         $this->gamestate->nextState($this->getNextTransitionBasedOnPendingAction($player_id));
-    }
-
-    function checkPersonalCityCard27($player_id) // TODO: Remove
-    {
-        $pending_actions = $this->getNextPendingActions($player_id, 'ASC');
-        if (count($pending_actions) > 1)
-            return;
-        $pending_action = $pending_actions[0];
-        if (str_replace("city_card_", "", $pending_action["location"]) == '27' && $pending_action["type"] == 'choice_of_good')
-            $this->checkAndTriggerFulfillPersonalCityCard($pending_action, $player_id);
     }
 
     function pickContract($contract_id, $replaced_contract_id)
@@ -2173,9 +2160,8 @@ class MarcoPoloExpansions extends Table
         if ($contract["location"] != "board" || $contract["location_arg"] > $die_value)
             throw new BgaVisibleSystemException("pick contract: not a valid choice");
 
-        if ($replaced_contract_id != null) {
+        if ($replaced_contract_id != null)
             $this->discardContract($replaced_contract_id, $pending_action["type_arg"], $player_id);
-        }
 
         if ($contract["location_arg"] > 3) {
             $count = $contract["location_arg"] == 4 ? 1 : 2;
@@ -2195,9 +2181,8 @@ class MarcoPoloExpansions extends Table
                 "player_name" => $this->getPlayerName($player_id), "is_new" => false, "contract_id" => $contract_id
             )
         );
-        if ($pending_action["remaining_count"] == 1) {
+        if ($pending_action["remaining_count"] == 1)
             $this->slideRemainingContracts("pickContract");
-        }
         $this->updatePendingActionRemainingCount(-1, $pending_action);
         $this->gamestate->nextState($this->getNextTransitionBasedOnPendingAction($player_id));
     }
