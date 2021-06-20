@@ -488,13 +488,9 @@ class MarcoPoloExpansions extends Table
     function getArghunCardIds(bool $arghun_hand = true)
     {
         $set_no = self::getGameStateValue("arghun_card_set");
-        // assert $set_no > 0
         $all_ids = range(0, 30);
-        if ($set_no > 5) {
-            $arghun_ids = range(25, 30);
-        } else {
-            $arghun_ids = range(6 * ($set_no - 1), 6 * $set_no - 1);
-        }
+        if ($set_no == 1)
+            $arghun_ids = array(12,19,23,27,6,18);
         if ($arghun_hand === true) {
             return $arghun_ids;
         }

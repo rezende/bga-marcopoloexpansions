@@ -58,12 +58,7 @@ $game_options = array(
         'name' => totranslate('Arghun card set'),
         'values' => array(
             0 => array( 'name' => totranslate('off') ),
-            1 => array( 'name' => totranslate('1') ),
-            2 => array( 'name' => totranslate('2') ),
-            3 => array( 'name' => totranslate('3') ),
-            4 => array( 'name' => totranslate('4') ),
-            5 => array( 'name' => totranslate('5') ),
-            6 => array( 'name' => totranslate('6') )
+            1 => array( 'name' => totranslate('bugged') ),
         ),
         'displaycondition' => array(
             array(
