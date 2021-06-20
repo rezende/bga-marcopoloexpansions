@@ -864,7 +864,7 @@ class MarcoPoloExpansions extends Table
         }
     }
 
-    function checkDiscardPersonalCityCard($city_card_type, $player_id) {
+    function checkChooseResourceCards($city_card_type, $player_id) {
         if (in_array($city_card_type, array(12,27))) {
             $pending_actions = $this->getNextPendingActions($player_id, 'ASC');
             if (count($pending_actions) > 1)
@@ -884,17 +884,24 @@ class MarcoPoloExpansions extends Table
             return true;
     }
 
+    function checkDiscardByCityCard($city_card_type, $from_function, $player_id, $pending_action) {
+        if ($from_function == 'activateMultipleCityCard')
+            return $city_card_type != 12;
+        if ($from_function == 'chooseResource' )
+            return $this->checkChooseResourceCards($city_card_type, $player_id);
+        if ($from_function == 'activateExchangeCityCard')
+            return ($city_card_type != 19 || $pending_action['remaining_count'] > 1);
+        return true;
+    }
+
+
     function checkAndTriggerFulfillPersonalCityCard($pending_action, $player_id, $from_function = '')
     {
         self::dump('ARGHUN_PENDING_ACTION', $pending_action);
         if (strpos($pending_action["location"], "city_card_") === 0) {
             $city_card_type = str_replace("city_card_", "", $pending_action["location"]);
-            if ($from_function === 'activateMultipleCityCard' && $city_card_type == 12) {
+            if (!$this->checkDiscardByCityCard($city_card_type, $from_function, $player_id, $pending_action))
                 return;
-            }
-            if ($from_function == 'chooseResource' && !$this->checkDiscardPersonalCityCard($city_card_type, $player_id)) {
-                return;
-            }
             self::dump('ARGHUN_CITY_CARD_TYPE', $city_card_type);
             $city_card_piece_db = self::getObjectFromDB(
                 "SELECT piece_id id, piece_location location
@@ -2430,10 +2437,12 @@ class MarcoPoloExpansions extends Table
         if ($this->validateCost($cost, $player_id) == false)
             throw new BgaUserException(self::_("You don't have the resources of this exchange"));
 
+        $this->checkAndTriggerFulfillPersonalCityCard($pending_action, $player_id, __FUNCTION__);
         $this->updatePendingActionRemainingCount(-1, $pending_action);
         $this->changePlayerResources($cost, true, 'city_card_' . $pending_action["type_arg"], $player_id);
         $this->changePlayerResources($reward, false, 'city_card_' . $pending_action["type_arg"], $player_id);
 
+        // city card 19
         if (array_key_exists("vp", $cost)) {
             self::incStat(-1 * $cost["vp"], "city_card_points", $player_id);
         }
