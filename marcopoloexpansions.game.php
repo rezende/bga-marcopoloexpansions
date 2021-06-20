@@ -874,7 +874,7 @@ class MarcoPoloExpansions extends Table
             if (count($pending_actions) > 1)
                 return false;
             $pending_action = $pending_actions[0];
-            if ($city_card_type == 12 && $pending_action['remaining_count'] == 1) {
+            if ($pending_action['remaining_count'] == 1) {
                 return true;
             }
             // $pending_action_city_card_type = str_replace("city_card_", "", $pending_action["location"]);
