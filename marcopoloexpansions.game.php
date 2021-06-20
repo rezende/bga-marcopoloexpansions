@@ -2437,10 +2437,10 @@ class MarcoPoloExpansions extends Table
         if ($this->validateCost($cost, $player_id) == false)
             throw new BgaUserException(self::_("You don't have the resources of this exchange"));
 
-        $this->checkAndTriggerFulfillPersonalCityCard($pending_action, $player_id, __FUNCTION__);
-        $this->updatePendingActionRemainingCount(-1, $pending_action);
         $this->changePlayerResources($cost, true, 'city_card_' . $pending_action["type_arg"], $player_id);
         $this->changePlayerResources($reward, false, 'city_card_' . $pending_action["type_arg"], $player_id);
+        $this->checkAndTriggerFulfillPersonalCityCard($pending_action, $player_id, __FUNCTION__);
+        $this->updatePendingActionRemainingCount(-1, $pending_action);
 
         // city card 19
         if (array_key_exists("vp", $cost)) {
