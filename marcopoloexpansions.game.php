@@ -868,11 +868,32 @@ class MarcoPoloExpansions extends Table
         }
     }
 
-    function checkAndTriggerFulfillPersonalCityCard($pending_action, $player_id)
+    function checkDiscardPersonalCityCard($city_card_type, $player_id) {
+        if (in_array($city_card_type, array(12,27))) {
+            $pending_actions = $this->getNextPendingActions($player_id, 'ASC');
+            if (count($pending_actions) > 1)
+                return false;
+            // $pending_action = $pending_actions[0];
+            // $pending_action_city_card_type = str_replace("city_card_", "", $pending_action["location"]);
+            // if (in_array($pending_action_city_card_type, array(12,27)))
+            //     return true;
+        }
+        else
+            return true;
+    }
+
+    function checkAndTriggerFulfillPersonalCityCard($pending_action, $player_id, $from_function = '')
     {
         self::dump('ARGHUN_PENDING_ACTION', $pending_action);
         if (strpos($pending_action["location"], "city_card_") === 0) {
             $city_card_type = str_replace("city_card_", "", $pending_action["location"]);
+            if ($from_function === 'activateMultipleCityCard' && $city_card_type == 12) {
+                // we can do this way or check on the parent function if the reward is a choice_of_good
+                return;
+            }
+            if ($from_function == 'chooseResource' && !$this->checkDiscardPersonalCityCard($city_card_type, $player_id)) {
+                return;
+            }
             self::dump('ARGHUN_CITY_CARD_TYPE', $city_card_type);
             $city_card_piece_db = self::getObjectFromDB(
                 "SELECT piece_id id, piece_location location
@@ -2121,12 +2142,13 @@ class MarcoPoloExpansions extends Table
 
         $this->checkAndTriggerDiscardGift($pending_action, $player_id);
         $this->checkAndTriggerFulfillContract($pending_action, $player_id);
-        $this->checkPersonalCityCard27($player_id);
+        // $this->checkPersonalCityCard27($player_id);
+        $this->checkAndTriggerFulfillPersonalCityCard($pending_action, $player_id, __FUNCTION__);
         $this->updatePendingActionRemainingCount($drop_by, $pending_action);
         $this->gamestate->nextState($this->getNextTransitionBasedOnPendingAction($player_id));
     }
 
-    function checkPersonalCityCard27($player_id)
+    function checkPersonalCityCard27($player_id) // TODO: Remove
     {
         $pending_actions = $this->getNextPendingActions($player_id, 'ASC');
         if (count($pending_actions) > 1)
@@ -2394,7 +2416,7 @@ class MarcoPoloExpansions extends Table
 
             $this->changePlayerResources($modified_costs, true, $location, $player_id);
             $this->giveAward($location, $modified_award, $player_id);
-            $this->checkAndTriggerFulfillPersonalCityCard($pending_action, $player_id);
+            $this->checkAndTriggerFulfillPersonalCityCard($pending_action, $player_id, __FUNCTION__);
             $this->deletePendingAction($pending_action["pending_id"]);
         }
         $pending_action = $this->getNextPendingAction($player_id);
