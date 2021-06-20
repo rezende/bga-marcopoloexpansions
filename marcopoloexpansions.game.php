@@ -1763,7 +1763,8 @@ class MarcoPoloExpansions extends Table
             "choice_of_good" => "chooseResource",
             "camel_coin" => "chooseResource",
             "2_diff_goods" => "chooseResource",
-            "trigger_other_city_bonus" => "triggerOtherCityBonus", "trigger_city_bonus_having_trading_post" => "triggerOtherCityBonus",
+            "trigger_other_city_bonus" => "triggerOtherCityBonus",
+            "trigger_city_bonus_having_trading_post" => "triggerOtherCityBonus",
             "move_trading_post" => "moveTradingPost",
             "city_card" => "chooseCityCardAward",
             "switch_to_gunj_bonus" => "gunj_bonus",
@@ -2473,6 +2474,7 @@ class MarcoPoloExpansions extends Table
         self::DbQuery("UPDATE pending_action SET pending_type_arg = CONCAT(pending_type_arg, ',', $city_bonus_type_arg) WHERE pending_id = {$pending_action_id}");
         $board_id = self::getUniqueValueFromDB("SELECT piece_location_arg FROM piece WHERE piece_type = 'city_bonus' AND piece_type_arg = {$city_bonus_type_arg} LIMIT 1");
         $this->awardBonus("city_bonus", $this->city_bonus_types[$city_bonus_type_arg], $board_id, false, $player_id);
+        $this->checkAndTriggerFulfillPersonalCityCard($pending_action, $player_id);
         $this->updatePendingActionRemainingCount(-1, $pending_action);
         $this->gamestate->nextState($this->getNextTransitionBasedOnPendingAction($player_id));
     }
