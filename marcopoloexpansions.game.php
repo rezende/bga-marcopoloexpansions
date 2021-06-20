@@ -899,7 +899,7 @@ class MarcoPoloExpansions extends Table
         if ($from_function == 'chooseResource' )
             return $this->checkChooseResourceCards($city_card_type, $player_id);
         if ($from_function == 'activateExchangeCityCard')
-            return ($city_card_type != 19 || $pending_action['remaining_count'] == 1);
+            return ($pending_action['remaining_count'] == 1);
         return true;
     }
 
@@ -2430,7 +2430,7 @@ class MarcoPoloExpansions extends Table
         $this->gamestate->nextState($transition_to);
     }
 
-    function activateExchangeCityCard($exchange_type)
+    function activateExchangeCityCard($exchange_type) // 19,27
     {
         self::checkAction("activateExchangeCityCard");
         $player_id = self::getActivePlayerId();
@@ -2460,6 +2460,7 @@ class MarcoPoloExpansions extends Table
             self::incStat($reward["vp"], "city_card_points", $player_id);
         }
 
+        // city card 27
         if (array_key_exists("choice_of_good", $cost)) {
             $this->addToPendingTable("choice_of_good", "pay", "", 1, 'city_card_' . $pending_action["type_arg"], $player_id);
         } else if (array_key_exists("choice_of_good", $reward)) {
