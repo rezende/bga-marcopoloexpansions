@@ -185,6 +185,7 @@ define([
                     }
                 }
 
+                //based on the image provided
                 this.uiItems.itemBackgroundConfig = {
                     "city_card": { items_per_row: 10, width: 197, height: 126.5, type_property: "type_arg" },
                     "character": { items_per_row: 10, width: 199, height: 301, type_property: "character_type" },
@@ -2788,7 +2789,7 @@ define([
                 var playerId = notif.args.player_id;
                 if (notif.args.location.startsWith("city_card")) {
                     var cityCardType = notif.args.location.replace("city_card_", "");
-                    notif.args.location = "uid-" + this.uiItems.getByUiType("city_card").find(function (c) { return c.data.type_arg == cityCardType }).uid;
+                    notif.args.location = "uid-" + this.uiItems.getByUiType("city_card").find(c => c.data.type_arg == cityCardType && c.data.location != "pick_character").uid;;
                 }
                 else if (notif.args.location.startsWith("character")) {
                     notif.args.location = "playerCharacter-" + playerId;
