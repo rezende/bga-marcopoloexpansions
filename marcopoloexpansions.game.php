@@ -652,8 +652,13 @@ class MarcoPoloExpansions extends Table
             $resource_break_down = ["log" => '${' . join('}, ${', $resources_string) . '}', "args" => $resources_args];
             $message = $negate ? clienttranslate('${player_name} pays ${resources}') : clienttranslate('${player_name} receives ${resources}');
             self::notifyAllPlayers("resourceChange", $message, array(
-                "player_id" => $player_id, "player_name" => $this->getPlayerName($player_id), "negate" => $negate,
-                "location" => $ui_location, "resource_changes" => $valid_resource_changes, "resources" => $resource_break_down, "absolute_resources" => $absolute_resources
+                "player_id" => $player_id,
+                "player_name" => $this->getPlayerName($player_id),
+                "negate" => $negate,
+                "location" => $ui_location,
+                "resource_changes" => $valid_resource_changes,
+                "resources" => $resource_break_down,
+                "absolute_resources" => $absolute_resources
             ));
         }
     }
@@ -1029,8 +1034,10 @@ class MarcoPoloExpansions extends Table
             "gift",
             $message,
             array(
-                "player_id" => $player_id, "player_name" => $this->getPlayerName($player_id),
-                "amount" => $amount, "gifts_data" => $final_gifts
+                "player_id" => $player_id,
+                "player_name" => $this->getPlayerName($player_id),
+                "amount" => $amount,
+                "gifts_data" => $final_gifts
             )
         );
 
