@@ -2785,7 +2785,6 @@ define([
             },
 
             notif_resourceChange: function (notif) {
-                debugger
                 var playerId = notif.args.player_id;
                 if (notif.args.location.startsWith("city_card")) {
                     var cityCardType = notif.args.location.replace("city_card_", "");
