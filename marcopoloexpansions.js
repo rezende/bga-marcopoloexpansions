@@ -2788,7 +2788,7 @@ define([
                 var playerId = notif.args.player_id;
                 if (notif.args.location.startsWith("city_card")) {
                     var cityCardType = notif.args.location.replace("city_card_", "");
-                    notif.args.location = "uid-" + this.uiItems.getByUiType("city_card").find(c => c.data.type_arg == cityCardType && c.data.location != "pick_character").uid;;
+                    notif.args.location = "uid-" + this.uiItems.getByUiType("city_card").find(c => c.data.type_arg == cityCardType && c.data.location != "pick_character").uid;
                 }
                 else if (notif.args.location.startsWith("character")) {
                     notif.args.location = "playerCharacter-" + playerId;
