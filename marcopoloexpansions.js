@@ -2002,7 +2002,8 @@ define([
                         modifiedTop += containerTop;
                         modifiedLeft = 0;
                         totalWidth = 0;
-                        dojo.setStyle(container, "height", modifiedTop + containerTop + "px");
+                        // bug here
+                        // dojo.setStyle(container, "height", modifiedTop + containerTop + "px");
                         containerTop = item.htmlNode.getBoundingClientRect().height + 4;
                     }
 
