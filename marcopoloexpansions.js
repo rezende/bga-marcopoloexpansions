@@ -1975,9 +1975,9 @@ define([
             repositionPlayerMatWithCallback: function (itemContainer, addedItems, onAnimateEndCallback, playerId)      //updates player mat with new/removed items
             {
                 debugger;
-                var items = this.getPlayerItemsForPlayerMatContainer(itemContainer, playerId);
+                const items = this.getPlayerItemsForPlayerMatContainer(itemContainer, playerId);
+                const container = itemContainer == "small" ? $("small-container-" + playerId) : $("large-container-" + playerId);
                 var anims = [];
-                var container = itemContainer == "small" ? $("small-container-" + playerId) : $("large-container-" + playerId);
                 var containerTop = itemContainer == "small" ? 40 : 90;
                 var containerWidth = dojo.getComputedStyle(container).width.replace("px", "") - 130;        //buffer for character card
 
@@ -1987,7 +1987,7 @@ define([
                 var modifiedTop = 0;
                 var tmpUiPosition = 0;
                 for (var i = 0; i < items.length; i++) {
-                    var item = items[i];
+                    const item = items[i];
                     var uiItemWidth = this.uiItems.itemConfig[item.uiType].width + 8;
                     var uiItemHeight = this.uiItems.itemConfig[item.uiType].height ? this.uiItems.itemConfig[item.uiType].height : 0;
                     var modifiedLeft = totalWidth;
@@ -2019,7 +2019,7 @@ define([
                     tmpUiPosition++;
                 }
 
-                var animChain = dojo.fx.combine(anims);
+                const animChain = dojo.fx.combine(anims);
                 animChain.onEnd = function () {
                     if (onAnimateEndCallback) { onAnimateEndCallback(); }
                     this.runningPlayerMatAnimations[playerId + itemContainer] = null;
