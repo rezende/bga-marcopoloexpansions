@@ -1992,18 +1992,30 @@ define([
                     var uiItemHeight = this.uiItems.itemConfig[item.uiType].height ? this.uiItems.itemConfig[item.uiType].height : 0;
                     var modifiedLeft = totalWidth;
 
-                    // Personal city cards and 1x_gift always stay to the right of contract space
-                    if ((item.uiType == "city_card" || item.uiType == "1x_gift") && modifiedTop == 0) {
-                        totalWidth = Math.max(420, modifiedLeft); //420 = width of 2 goal cards & 2 contracts
-                        modifiedLeft = Math.max(420, modifiedLeft);
-                    }
+                    // // Personal city cards and 1x_gift always stay to the right of contract space
+                    // if ((item.uiType == "city_card" || item.uiType == "1x_gift") && modifiedTop == 0) {
+                    //     // Make items that are on the first line always start after contracts
+                    //     // 420 = width of 2 goal cards & 2 contracts
+                    //     // modifiedTop represents the line we're in
+                    //     totalWidth = Math.max(420, modifiedLeft);
+                    //     modifiedLeft = Math.max(420, modifiedLeft);
+                    // }
+
                     containerTop = Math.max(containerTop, item.htmlNode.getBoundingClientRect().height + 4, uiItemHeight, 50);
-                    if (totalWidth > containerWidth - uiItemWidth) {
+
+                    if ((item.uiType == "city_card" || item.uiType == "1x_gift") && modifiedTop == 0) {
+                        // Start new items on a new line
+                        modifiedTop = containerTop;
+                        modifiedLeft = totalWidth = 0;
+                    }
+                    const spaceForANewLine = containerWidth - uiItemWidth;
+                    if (totalWidth > spaceForANewLine) {
+                        // this is to generate a new line for stuff
                         modifiedTop += containerTop;
                         modifiedLeft = 0;
                         totalWidth = 0;
                         // bug here
-                        // dojo.setStyle(container, "height", modifiedTop + containerTop + "px");
+                        dojo.setStyle(container, "height", modifiedTop + containerTop + "px");
                         containerTop = item.htmlNode.getBoundingClientRect().height + 4;
                     }
 
