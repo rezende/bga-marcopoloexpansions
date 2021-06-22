@@ -36,8 +36,8 @@ $game_options = array(
     101 => array(
         'name' => totranslate('The New Characters Expansion'),
         'values' => array(
-            0 => array( 'name' => totranslate('No'), 'tmdisplay' => totranslate('Disable') ),
-            1 => array( 'name' => totranslate('Yes'), 'tmdisplay' => totranslate('Enable'), 'beta' => true ),
+            0 => array( 'name' => totranslate('Disabled'), 'tmdisplay' => totranslate('The New Characters Expansion disabled') ),
+            1 => array( 'name' => totranslate('Enabled'), 'tmdisplay' => totranslate('The New Characters Expansion enabled'), 'beta' => true ),
         )
     ),
     102 => array(
