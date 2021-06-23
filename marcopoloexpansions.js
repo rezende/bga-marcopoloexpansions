@@ -2000,7 +2000,7 @@ define([
                     const noSpace = totalWidth > spaceForOneLine;
                     const extraItems = (item.uiType == "city_card" || item.uiType == "1x_gift") && modifiedTop === 0;
                     if (noSpace|| extraItems) {
-                        console.log(uiItem);
+                        console.log(item);
                         console.log("reason: "+noSpace+","+extraItems);
                         console.log("mdfTop "+modifiedTop);
                         console.log("ctnTop: "+containerTop);
