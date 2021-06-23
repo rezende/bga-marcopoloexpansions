@@ -230,7 +230,7 @@ define([
                         background = null;
                     }
 
-                    if (uiItem.uiType == "character" && uiItem.data.character_type == "0")      //merchantor has different image depending on player count
+                    if (uiItem.uiType == "character" && uiItem.data.character_type == "0")      //mercator has different image depending on player count
                     {
                         var numPlayers = Object.keys(_self.gamedatas.players).length;
                         if (numPlayers == 4) {
@@ -1993,28 +1993,27 @@ define([
                     const uiItemHeight = this.uiItems.itemConfig[item.uiType].height ? this.uiItems.itemConfig[item.uiType].height : 0;
                     var modifiedLeft = totalWidth;
 
-                    // // Personal city cards and 1x_gift always stay to the right of contract space
-                    // if ((item.uiType == "city_card" || item.uiType == "1x_gift") && modifiedTop == 0) {
-                    //     // Make items that are on the first line always start after contracts
-                    //     // 420 = width of 2 goal cards & 2 contracts
-                    //     // modifiedTop represents the line we're in
-                    //     totalWidth = Math.max(420, modifiedLeft);
-                    //     modifiedLeft = Math.max(420, modifiedLeft);
-                    // }
-
+                    const cTopBefore = containerTop;
                     containerTop = Math.max(containerTop, item.htmlNode.getBoundingClientRect().height + 4, uiItemHeight, 50);
 
-                    if (
-                        (totalWidth > spaceForOneLine)
-                        || ((item.uiType == "city_card" || item.uiType == "1x_gift") && modifiedTop == 0)
-                    ) {
-                        // this is to generate a new line for stuff
+                    // this is to generate a new line for stuff
+                    const noSpace = totalWidth > spaceForOneLine;
+                    const extraItems = (item.uiType == "city_card" || item.uiType == "1x_gift") && modifiedTop === 0;
+                    if (noSpace|| extraItems) {
+                        console.log(uiItem);
+                        console.log("reason: "+noSpace+","+extraItems);
+                        console.log("mdfTop "+modifiedTop);
+                        console.log("ctnTop: "+containerTop);
+                        console.log("howCtopwasCalc: "+cTopBefore+","+item.htmlNode.getBoundingClientRect().height + 4+","+uiItemHeight);
                         modifiedTop += containerTop;
+                        console.log("NEW mdfTop: "+modifiedTop);
                         modifiedLeft = 0;
                         totalWidth = 0;
                         // bug here
                         dojo.setStyle(container, "height", modifiedTop + containerTop + "px");
+                        console.log("NEW HEIGHT: "+modifiedTop + containerTop + "px");
                         containerTop = item.htmlNode.getBoundingClientRect().height + 4;
+                        console.log("NEW ctnTop: "+modifiedTop + containerTop + "px");
                     }
 
                     var anim = this.slideToObjectPos(item.htmlNode, container, modifiedLeft, modifiedTop);
