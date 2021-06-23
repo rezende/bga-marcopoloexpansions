@@ -1972,13 +1972,13 @@ define([
                 this.animateAndMoveUiItemsWithCallback(uiItems, function (fx) { });
             },
 
-            repositionPlayerMatWithCallback: function (itemContainer, addedItems, onAnimateEndCallback, playerId)      //updates player mat with new/removed items
+            repositionPlayerMatWithCallback: function (itemContainer, addedItems, onAnimateEndCallback, playerId)  //updates player mat with new/removed items
             {
                 const items = this.getPlayerItemsForPlayerMatContainer(itemContainer, playerId);
                 const container = itemContainer == "small" ? $("small-container-" + playerId) : $("large-container-" + playerId);
                 var anims = [];
                 var containerTop = itemContainer == "small" ? 40 : 75;
-                const containerWidth = dojo.getComputedStyle(container).width.replace("px", "") - 130;        //buffer for character card
+                const containerWidth = dojo.getComputedStyle(container).width.replace("px", "") - 130;  //buffer for character card
 
                 if (addedItems == null || addedItems == undefined) { addedItems = []; }
 
@@ -1990,7 +1990,6 @@ define([
                 var cTopBefore;
                 for (var i = 0; i < items.length; i++) {
                     const item = items[i];
-                    console.log(item);
                     var uiItemWidth = this.uiItems.itemConfig[item.uiType].width + 8;
                     const spaceForOneLine = containerWidth - uiItemWidth;
                     const uiItemHeight = this.uiItems.itemConfig[item.uiType].height ? this.uiItems.itemConfig[item.uiType].height : 0;
@@ -1998,28 +1997,17 @@ define([
 
                     cTopBefore = containerTop;
                     containerTop = Math.max(containerTop, item.htmlNode.getBoundingClientRect().height + 4, uiItemHeight, 50);
-                    // this is to generate a new line for stuff
                     const noSpace = totalWidth > spaceForOneLine;
-                    const extraItems = (item.uiType == "city_card" || item.uiType == "1x_gift") && modifiedTop === 0;
-                    if (noSpace|| extraItems) {
-                        console.log("NEW LINE: mdfTop "+modifiedTop);
-                        console.log("NEW LINE: ctTop: "+containerTop);
-                        console.log("NEW LINE: howCtopwasCalc: "+cTopBefore+","+item.htmlNode.getBoundingClientRect().height + 4+","+uiItemHeight);
+                    // extraItem: not die, not goal_card, not contract
+                    const isExtraItem = item.uiType == "city_card" || item.uiType == "1x_gift";
+                    const firstLine = modifiedTop === 0;
+                    if (noSpace || (isExtraItem && firstLine)) {
+                        // generate extra line
                         modifiedTop += containerTop;
-                        console.log("NEW LINE: NEW mdfTop: "+modifiedTop);
                         modifiedLeft = 0;
                         totalWidth = 0;
-                        // bug here
-                        const newCtop = item.htmlNode.getBoundingClientRect().height + 4;
-                        containerTop = newCtop;
-                        newHeight = newCtop + modifiedTop;
-                        dojo.setStyle(container, "height", newHeight + "px");
-                        console.log("NEW LINE: NEW HEIGHT: " + newHeight + "px");
-                        console.log("NEW LINE: NEW ctTop: "+ newCtop);
-                    }
-                    else {
-                        console.log("ctTop: "+containerTop);
-                        console.log("howCtopwasCalc: "+cTopBefore+" , "+item.htmlNode.getBoundingClientRect().height + 4+" , "+uiItemHeight);
+                        containerTop = item.htmlNode.getBoundingClientRect().height + 4;
+                        dojo.setStyle(container, "height", containerTop + modifiedTop + "px");
                     }
                     var anim = this.slideToObjectPos(item.htmlNode, container, modifiedLeft, modifiedTop);
                     if (addedItems.find(function (a) { return a.uid == item.uid })) {
@@ -2034,14 +2022,11 @@ define([
                 }
 
                 const animChain = dojo.fx.combine(anims);
-                newHeight = modifiedTop + containerTop;
                 animChain.onEnd = function () {
                     if (onAnimateEndCallback) { onAnimateEndCallback(); }
                     this.runningPlayerMatAnimations[playerId + itemContainer] = null;
-                    dojo.setStyle(container, "height", newHeight + "px");
+                    dojo.setStyle(container, "height", modifiedTop + containerTop + "px");
                 }.bind(this);
-                console.log("NEW HEIGHT: "+ newHeight + "px");
-                console.log("NEW HEIGHT calc: mtop"+ modifiedTop + ", ctop:" + containerTop);
 
                 if (this.runningPlayerMatAnimations[playerId + itemContainer]) {
                     this.runningPlayerMatAnimations[playerId + itemContainer].stop(true);       //stop any running animation
