@@ -50,7 +50,6 @@ class MarcoPoloExpansions extends Table
             "expert_variant" => 100,
             "the_new_charaters_expansion" => 101,
             "force_exp" => 102,
-            "arghun_card_set" => 103
         ));
 
         $this->deck = self::getNew("module.common.deck");
@@ -485,33 +484,11 @@ class MarcoPoloExpansions extends Table
         }
     }
 
-    function getArghunCardIds(bool $arghun_hand = true)
-    {
-        $set_no = self::getGameStateValue("arghun_card_set");
-        $all_ids = range(0, 30);
-        if ($set_no == 1)
-            $arghun_ids = array(12,19,23,27,6,18);
-        if ($arghun_hand === true) {
-            return $arghun_ids;
-        }
-        return array_diff($all_ids, $arghun_ids);
-    }
-
     function assignCityCards()
     {
-        $city_cards = $this->city_card_types;
-        if (self::getGameStateValue("arghun_card_set") > 0) {
-            $city_cards = array_filter(
-                $this->city_card_types,
-                function ($city_card) {
-                    return in_array(
-                        $city_card['type'],
-                        $this->getArghunCardIds(false)
-                    );
-                }
-            );
-        }
-        $this->randomlyAssignBonusPieces('city_card', $city_cards, "large_city");
+        $this->randomlyAssignBonusPieces(
+            'city_card', $this->city_card_types, "large_city"
+        );
     }
 
     function assignOutpostBonuses()
@@ -522,16 +499,6 @@ class MarcoPoloExpansions extends Table
     function presetupCharacter($character_type)
     {
         if ($character_type == self::CHARACTER_KHAN_ARGHUN) {
-            if (self::getGameStateValue("arghun_card_set") > 0) {
-                $arghun_cards = $this->getArghunCardIds();
-                foreach ($arghun_cards as $card_type_id) {
-                    self::DbQuery(
-                        "INSERT INTO piece (piece_type, piece_type_arg, piece_location)
-                        VALUES ('city_card', '{$card_type_id}', 'pick_character')"
-                    );
-                }
-                return;
-            }
             $current_count = 0;
             $shuffled_card_index = 0;
             $current_city_cards = self::getObjectListFromDB(

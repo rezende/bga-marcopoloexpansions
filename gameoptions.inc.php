@@ -36,29 +36,18 @@ $game_options = array(
     101 => array(
         'name' => totranslate('The New Characters Expansion'),
         'values' => array(
-            0 => array( 'name' => totranslate('Disabled'), 'tmdisplay' => totranslate('The New Characters Expansion disabled') ),
-            1 => array( 'name' => totranslate('Enabled'), 'tmdisplay' => totranslate('The New Characters Expansion enabled'), 'beta' => true ),
+            0 => array( 'name' => totranslate('Disabled'), 'tmdisplay' => '' ),
+            1 => array( 'name' => totranslate('Enabled'), 'tmdisplay' => totranslate('The New Characters Expansion'), 'beta' => true ),
         )
     ),
     102 => array(
         'name' => totranslate('Force new characters and gift city bonus'),
         'values' => array(
             0 => array( 'name' => totranslate('Off') ),
-            1 => array( 'name' => totranslate('On') )
-        ),
-        'displaycondition' => array(
-            array(
-                'type' => 'otheroption',
-                'id' => 101,
-                'value' => 1
+            1 => array(
+                'name' => totranslate('On'),
+                'description' => "ALPHA only - Forces new characters to be drawn on character selection. Forces the Gift bonus city card to appear."
             )
-        )
-    ),
-    103 => array(
-        'name' => totranslate('Arghun card set'),
-        'values' => array(
-            0 => array( 'name' => totranslate('off') ),
-            1 => array( 'name' => totranslate('bugged') ),
         ),
         'displaycondition' => array(
             array(
