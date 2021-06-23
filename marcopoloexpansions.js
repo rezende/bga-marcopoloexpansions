@@ -1977,7 +1977,7 @@ define([
                 const items = this.getPlayerItemsForPlayerMatContainer(itemContainer, playerId);
                 const container = itemContainer == "small" ? $("small-container-" + playerId) : $("large-container-" + playerId);
                 var anims = [];
-                var containerTop = itemContainer == "small" ? 40 : 90;
+                var containerTop = itemContainer == "small" ? 40 : 75;
                 const containerWidth = dojo.getComputedStyle(container).width.replace("px", "") - 130;        //buffer for character card
 
                 if (addedItems == null || addedItems == undefined) { addedItems = []; }
