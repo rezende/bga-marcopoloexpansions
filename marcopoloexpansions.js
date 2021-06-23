@@ -1979,7 +1979,7 @@ define([
                 const container = itemContainer == "small" ? $("small-container-" + playerId) : $("large-container-" + playerId);
                 var anims = [];
                 var containerTop = itemContainer == "small" ? 40 : 90;
-                var containerWidth = dojo.getComputedStyle(container).width.replace("px", "") - 130;        //buffer for character card
+                const containerWidth = dojo.getComputedStyle(container).width.replace("px", "") - 130;        //buffer for character card
 
                 if (addedItems == null || addedItems == undefined) { addedItems = []; }
 
@@ -1989,7 +1989,8 @@ define([
                 for (var i = 0; i < items.length; i++) {
                     const item = items[i];
                     var uiItemWidth = this.uiItems.itemConfig[item.uiType].width + 8;
-                    var uiItemHeight = this.uiItems.itemConfig[item.uiType].height ? this.uiItems.itemConfig[item.uiType].height : 0;
+                    const spaceForOneLine = containerWidth - uiItemWidth;
+                    const uiItemHeight = this.uiItems.itemConfig[item.uiType].height ? this.uiItems.itemConfig[item.uiType].height : 0;
                     var modifiedLeft = totalWidth;
 
                     // // Personal city cards and 1x_gift always stay to the right of contract space
@@ -2004,12 +2005,12 @@ define([
                     containerTop = Math.max(containerTop, item.htmlNode.getBoundingClientRect().height + 4, uiItemHeight, 50);
 
                     if ((item.uiType == "city_card" || item.uiType == "1x_gift") && modifiedTop == 0) {
-                        // Start new items on a new line
+                        // Create a new line for city_cards and 1x_gift (and other pieces in the future)
                         modifiedTop = containerTop;
                         modifiedLeft = totalWidth = 0;
                     }
-                    const spaceForANewLine = containerWidth - uiItemWidth;
-                    if (totalWidth > spaceForANewLine) {
+
+                    if (totalWidth > spaceForOneLine) {
                         // this is to generate a new line for stuff
                         modifiedTop += containerTop;
                         modifiedLeft = 0;
