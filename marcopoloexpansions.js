@@ -1986,6 +1986,7 @@ define([
                 var modifiedTop = 0;
                 var tmpUiPosition = 0;
                 for (var i = 0; i < items.length; i++) {
+                    console.log(item);
                     const item = items[i];
                     var uiItemWidth = this.uiItems.itemConfig[item.uiType].width + 8;
                     const spaceForOneLine = containerWidth - uiItemWidth;
@@ -1999,20 +2000,18 @@ define([
                     const noSpace = totalWidth > spaceForOneLine;
                     const extraItems = (item.uiType == "city_card" || item.uiType == "1x_gift") && modifiedTop === 0;
                     if (noSpace|| extraItems) {
-                        console.log(item);
-                        console.log("reason: "+noSpace+","+extraItems);
-                        console.log("mdfTop "+modifiedTop);
-                        console.log("ctnTop: "+containerTop);
-                        console.log("howCtopwasCalc: "+cTopBefore+","+item.htmlNode.getBoundingClientRect().height + 4+","+uiItemHeight);
+                        console.log("NEW LINE: mdfTop "+modifiedTop);
+                        console.log("NEW LINE: ctnTop: "+containerTop);
+                        console.log("NEW LINE: howCtopwasCalc: "+cTopBefore+","+item.htmlNode.getBoundingClientRect().height + 4+","+uiItemHeight);
                         modifiedTop += containerTop;
-                        console.log("NEW mdfTop: "+modifiedTop);
+                        console.log("NEW LINE: NEW mdfTop: "+modifiedTop);
                         modifiedLeft = 0;
                         totalWidth = 0;
                         // bug here
                         dojo.setStyle(container, "height", modifiedTop + containerTop + "px");
-                        console.log("NEW HEIGHT: "+modifiedTop + containerTop + "px");
+                        console.log("NEW LINE: NEW HEIGHT: "+modifiedTop + containerTop + "px");
                         containerTop = item.htmlNode.getBoundingClientRect().height + 4;
-                        console.log("NEW ctnTop: "+modifiedTop + containerTop + "px");
+                        console.log("NEW LINE: NEW ctnTop: "+modifiedTop + containerTop + "px");
                     }
 
                     var anim = this.slideToObjectPos(item.htmlNode, container, modifiedLeft, modifiedTop);
@@ -2033,6 +2032,7 @@ define([
                     this.runningPlayerMatAnimations[playerId + itemContainer] = null;
                     dojo.setStyle(container, "height", modifiedTop + containerTop + "px");
                 }.bind(this);
+                console.log("NEW HEIGHT: "+modifiedTop + containerTop + "px");
 
                 if (this.runningPlayerMatAnimations[playerId + itemContainer]) {
                     this.runningPlayerMatAnimations[playerId + itemContainer].stop(true);       //stop any running animation
