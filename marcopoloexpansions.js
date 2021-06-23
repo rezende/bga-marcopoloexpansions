@@ -1986,8 +1986,8 @@ define([
                 var modifiedTop = 0;
                 var tmpUiPosition = 0;
                 for (var i = 0; i < items.length; i++) {
-                    console.log(item);
                     const item = items[i];
+                    console.log(item);
                     var uiItemWidth = this.uiItems.itemConfig[item.uiType].width + 8;
                     const spaceForOneLine = containerWidth - uiItemWidth;
                     const uiItemHeight = this.uiItems.itemConfig[item.uiType].height ? this.uiItems.itemConfig[item.uiType].height : 0;
