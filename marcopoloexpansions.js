@@ -2008,10 +2008,11 @@ define([
                         modifiedLeft = 0;
                         totalWidth = 0;
                         // bug here
-                        dojo.setStyle(container, "height", modifiedTop + containerTop + "px");
-                        console.log("NEW LINE: NEW HEIGHT: "+modifiedTop + containerTop + "px");
+                        const newHeight = modifiedTop + containerTop;
+                        dojo.setStyle(container, "height", newHeight + "px");
+                        console.log("NEW LINE: NEW HEIGHT: " + newHeight + "px");
                         containerTop = item.htmlNode.getBoundingClientRect().height + 4;
-                        console.log("NEW LINE: NEW ctnTop: "+modifiedTop + containerTop + "px");
+                        console.log("NEW LINE: NEW ctnTop: "+ containerTop);
                     }
 
                     var anim = this.slideToObjectPos(item.htmlNode, container, modifiedLeft, modifiedTop);
