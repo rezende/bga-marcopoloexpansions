@@ -1974,7 +1974,6 @@ define([
 
             repositionPlayerMatWithCallback: function (itemContainer, addedItems, onAnimateEndCallback, playerId)      //updates player mat with new/removed items
             {
-                debugger;
                 const items = this.getPlayerItemsForPlayerMatContainer(itemContainer, playerId);
                 const container = itemContainer == "small" ? $("small-container-" + playerId) : $("large-container-" + playerId);
                 var anims = [];
