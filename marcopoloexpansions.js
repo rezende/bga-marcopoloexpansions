@@ -1985,6 +1985,9 @@ define([
                 var totalWidth = 0;
                 var modifiedTop = 0;
                 var tmpUiPosition = 0;
+
+                var newHeight;
+                var cTopBefore;
                 for (var i = 0; i < items.length; i++) {
                     const item = items[i];
                     console.log(item);
@@ -1993,28 +1996,30 @@ define([
                     const uiItemHeight = this.uiItems.itemConfig[item.uiType].height ? this.uiItems.itemConfig[item.uiType].height : 0;
                     var modifiedLeft = totalWidth;
 
-                    const cTopBefore = containerTop;
+                    cTopBefore = containerTop;
                     containerTop = Math.max(containerTop, item.htmlNode.getBoundingClientRect().height + 4, uiItemHeight, 50);
-
                     // this is to generate a new line for stuff
                     const noSpace = totalWidth > spaceForOneLine;
                     const extraItems = (item.uiType == "city_card" || item.uiType == "1x_gift") && modifiedTop === 0;
                     if (noSpace|| extraItems) {
                         console.log("NEW LINE: mdfTop "+modifiedTop);
-                        console.log("NEW LINE: ctnTop: "+containerTop);
+                        console.log("NEW LINE: ctTop: "+containerTop);
                         console.log("NEW LINE: howCtopwasCalc: "+cTopBefore+","+item.htmlNode.getBoundingClientRect().height + 4+","+uiItemHeight);
                         modifiedTop += containerTop;
                         console.log("NEW LINE: NEW mdfTop: "+modifiedTop);
                         modifiedLeft = 0;
                         totalWidth = 0;
                         // bug here
-                        const newHeight = modifiedTop + containerTop;
+                        newHeight = modifiedTop + containerTop;
                         dojo.setStyle(container, "height", newHeight + "px");
                         console.log("NEW LINE: NEW HEIGHT: " + newHeight + "px");
                         containerTop = item.htmlNode.getBoundingClientRect().height + 4;
-                        console.log("NEW LINE: NEW ctnTop: "+ containerTop);
+                        console.log("NEW LINE: NEW ctTop: "+ containerTop);
                     }
-
+                    else {
+                        console.log("ctTop: "+containerTop);
+                        console.log("howCtopwasCalc: "+cTopBefore+" , "+item.htmlNode.getBoundingClientRect().height + 4+" , "+uiItemHeight);
+                    }
                     var anim = this.slideToObjectPos(item.htmlNode, container, modifiedLeft, modifiedTop);
                     if (addedItems.find(function (a) { return a.uid == item.uid })) {
                         anim.onEnd = dojo.partial(this.placeOnNewParent, modifiedTop, modifiedLeft, container);
@@ -2028,12 +2033,14 @@ define([
                 }
 
                 const animChain = dojo.fx.combine(anims);
+                newHeight = modifiedTop + containerTop;
                 animChain.onEnd = function () {
                     if (onAnimateEndCallback) { onAnimateEndCallback(); }
                     this.runningPlayerMatAnimations[playerId + itemContainer] = null;
-                    dojo.setStyle(container, "height", modifiedTop + containerTop + "px");
+                    dojo.setStyle(container, "height", newHeight + "px");
                 }.bind(this);
-                console.log("NEW HEIGHT: "+modifiedTop + containerTop + "px");
+                console.log("NEW HEIGHT: "+ newHeight + "px");
+                console.log("NEW HEIGHT calc: mtop"+ modifiedTop + ", ctop:" + containerTop);
 
                 if (this.runningPlayerMatAnimations[playerId + itemContainer]) {
                     this.runningPlayerMatAnimations[playerId + itemContainer].stop(true);       //stop any running animation
