@@ -421,7 +421,7 @@ define([
                     "city_bonus": { cssClass: "city_bonus", tooltip: true },
                     "outpost": { cssClass: "outpost", tooltip: true },
                     "contract": { cssClass: "contract", "width": 80, tooltip: true },
-                    "goal_card": { cssClass: "goal_card", "width": 116, "height": 90, tooltip: true },
+                    "goal_card": { cssClass: "goal_card", "width": 114, "height": 79, tooltip: true },
                     "map_node": { htmlNode: "map_node_${id}", "zIndex": 500 },
                     "board_spot": { htmlNode: "board_spot_${place}_${index}", "zIndex": 400, tooltip: false },
                     "award_spot": { htmlNode: "award_spot_${place}_${tied_to_index}_${index}" },
