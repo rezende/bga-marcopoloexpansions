@@ -2004,13 +2004,10 @@ define([
 
                     containerTop = Math.max(containerTop, item.htmlNode.getBoundingClientRect().height + 4, uiItemHeight, 50);
 
-                    if ((item.uiType == "city_card" || item.uiType == "1x_gift") && modifiedTop == 0) {
-                        // Create a new line for city_cards and 1x_gift (and other pieces in the future)
-                        modifiedTop = containerTop;
-                        modifiedLeft = totalWidth = 0;
-                    }
-
-                    if (totalWidth > spaceForOneLine) {
+                    if (
+                        (totalWidth > spaceForOneLine)
+                        || ((item.uiType == "city_card" || item.uiType == "1x_gift") && modifiedTop == 0)
+                    ) {
                         // this is to generate a new line for stuff
                         modifiedTop += containerTop;
                         modifiedLeft = 0;
