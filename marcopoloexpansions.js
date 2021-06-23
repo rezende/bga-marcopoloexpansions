@@ -2010,11 +2010,11 @@ define([
                         modifiedLeft = 0;
                         totalWidth = 0;
                         // bug here
-                        newHeight = modifiedTop + containerTop;
-                        console.log("NEW LINE: NEW HEIGHT: " + newHeight + "px");
                         const newCtop = item.htmlNode.getBoundingClientRect().height + 4;
                         containerTop = newCtop;
-                        dojo.setStyle(container, "height", newCtop + modifiedTop + "px");
+                        newHeight = newCtop + modifiedTop;
+                        dojo.setStyle(container, "height", newHeight + "px");
+                        console.log("NEW LINE: NEW HEIGHT: " + newHeight + "px");
                         console.log("NEW LINE: NEW ctTop: "+ newCtop);
                     }
                     else {
