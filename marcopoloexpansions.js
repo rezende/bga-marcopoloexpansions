@@ -864,7 +864,15 @@ define([
                 if (keepGiftItem) { gifts.push(keepGiftItem); }
                 this.uiItems.makeSelectable(gifts);
                 if (uiItem && uiItem.uiType == "gift") {
-                    this.onClickChooseResource(uiItem.data.id);
+                    this.confirmationDialog(
+                        _('Are you sure you want to discard this gift?'),
+                        dojo.hitch(this, function () { this.onClickChooseResource(uiItem.data.id); }),
+                        dojo.hitch(this, function () {
+                            this.uiItems.toggleSelection(uiItem);
+                            this.client_playerForceDiscardGift(null);
+                        })
+                    );
+                    ;
                 }
                 else if (uiItem && uiItem.uiType == "1x_gift") // Fratre Nicolao -- pick 2 gifts piece
                 {
