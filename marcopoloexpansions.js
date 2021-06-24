@@ -872,7 +872,6 @@ define([
                             this.client_playerForceDiscardGift(null);
                         })
                     );
-                    ;
                 }
                 else if (uiItem && uiItem.uiType == "1x_gift") // Fratre Nicolao -- pick 2 gifts piece
                 {
