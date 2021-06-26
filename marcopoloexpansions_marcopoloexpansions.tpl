@@ -1,27 +1,27 @@
 {OVERALL_GAME_HEADER}
 
-<!-- 
+<!--
 --------
 -- BGA framework: © Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
--- MarcoPoloExpansions implementation : © Hershey Sakhrani <hersh16@yahoo.com>
--- 
+-- MarcoPoloExpansions implementation : © Hershey Sakhrani <hersh16@yahoo.com> & Vinicius Rezende <vinicius@rezende.dev>
+--
 -- This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
 -- See http://en.boardgamearena.com/#!doc/Studio for more information.
 -------
 
     marcopoloexpansions_marcopoloexpansions.tpl
-    
+
     This is the HTML template of your game.
-    
+
     Everything you are writing in this file will be displayed in the HTML page of your game user interface,
     in the "main game zone" of the screen.
-    
+
     You can use in this template:
     _ variables, with the format {MY_VARIABLE_ELEMENT}.
     _ HTML block, with the BEGIN/END format
-    
+
     See your "view" PHP file to check how to set variables and control blocks
-    
+
     Please REMOVE this comment before publishing your game on BGA
 -->
 <div id="zoomBox">
@@ -58,7 +58,7 @@
                 <div id="map_node_22" class="map_node oasis" style="top:390px;left:119px;"></div>
                 <div id="map_node_23" class="map_node small_city" style="top:380px;left:214px;"></div>
                 <div id="map_node_24" class="map_node small_city" style="top:433px;left:450px;"></div>
-                
+
                 <div id="board_spot_coin3_0" class="board_spot" style="top:436px;left:66px;"></div>
                 <div id="board_spot_coin5_0" class="board_spot" style="top:664px;left:12px;"></div>
                 <div id="board_spot_travel_0" class="board_spot" style="top:570px;left:516px;height:50px;"></div>
@@ -67,7 +67,7 @@
                 <div id="award_spot_travel_0_2" class="award_spot travel" style="top:542px;left:629px;"></div>
                 <div id="award_spot_travel_0_3" class="award_spot travel" style="top:542px;left:668px;"></div>
                 <div id="award_spot_travel_0_4" class="award_spot travel" style="top:540px;left:705px;"></div>
-                <div id="award_spot_travel_0_5" class="award_spot travel" style="top:540px;left:742px;"></div>        
+                <div id="award_spot_travel_0_5" class="award_spot travel" style="top:540px;left:742px;"></div>
                 <div id="board_spot_bazaar_0" class="board_spot" style="top:640px;left:100px;height:30px;"></div>
                 <div id="award_spot_bazaar_0_0" class="award_spot" style="top:640px;left:140px;width:34px;height:30px;"></div>
                 <div id="award_spot_bazaar_0_1" class="award_spot" style="top:640px;left:186px;width:40px;height:30px;"></div>
@@ -103,10 +103,10 @@
                 <div id="board_spot_contracts_0" class="board_spot" style="top:708px;left:254px;"></div>
                 <div id="board_spot_avail_black_die_0" class="board_spot" style="top:482px;left:191px;"></div>
                 <div id="board_spot_contract_award_4" class="board_spot" style="top:672px;left:672px;"></div>
-                <div id="board_spot_contract_award_5" class="board_spot" style="top:672px;left:756px;"></div>                
+                <div id="board_spot_contract_award_5" class="board_spot" style="top:672px;left:756px;"></div>
             </div>
             <div id="roundContainer">
-                <!-- <div style="position: absolute;top: 0px;"><button id="toggleBoardPieces" class="bgabutton bgabutton_blue">{HIDE_PIECES}</button></div> -->                
+                <!-- <div style="position: absolute;top: 0px;"><button id="toggleBoardPieces" class="bgabutton bgabutton_blue">{HIDE_PIECES}</button></div> -->
                 <div style="position: absolute;top: 0px;left:0px;text-shadow: white 0 0 10px;font-weight: bold;font-size: larger;">
                     <div>{ROUND}<span id="roundNumber">1</span><span>/5</span></div>
                 </div>
@@ -117,13 +117,13 @@
                 <div id="round_5" class="piece contract_back" style="top: 0px; left: 500px;"></div>
                 <div id="transparent_figure" class="piece figure purple" style="filter:grayscale(1) brightness(1);top:26px;left:20px;cursor:pointer;opacity: 1;"></div>
                 <div id="gift_pile" class="gift gift_back" style="top: 14px; left: 656px;"></div>
-                <div id="contract_special_pile" class="piece contract_back" style="right: -70px;"></div>                
+                <div id="contract_special_pile" class="piece contract_back" style="right: -70px;"></div>
             </div>
         </div>
         <div id="mats" style="width:587px;flex-grow: 1;">
             <div style="display:flex;flex-wrap:wrap;">
                 <!-- BEGIN playerMat -->
-                <div id="playerMat-{PLAYER_ID}" class="playerMat whiteblock" style="width:610px;flex-grow:1;margin-right:5px;margin-left:5px;">        
+                <div id="playerMat-{PLAYER_ID}" class="playerMat whiteblock" style="width:610px;flex-grow:1;margin-right:5px;margin-left:5px;">
                     <div><span style="font-weight:bold;color:#{PLAYER_COLOR};{PLAYER_BACKGROUND_COLOR}">{PLAYER_NAME}</span></div>
                     <div>
                         <span><span class="piece panel coin"></span><span id="resources-coin-{PLAYER_ID}" style="display:inline-block;margin-left:36px;margin-top:8px;margin-right:6px;"></span></span>
@@ -143,11 +143,11 @@
                                 <div class="parchment {CSS_OTHER_PLAYER_PARCHMENT}"></div>
                             </div>
                         </div>
-                        <div id="myCharacterAndGoalArea-{PLAYER_ID}" style="display:none;position: relative;">                 
+                        <div id="myCharacterAndGoalArea-{PLAYER_ID}" style="display:none;position: relative;">
                             <span id="goal-cards-{PLAYER_ID}"></span>
-                        </div>                        
+                        </div>
                     </div>
-                    <div id="playerCharacter-{PLAYER_ID}" style="position:absolute;right:0px;bottom:0px;"></div>        
+                    <div id="playerCharacter-{PLAYER_ID}" style="position:absolute;right:0px;bottom:0px;"></div>
                 </div>
                 <!-- END playerMat -->
             </div>

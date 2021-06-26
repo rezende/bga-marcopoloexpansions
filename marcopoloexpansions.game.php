@@ -3,7 +3,7 @@
 /**
  *------
  * BGA framework: © Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
- * MarcoPoloExpansions implementation : © Hershey Sakhrani <hersh16@yahoo.com>
+ * MarcoPoloExpansions implementation : © Hershey Sakhrani <hersh16@yahoo.com> & Vinicius Rezende <vinicius@rezende.dev>
  *
  * This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
  * See http://en.boardgamearena.com/#!doc/Studio for more information.
@@ -487,7 +487,9 @@ class MarcoPoloExpansions extends Table
     function assignCityCards()
     {
         $this->randomlyAssignBonusPieces(
-            'city_card', $this->city_card_types, "large_city"
+            'city_card',
+            $this->city_card_types,
+            "large_city"
         );
     }
 
@@ -638,7 +640,8 @@ class MarcoPoloExpansions extends Table
         self::notifyAllPlayers("updateDice", "", array('dice' => $dice, "shake" => false));
     }
 
-    function setDieValue($die_id, $die_value) {
+    function setDieValue($die_id, $die_value)
+    {
         self::DbQuery("UPDATE die SET die_value = {$die_value} WHERE die_id = {$die_id}");
     }
 
@@ -845,8 +848,9 @@ class MarcoPoloExpansions extends Table
         }
     }
 
-    function checkChooseResourceCards($city_card_type, $player_id) {
-        if (in_array($city_card_type, array(12,27))) {
+    function checkChooseResourceCards($city_card_type, $player_id)
+    {
+        if (in_array($city_card_type, array(12, 27))) {
             $pending_actions = $this->getNextPendingActions($player_id, 'ASC');
             if (count($pending_actions) > 1)
                 return false;
@@ -854,21 +858,21 @@ class MarcoPoloExpansions extends Table
             if ($pending_action['remaining_count'] == 1) {
                 if ($city_card_type == 12) {
                     return true;
-                } else if ($pending_action['type'] == 'choice_of_good')  {
+                } else if ($pending_action['type'] == 'choice_of_good') {
                     // city card 27
                     return true;
                 }
             }
             return false;
-        }
-        else
+        } else
             return true;
     }
 
-    function checkDiscardByCityCard($city_card_type, $from_function, $player_id, $pending_action) {
+    function checkDiscardByCityCard($city_card_type, $from_function, $player_id, $pending_action)
+    {
         if ($from_function == 'activateMultipleCityCard')
             return $city_card_type != 12;
-        if ($from_function == 'chooseResource' )
+        if ($from_function == 'chooseResource')
             return $this->checkChooseResourceCards($city_card_type, $player_id);
         if ($from_function == 'activateExchangeCityCard')
             return ($pending_action['remaining_count'] == 1);
@@ -878,17 +882,14 @@ class MarcoPoloExpansions extends Table
 
     function checkAndTriggerFulfillPersonalCityCard($pending_action, $player_id, $from_function = '')
     {
-        self::dump('ARGHUN_PENDING_ACTION', $pending_action);
         if (strpos($pending_action["location"], "city_card_") === 0) {
             $city_card_type = str_replace("city_card_", "", $pending_action["location"]);
             if (!$this->checkDiscardByCityCard($city_card_type, $from_function, $player_id, $pending_action))
                 return;
-            self::dump('ARGHUN_CITY_CARD_TYPE', $city_card_type);
             $city_card_piece_db = self::getObjectFromDB(
                 "SELECT piece_id id, piece_location location
                 FROM piece WHERE piece_type = 'city_card' AND piece_type_arg = '{$city_card_type}'"
             );
-            self::dump('ARGHUN_CITY_CARD_DB', $city_card_piece_db);
             $city_card_id = $city_card_piece_db['id'];
             if ($city_card_piece_db['location'] == 'player_mat') {
                 self::DbQuery("UPDATE piece SET piece_location = 'box' WHERE piece_id = '{$city_card_id}'");

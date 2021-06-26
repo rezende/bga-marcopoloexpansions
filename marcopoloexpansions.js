@@ -1,7 +1,7 @@
 /**
  *------
  * BGA framework: © Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
- * MarcoPoloExpansions implementation : © Hershey Sakhrani <hersh16@yahoo.com>
+ * MarcoPoloExpansions implementation : © Hershey Sakhrani <hersh16@yahoo.com> & Vinicius Rezende <vinicius@rezende.dev>
  *
  * This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
  * See http://en.boardgamearena.com/#!doc/Studio for more information.
@@ -513,7 +513,6 @@ define([
             },
 
             setup: function (gamedatas) {
-                console.log("Starting game setup");
                 if (gamedatas.expansions.length == 0 || !gamedatas.expansions.includes("0")) {
                     this.dontPreloadImage('gifts.png');
                     dojo.setStyle("gift_pile", "display", "none");
@@ -575,8 +574,6 @@ define([
 
                 dojo.connect($("transparent_figure"), "onclick", this, "onClickTransparentFigure");
                 dojo.connect($("preference_control_100"), "onchange", this, "onChangeGoalAnchorPreference");
-
-                console.log("Ending game setup");
             },
             ///////////////////////////////////////////////////
             //// Game & client states
@@ -996,7 +993,6 @@ define([
             //                  You can use this method to perform some user interface changes at this moment.
             //
             onEnteringState: function (stateName, args) {
-                console.log('Entering state: ' + stateName);
                 this.currentMove = stateName;
                 this.currentMoveArgs = args.args;
                 switch (stateName) {
@@ -1056,7 +1052,6 @@ define([
             //                 You can use this method to perform some user interface changes at this moment.
             //
             onLeavingState: function (stateName) {
-                console.log('Leaving state: ' + stateName);
                 switch (stateName) {
                     case 'rollAllDice':
                         this.uiItems.resetAllSelectable();
@@ -1071,7 +1066,6 @@ define([
             //                        action status bar (ie: the HTML links in the status bar).
             //
             onUpdateActionButtons: function (stateName, args) {
-                console.log('onUpdateActionButtons: ' + stateName);
                 if (this.isCurrentPlayerActive()) {
                     switch (stateName) {
                         case 'pickCharacter':
@@ -2678,8 +2672,6 @@ define([
 
             */
             setupNotifications: function () {
-                console.log('notifications subscriptions setup');
-
                 dojo.subscribe('pickCharacter', this, "notif_pickCharacter");
                 dojo.subscribe('characterUpdate', this, "notif_characterUpdate");
                 dojo.subscribe('goalCard', this, "notif_goalCard");

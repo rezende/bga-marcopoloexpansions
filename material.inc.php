@@ -3,7 +3,7 @@
 /**
  *------
  * BGA framework: © Gregory Isabelli <gisabelli@boardgamearena.com> & Emmanuel Colin <ecolin@boardgamearena.com>
- * MarcoPoloExpansions implementation : © Hershey Sakhrani <hersh16@yahoo.com>
+ * MarcoPoloExpansions implementation : © Hershey Sakhrani <hersh16@yahoo.com> & Vinicius Rezende <vinicius@rezende.dev>
  *
  * This code has been produced on the BGA studio platform for use on http://boardgamearena.com.
  * See http://en.boardgamearena.com/#!doc/Studio for more information.
@@ -102,13 +102,13 @@ $this->gift_types = array(
   1 => array("type" => 1, "award" => ["contract" => 2]),
   2 => array("type" => 2, "award" => ["contract" => 1]),
   3 => array("type" => 3, "auto" => true, "award" => ["blackdie_or_3coins" => 1]),
-  4 => array("type" => 4, "description" => "change value of one die", "award" => [], "invalid_character_type" => 2),
+  4 => array("type" => 4, "description" =>  clienttranslate("Change the value of one die"), "award" => [], "invalid_character_type" => 2),
   5 => array("type" => 5, "auto" => true, "award" => ["camel" => 2]),
   6 => array("type" => 6, "auto" => true, "award" => ["choice_of_good" => 1]),
-  7 => array("type" => 7, "description" => "free die placement", "award" => [], "invalid_character_type" => 6),
+  7 => array("type" => 7, "description" => clienttranslate("Free dice placement"), "award" => [], "invalid_character_type" => 6),
   8 => array("type" => 8, "auto" => true, "award" => ["coin" => 5]),
   9 => array("type" => 9, "auto" => true, "award" => ["choice_of_good" => 2], "others_award" => ["gold" => 1]),
-  10 => array("type" => 10, "description" => "place a trading post", "award" => [], "invalid_character_type" => 4),
+  10 => array("type" => 10, "description" => clienttranslate("While moving, place a trading post in a city you pass through"), "award" => [], "invalid_character_type" => 4),
   11 => array("type" => 11, "auto" => true, "cost" => ["placed_trading_post" => 1], "award" => ["vp" => 1], "max_times" => 6),
   12 => array("type" => 12, "auto" => true, "cost" => ["fulfilled_contracts" => 1], "award" => ["vp" => 1], "max_times" => 6),
   13 => array("type" => 13, "auto" => true, "award" => ["coin" => 8], "others_award" => ["coin" => 3]),
@@ -282,11 +282,11 @@ $this->character_types = array(
   5 => array("type" => 5, "name" => clienttranslate("Niccolo & Marco Polo"), "description" => clienttranslate("<p>You receive another figure with which to move across the map at the start of the game. Your second figure also starts in Venezia.</p><p>You also receive 1 camel at the start of each round.</p><p>Note: You are allowed to split your movement between the two figures when traveling. However, you must pay all travel and additional costs before moving both figures.</p>"), "award" => ["camel" => 1], "auto" => true),                          //two figures, camel at beginning of round
   6 => array("type" => 6, "name" => clienttranslate("Berke Khan"), "description" => clienttranslate("<p>You do not have to pay anything to use an occupied action space.</p><p>Note: This does not allow you to use occupied city cards.</p>"), "default_player" => 3),             //no need to pay coins to place die
   7 => array("type" => 7, "name" => clienttranslate("Matteo Polo"), "description" => clienttranslate("<p>You receive the white die at the start of each round. Roll it and add it to the remaining dice on your player board. You also receive the topmost contract in the special pile at the start of each round. Look at page 1 of this supplement for more information.</p>"), "default_player" => 2, "award" => ["contract" => 1]),            //white die & contract at beginning of round
-  8 => array("type" => 8, "name" => "Fratre Nicolao", "description" => "<p>At the beginning of each round, you draw 3 gifts. Choose 1 of these gifts to take and discard the other 2 faceup</p><p>You also receive this token, which allows you to instead take 2 of the 3 drawn gifts once during the game.</p>", "award" => ["pick_gift" => 1], "expansion" => 0),
-  9 => array("type" => 9, "name" => "Khan Arghun", "description" => "<p>Once per turn, you may use 1 of these city cards.  This counts as a bonus action.</p><p>By using a card, you perform the action depicted on the city card as though you had placed a 6 value die on it. No die is required.</p><p>After you have completed the action on the city card, discard it.</p>", "expansion" => 0),
-  10 => array("type" => 10, "name" => "Altan Ord", "description" => "<p>You receive a bonus each time you place a trading post. When you place your 1st trading post, you receive 1 point. When you place your 2nd trading post, you receive 1 point and 1 coin. When you place your 3rd trading post, you receive 1 point, 1 coin, and 1 camel, etc..</p>", "expansion" => 0),
+  8 => array("type" => 8, "name" => clienttranslate("Fratre Nicolao"), "description" => clienttranslate("<p>At the beginning of each round, you draw 3 gifts. Choose 1 of these gifts to take and discard the other 2 faceup</p><p>You also receive this token, which allows you to instead take 2 of the 3 drawn gifts once during the game.</p>"), "award" => ["pick_gift" => 1], "expansion" => 0),
+  9 => array("type" => 9, "name" => clienttranslate("Khan Arghun"), "description" => clienttranslate("<p>Once per turn, you may use 1 of these city cards.  This counts as a bonus action.</p><p>By using a card, you perform the action depicted on the city card as though you had placed a 6 value die on it. No die is required.</p><p>After you have completed the action on the city card, discard it.</p>"), "expansion" => 0),
+  10 => array("type" => 10, "name" => clienttranslate("Altan Ord"), "description" => clienttranslate("<p>You receive a bonus each time you place a trading post. When you place your 1st trading post, you receive 1 point. When you place your 2nd trading post, you receive 1 point and 1 coin. When you place your 3rd trading post, you receive 1 point, 1 coin, and 1 camel, etc..</p>"), "expansion" => 0),
   11 => array(
-    "type" => 11, "name" => "Gunj Kököchin", "description" => "<p>You have 2 additional action spaces that only you may use. To use them, simply place 1 of your dice on one of the action spaces. This counts as your turn’s action.</p><p>This die will be retrieved and rolled at the beginning of the next round, as usual. This means that these action spaces are available to be used in each new round</p><p>1st action space: Take 2 camels and 2 goods of your choice. Each of your opponents take 1 good of their choice. These goods are taken from the supply, as usual</p><p>2nd action space: Move your figure 1 space on the map</p>", "expansion" => 0,
+    "type" => 11, "name" => clienttranslate("Gunj Kököchin"), "description" => clienttranslate("<p>You have 2 additional action spaces that only you may use. To use them, simply place 1 of your dice on one of the action spaces. This counts as your turn’s action.</p><p>This die will be retrieved and rolled at the beginning of the next round, as usual. This means that these action spaces are available to be used in each new round</p><p>1st action space: Take 2 camels and 2 goods of your choice. Each of your opponents take 1 good of their choice. These goods are taken from the supply, as usual</p><p>2nd action space: Move your figure 1 space on the map</p>"), "expansion" => 0,
     "places" => array(
       ["place" => "gunj", "index" => 0, "name" => "Gunj Kököchin goods", "description" => "", "owns_place" => true, "num_dice" => 1, "award" => ["camel" => 2, "choice_of_good" => 2], "allow_multiple" => false, "ui_location" => "gunj_0"],
       ["place" => "gunj", "index" => 1, "name" => "Gunj Kököchin travel", "description" => "", "owns_place" => true, "num_dice" => 1, "award" => ["travel" => 1], "allow_multiple" => false, "ui_location" => "gunj_1"]
