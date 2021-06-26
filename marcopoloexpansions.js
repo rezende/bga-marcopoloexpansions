@@ -857,31 +857,41 @@ define([
             },
 
             client_playerForceDiscardGift: function (uiItem) {
-                var giftIds = this.currentMoveArgs.giftIds;
-                var gifts = this.uiItems.getByUiType("gift").filter(function (g) { return giftIds.includes(g.data.id); });
-
-                var keepGiftItem = this.uiItems.getByUiType("1x_gift").find(function (i) { return i.data.location == "player_mat" });
-                if (keepGiftItem) { gifts.push(keepGiftItem); }
-                this.uiItems.makeSelectable(gifts);
+                var giftIds = this.currentMoveArgs.giftIds
+                var gifts = this.uiItems.getByUiType("gift").filter(
+                    g => giftIds.includes(g.data.id)
+                )
+                var keepGiftItem = this.uiItems.getByUiType("1x_gift").find(
+                    i => i.data.location == "player_mat"
+                )
+                if (keepGiftItem)
+                    gifts.push(keepGiftItem)
+                this.uiItems.makeSelectable(gifts)
                 if (uiItem && uiItem.uiType == "gift") {
-                    this.confirmationDialog(
-                        _('Are you sure you want to discard this gift?'),
-                        dojo.hitch(this, function () { this.onClickChooseResource(uiItem.data.id); }),
-                        dojo.hitch(this, function () {
-                            this.uiItems.toggleSelection(uiItem);
-                            this.client_playerForceDiscardGift(null);
-                        })
-                    );
+                    if (this.prefs[101].value == 0)
+                        this.onClickChooseResource(uiItem.data.id)
+                    else
+                        this.confirmationDialog(
+                            _('Are you sure you want to discard this gift?'),
+                            dojo.hitch(this, () => { this.onClickChooseResource(uiItem.data.id) }),
+                            dojo.hitch(this, () => {
+                                this.uiItems.toggleSelection(uiItem)
+                                this.client_playerForceDiscardGift(null)
+                            })
+                        )
                 }
-                else if (uiItem && uiItem.uiType == "1x_gift") // Fratre Nicolao -- pick 2 gifts piece
-                {
-                    this.confirmationDialog(_('Are you sure you want to use this piece?  This move cannot be undone'),
-                        dojo.hitch(this, function () { this.onClickUsePlayerPiece(uiItem.data.id); }),
-                        dojo.hitch(this, function () {
-                            this.uiItems.toggleSelection(uiItem);
-                            this.client_playerForceDiscardGift(null);
-                        })
-                    );
+                else if (uiItem && uiItem.uiType == "1x_gift") {
+                    if (this.prefs[101].value == 0)
+                        this.onClickUsePlayerPiece(uiItem.data.id)
+                    else
+                        this.confirmationDialog(
+                            _('Are you sure you want to use this piece?  This move cannot be undone'),
+                            dojo.hitch(this, () => this.onClickUsePlayerPiece(uiItem.data.id)),
+                            dojo.hitch(this, () => {
+                                this.uiItems.toggleSelection(uiItem)
+                                this.client_playerForceDiscardGift(null)
+                            })
+                        )
                 }
             },
 

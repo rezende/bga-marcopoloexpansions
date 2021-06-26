@@ -66,5 +66,12 @@ $game_preferences = array(
             0 => array( 'name' => totranslate('Yes') ),
             1 => array( 'name' => totranslate('No') ),
         )
+    ),
+    101 => array(
+        'name' => totranslate("Confirmation prompts"),
+        'values' => array(
+            0 => array( 'name' => totranslate('Yes') ),
+            1 => array( 'name' => totranslate('No') ),
+        ),
     )
 );
